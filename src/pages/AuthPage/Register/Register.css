@@ -1,0 +1,291 @@
+.register-container {
+    width: auto;
+    height: 100vh;
+    background: linear-gradient(90deg, white 0%, #EEEAFF 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.register-card {
+    width: 448px;
+    max-width: 100%;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0px 20px 60px rgba(0, 0, 0, 0.15);
+    padding: 40px;
+    position: relative;
+}
+
+.register-header {
+    text-align: center;
+}
+
+.brand-title {
+    font-size: 36px !important;
+    font-weight: 700 !important;
+    line-height: 1 !important;
+}
+
+
+.stay-text {
+    color: #4739F0 !important;
+}
+
+.hub-text {
+    color: #FAC227 !important;
+}
+
+.register-title-section {
+    margin-bottom: 20px;
+}
+
+.register-title {
+    font-size: 24px !important;
+    font-weight: 700 !important;
+    line-height: 32px !important;
+    margin-bottom: 12px !important;
+    color: #4739F0 !important;
+}
+
+.register-subtitle {
+    color: #4B5563 !important;
+    font-size: 14px !important;
+    font-weight: 400 !important;
+    line-height: 20px !important;
+    display: block;
+}
+
+.register-form {
+    width: 100%;
+}
+
+.register-form .ant-form-item {
+    margin-bottom: 16px;
+}
+
+.register-form .ant-form-item:last-child {
+    margin-bottom: 16px;
+}
+
+.custom-input {
+    height: 50px !important;
+    border: 1px solid #D1D5DB !important;
+    border-radius: 8px !important;
+    font-size: 16px !important;
+}
+
+.custom-input .ant-input {
+    font-size: 16px !important;
+    color: #374151 !important;
+}
+
+.custom-input .ant-input::placeholder {
+    color: #ADAEBC !important;
+}
+
+.input-icon {
+    color: #9CA3AF !important;
+    font-size: 16px !important;
+}
+
+.custom-input:hover,
+.custom-input:focus {
+    border-color: #4739F0 !important;
+    box-shadow: 0 0 0 2px rgba(71, 57, 240, 0.1) !important;
+}
+
+.verification-input {
+    margin-bottom: 0 !important;
+}
+
+.send-code-btn {
+    height: 50px !important;
+    background: #FAC227 !important;
+    border: none !important;
+    border-radius: 8px !important;
+    font-size: 18px !important;
+    font-weight: 700 !important;
+    color: white !important;
+}
+
+.send-code-btn:hover {
+    background: #e6af22 !important;
+    color: white !important;
+}
+
+.agreement-checkbox {
+    margin-top: 20px;
+}
+
+.agreement-checkbox .ant-checkbox {
+    border-radius: 1px;
+}
+
+.agreement-text {
+    color: #4B5563 !important;
+    font-size: 14px !important;
+    font-weight: 400 !important;
+    line-height: 20px !important;
+}
+
+.terms-link {
+    color: #4739F0 !important;
+    font-weight: 700 !important;
+    text-decoration: none !important;
+}
+
+.terms-link:hover {
+    color: #3627d4 !important;
+    text-decoration: underline !important;
+}
+
+.privacy-link {
+    color: #FAC227 !important;
+    font-weight: 700 !important;
+    text-decoration: none !important;
+}
+
+.privacy-link:hover {
+    color: #e6af22 !important;
+    text-decoration: underline !important;
+}
+
+.register-btn {
+    height: 60px !important;
+    background: #4739F0 !important;
+    border: none !important;
+    border-radius: 8px !important;
+    font-size: 18px !important;
+    font-weight: 700 !important;
+    margin-top: 20px !important;
+}
+
+.register-btn:hover {
+    background: #3627d4 !important;
+}
+
+.login-link-section {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.login-text {
+    color: #4B5563 !important;
+    font-size: 16px !important;
+    font-weight: 500 !important;
+    line-height: 24px !important;
+}
+
+.login-link-btn {
+    color: #4739F0 !important;
+    font-size: 16px !important;
+    font-weight: 600 !important;
+    line-height: 24px !important;
+    padding: 0 !important;
+    height: auto !important;
+    text-decoration: underline;
+}
+
+.login-link-btn:hover {
+    color: #e6af22 !important;
+}
+
+/* Form validation styles */
+.ant-form-item-has-error .custom-input {
+    border-color: #ef4444 !important;
+}
+
+.ant-form-item-has-error .custom-input:hover,
+.ant-form-item-has-error .custom-input:focus {
+    border-color: #ef4444 !important;
+    box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.1) !important;
+}
+
+.ant-form-item-explain-error {
+    font-size: 12px !important;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .register-container {
+        padding: 10px;
+    }
+
+    .register-card {
+        width: 100%;
+        max-width: 400px;
+        padding: 30px 20px;
+    }
+
+    .brand-title {
+        font-size: 28px !important;
+    }
+
+    .register-title {
+        font-size: 20px !important;
+        line-height: 28px !important;
+    }
+
+    .register-subtitle {
+        font-size: 13px !important;
+        line-height: 18px !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .register-card {
+        padding: 20px 15px;
+    }
+
+    .brand-title {
+        font-size: 24px !important;
+        margin-bottom: 20px !important;
+    }
+
+    .register-title {
+        font-size: 18px !important;
+        line-height: 24px !important;
+    }
+
+    .custom-input {
+        height: 45px !important;
+    }
+
+    .send-code-btn {
+        height: 45px !important;
+        font-size: 16px !important;
+    }
+
+    .register-btn {
+        height: 50px !important;
+        font-size: 16px !important;
+    }
+}
+
+/* Loading state */
+.register-btn.ant-btn-loading {
+    pointer-events: none;
+}
+
+/* Ant Design overrides */
+.ant-checkbox-wrapper {
+    align-items: flex-start !important;
+}
+
+.ant-checkbox {
+    margin-top: 2px;
+}
+
+.ant-input-affix-wrapper {
+    padding: 0 16px !important;
+}
+
+.ant-input-affix-wrapper .ant-input {
+    padding: 0 !important;
+}
+
+.ant-input-password-icon {
+    color: #9CA3AF !important;
+}
