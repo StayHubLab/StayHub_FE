@@ -56,7 +56,7 @@ const TestimonialSection = () => {
                   />
 
                   <Text className="testimonial-comment">
-                    "{testimonial.comment}"
+                    &ldquo;{testimonial.comment}&rdquo;
                   </Text>
 
                   <div className="testimonial-author">
