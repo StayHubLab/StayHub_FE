@@ -1,0 +1,31 @@
+.transaction-container {
+  padding: 24px;
+}
+
+.transaction-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.transaction-header h2 {
+  color: #FF7A00;
+  margin: 0;
+}
+
+.transaction-filters {
+  display: flex;
+  align-items: center;
+}
+
+.ant-table {
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.ant-table-thead > tr > th {
+  background: #FFF7E6;
+  color: #FF7A00;
+  font-weight: 600;
+}

@@ -1,0 +1,164 @@
+.landlord-menu-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  background: rgba(0, 0, 0, 0);
+}
+
+.landlord-menu-content {
+  width: 188px;
+  height: 392px;
+  left: 16px;
+  top: 24px;
+  position: absolute;
+  background: rgba(0, 0, 0, 0);
+}
+
+.landlord-menu-item {
+  width: 188px;
+  height: 48px;
+  position: absolute;
+  background: rgba(0, 0, 0, 0);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.landlord-menu-item:hover {
+  opacity: 0.8;
+}
+
+.landlord-menu-item-background {
+  width: 188px;
+  height: 48px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  border-radius: 8px;
+  background: transparent;
+  transition: background-color 0.3s ease;
+}
+
+.landlord-menu-item-background.active-bg {
+  background: #FFF7E6; /* Orange theme for landlord */
+}
+
+.landlord-menu-icon-container {
+  width: 18px;
+  height: 24px;
+  left: 20px;
+  top: 12px;
+  position: absolute;
+  background: rgba(0, 0, 0, 0);
+}
+
+.landlord-menu-icon {
+  width: 18px;
+  height: 16px;
+  left: 0;
+  top: 3px;
+  position: absolute;
+  justify-content: center;
+  align-items: center;
+  display: inline-flex;
+  color: #4B5563;
+  font-size: 16px;
+  transition: color 0.3s ease;
+}
+
+.landlord-menu-item.active .landlord-menu-icon {
+  color: #FF7A00; /* Orange theme for active state */
+}
+
+.landlord-menu-icon > div {
+  width: 18px;
+  height: 16px;
+  position: relative;
+  background: rgba(0, 0, 0, 0);
+  overflow: hidden;
+}
+
+.icon-background {
+  width: 18px;
+  height: 16px;
+  left: 0;
+  top: 0;
+  position: absolute;
+  background: #4B5563;
+  transition: background-color 0.3s ease;
+}
+
+.icon-background.active-icon {
+  background: #FF7A00; /* Orange theme */
+}
+
+.landlord-menu-text-container {
+  height: 24px;
+  left: 50px;
+  top: 12px;
+  position: absolute;
+  background: rgba(0, 0, 0, 0);
+}
+
+.landlord-menu-text {
+  height: 24px;
+  left: 0;
+  top: 0.44px;
+  color: #4B5563;
+  font-size: 16px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 500;
+  line-height: 24px;
+  word-wrap: break-word;
+  transition: color 0.3s ease;
+}
+
+.landlord-menu-text.active-text {
+  color: #FF7A00; /* Orange theme */
+  font-weight: 600;
+}
+
+/* Special styling for subscription item with crown icon */
+.landlord-menu-item:nth-child(5) .landlord-menu-icon {
+  color: #FFD700; /* Gold color for crown */
+}
+
+.landlord-menu-item:nth-child(5).active .landlord-menu-icon {
+  color: #FF7A00; /* Orange when active */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .landlord-menu-container {
+    width: 100%;
+    max-width: 220px;
+  }
+  
+  .landlord-menu-content {
+    width: 100%;
+    max-width: 188px;
+  }
+  
+  .landlord-menu-item,
+  .landlord-menu-item-background {
+    width: 100%;
+    max-width: 188px;
+  }
+}
+
+/* Hover effects */
+.landlord-menu-item:hover .landlord-menu-icon {
+  color: #FF7A00;
+}
+
+.landlord-menu-item:hover .landlord-menu-text {
+  color: #FF7A00;
+}
+
+.landlord-menu-item:hover .landlord-menu-item-background {
+  background: rgba(255, 122, 0, 0.1);
+}
+
+/* Active state overrides hover */
+.landlord-menu-item.active:hover .landlord-menu-item-background {
+  background: #FFF7E6;
+}

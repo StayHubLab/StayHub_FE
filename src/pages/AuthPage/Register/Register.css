@@ -193,6 +193,7 @@
 }
 
 .register-btn {
+    width: 50%;
     height: 60px !important;
     background: #4739F0 !important;
     border: none !important;
@@ -339,4 +340,49 @@
 
 .ant-input-password-icon {
     color: #9CA3AF !important;
+}
+
+/* Address note styling */
+.address-note {
+    background: #f6ffed;
+    border: 1px solid #b7eb8f;
+    border-radius: 6px;
+    padding: 12px;
+    margin-top: 8px;
+}
+
+.address-note .ant-typography {
+    margin-bottom: 0;
+}
+
+/* Tab styling for better UX */
+.register-tabs .ant-tabs-tab {
+    font-weight: 500;
+}
+
+.register-tabs .ant-tabs-tab.ant-tabs-tab-active {
+    font-weight: 600;
+}
+
+.register-tabs .ant-tabs-tab.ant-tabs-tab-disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.tab-footer {
+    margin-top: 24px;
+    text-align: center;
+}
+
+.next-tab-btn, .back-tab-btn {
+    margin: 0 8px;
+}
+
+.agreement-item {
+    margin: 16px 0;
+    text-align: left;
+}
+
+.register-button-item {
+    margin-top: 16px;
 }

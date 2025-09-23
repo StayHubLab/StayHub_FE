@@ -25,6 +25,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import './Register.css';
 import logoRemoveBG from '../../../assets/images/logo/logoRemoveBG.png';
+import { fetchProvinces, fetchWards, formatProvinceName, formatWardName } from '../../../services/api/vietnamProvinceApi';
 
 const { Title, Text, Link } = Typography;
 const { Option } = Select;
@@ -35,74 +36,55 @@ const Register = () => {
     const [loading, setLoading] = useState(false);
     const [sendingCode, setSendingCode] = useState(false);
     
-    // Address state
+    // Address state - districts removed due to Vietnam administrative restructure
     const [provinces, setProvinces] = useState([]);
-    const [districts, setDistricts] = useState([]);
     const [wards, setWards] = useState([]);
     const [loadingProvinces, setLoadingProvinces] = useState(false);
-    const [loadingDistricts, setLoadingDistricts] = useState(false);
     const [loadingWards, setLoadingWards] = useState(false);
+    const [selectedProvinceId, setSelectedProvinceId] = useState(null);
     const [activeTab, setActiveTab] = useState('1');
     const [infoCompleted, setInfoCompleted] = useState(false);
 
-    // Vietnam Province API functions
-    const fetchProvinces = async () => {
+    // Vietnam Province API v2 functions
+    const loadProvinces = async () => {
         setLoadingProvinces(true);
         try {
-            const response = await fetch('https://provinces.open-api.vn/api/p/');
-            const data = await response.json();
+            const data = await fetchProvinces();
             setProvinces(data);
         } catch (error) {
-            console.error('Error fetching provinces:', error);
-            message.error('Không thể tải danh sách tỉnh/thành phố');
+            message.error(error.message);
         } finally {
             setLoadingProvinces(false);
         }
     };
 
-    const fetchDistricts = async (provinceCode) => {
-        setLoadingDistricts(true);
-        try {
-            const response = await fetch(`https://provinces.open-api.vn/api/p/${provinceCode}?depth=2`);
-            const data = await response.json();
-            setDistricts(data.districts || []);
-            setWards([]); // Reset wards when province changes
-            form.setFieldsValue({ district: undefined, ward: undefined });
-        } catch (error) {
-            console.error('Error fetching districts:', error);
-            message.error('Không thể tải danh sách quận/huyện');
-        } finally {
-            setLoadingDistricts(false);
-        }
-    };
-
-    const fetchWards = async (districtCode) => {
+    const loadWards = async (provinceCode) => {
         setLoadingWards(true);
         try {
-            const response = await fetch(`https://provinces.open-api.vn/api/d/${districtCode}?depth=2`);
-            const data = await response.json();
-            setWards(data.wards || []);
-            form.setFieldsValue({ ward: undefined });
+            console.log('Loading wards for province:', provinceCode); // Debug log
+            const data = await fetchWards(provinceCode);
+            console.log('Wards received:', data.length, 'items'); // Debug log
+            setWards(data);
+            form.setFieldsValue({ ward: undefined }); // Reset ward when province changes
         } catch (error) {
-            console.error('Error fetching wards:', error);
-            message.error('Không thể tải danh sách phường/xã');
+            console.error('Error loading wards:', error); // Debug log
+            message.error(error.message);
         } finally {
             setLoadingWards(false);
         }
     };
 
-    // Handle address changes
+    // Handle province change - directly load wards (no districts)
     const handleProvinceChange = (value) => {
-        fetchDistricts(value);
-    };
-
-    const handleDistrictChange = (value) => {
-        fetchWards(value);
+        console.log('Province changed to:', value); // Debug log
+        setSelectedProvinceId(value);
+        setWards([]); // Clear existing wards first
+        loadWards(value);
     };
 
     // Load provinces on component mount
     useEffect(() => {
-        fetchProvinces();
+        loadProvinces();
     }, []);
 
     // Validate information tab before allowing address tab
@@ -377,43 +359,13 @@ const Register = () => {
                                                     >
                                                         {provinces.map((province) => (
                                                             <Option key={province.code} value={province.code}>
-                                                                {province.name}
+                                                                {formatProvinceName(province)}
                                                             </Option>
                                                         ))}
                                                     </Select>
                                                 </Form.Item>
 
-                                                {/* District */}
-                                                <Form.Item
-                                                    name="district"
-                                                    label="Quận/Huyện"
-                                                    rules={[
-                                                        { required: true, message: 'Vui lòng chọn quận/huyện!' }
-                                                    ]}
-                                                >
-                                                    <Select
-                                                        placeholder="Chọn quận/huyện"
-                                                        className="custom-select"
-                                                        loading={loadingDistricts}
-                                                        onChange={handleDistrictChange}
-                                                        disabled={districts.length === 0}
-                                                        showSearch
-                                                        filterOption={(input, option) =>
-                                                            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                                                        }
-                                                    >
-                                                        {districts.map((district) => (
-                                                            <Option key={district.code} value={district.code}>
-                                                                {district.name}
-                                                            </Option>
-                                                        ))}
-                                                    </Select>
-                                                </Form.Item>
-                                            </Col>
-
-                                            {/* Right Column */}
-                                            <Col span={12}>
-                                                {/* Ward */}
+                                                {/* Ward - Districts removed due to administrative restructure */}
                                                 <Form.Item
                                                     name="ward"
                                                     label="Phường/Xã"
@@ -422,10 +374,18 @@ const Register = () => {
                                                     ]}
                                                 >
                                                     <Select
-                                                        placeholder="Chọn phường/xã"
+                                                        placeholder={
+                                                            !selectedProvinceId 
+                                                                ? "Vui lòng chọn tỉnh/thành phố trước" 
+                                                                : loadingWards 
+                                                                    ? "Đang tải phường/xã..." 
+                                                                    : wards.length === 0 
+                                                                        ? "Không có dữ liệu phường/xã" 
+                                                                        : "Chọn phường/xã"
+                                                        }
                                                         className="custom-select"
                                                         loading={loadingWards}
-                                                        disabled={wards.length === 0}
+                                                        disabled={!selectedProvinceId || loadingWards}
                                                         showSearch
                                                         filterOption={(input, option) =>
                                                             option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
@@ -433,12 +393,15 @@ const Register = () => {
                                                     >
                                                         {wards.map((ward) => (
                                                             <Option key={ward.code} value={ward.code}>
-                                                                {ward.name}
+                                                                {formatWardName(ward)}
                                                             </Option>
                                                         ))}
                                                     </Select>
                                                 </Form.Item>
+                                            </Col>
 
+                                            {/* Right Column */}
+                                            <Col span={12}>
                                                 {/* Detailed Address */}
                                                 <Form.Item
                                                     name="detailedAddress"
@@ -449,10 +412,17 @@ const Register = () => {
                                                 >
                                                     <Input
                                                         prefix={<HomeOutlined className="input-icon" />}
-                                                        placeholder="Số nhà, tên đường..."
+                                                        placeholder="Số nhà, tên đường, khu vực..."
                                                         className="custom-input"
                                                     />
                                                 </Form.Item>
+                                                
+                                                {/* Note about address structure */}
+                                                <div className="address-note">
+                                                    <Text type="secondary" style={{ fontSize: '12px' }}>
+                                                        💡 Lưu ý: Theo cải cách hành chính mới, hệ thống chỉ sử dụng Tỉnh/Thành phố và Phường/Xã
+                                                    </Text>
+                                                </div>
                                             </Col>
                                         </Row>
                                         
@@ -499,6 +469,7 @@ const Register = () => {
                                                     loading={loading}
                                                     className="register-btn"
                                                     block
+                                                    style={{ width: '50%' }}
                                                 >
                                                     Đăng Ký
                                                 </Button>
