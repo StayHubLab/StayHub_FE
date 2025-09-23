@@ -610,6 +610,51 @@
   transform: scale(1.05);
 }
 
+/* Heart Icon */
+.search-room-heart-icon {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  width: 32px;
+  height: 32px;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+.search-room-heart-icon:hover {
+  background: rgba(255, 255, 255, 1);
+  transform: scale(1.1);
+}
+
+.search-room-heart-outlined {
+  color: #6B7280;
+  font-size: 16px;
+  transition: color 0.3s ease;
+}
+
+.search-room-heart-filled {
+  color: #EF4444;
+  font-size: 16px;
+  animation: heartPulse 0.3s ease-in-out;
+}
+
+@keyframes heartPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+.search-room-heart-icon:hover .search-room-heart-outlined {
+  color: #EF4444;
+}
+
 /* Verified Badge */
 .search-room-verified-badge {
   width: 106.12px;

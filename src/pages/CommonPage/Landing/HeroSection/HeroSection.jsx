@@ -7,7 +7,7 @@ const HeroSection = () => {
     const navigate = useNavigate();
 
     const handleFindRoom = () => {
-        navigate('/main/find-room');
+        navigate('/main/find');
     };
 
     const handleRoomManage = () => {

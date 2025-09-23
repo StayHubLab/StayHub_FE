@@ -26,11 +26,11 @@ const Menu = () => {
       route: '/main/home'
     },
     {
-      id: 'search',
+      id: 'find',
       label: 'Tìm Phòng',
       icon: <SearchOutlined />,
       isActive: false,
-      route: '/main/search'
+      route: '/main/find'
     },
     {
       id: 'saved',

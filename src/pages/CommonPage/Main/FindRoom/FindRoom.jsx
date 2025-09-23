@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { SearchOutlined, TableOutlined, EnvironmentOutlined, StarFilled } from '@ant-design/icons';
+import React, { useState, useEffect } from 'react';
+import { SearchOutlined, TableOutlined, EnvironmentOutlined, StarFilled, HeartOutlined, HeartFilled } from '@ant-design/icons';
 import { Pagination } from 'antd';
-import './SearchRoom.css';
+import './FindRoom.css';
 
-const SearchRoom = () => {
+const FindRoom = () => {
   const [searchParams, setSearchParams] = useState({
     location: '',
     priceFrom: '',
@@ -18,6 +18,16 @@ const SearchRoom = () => {
 
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(6);
+  const [favorites, setFavorites] = useState(new Set()); // Track favorited room IDs
+
+  // Load favorites from localStorage on component mount
+  useEffect(() => {
+    const savedFavorites = localStorage.getItem('favoriteRooms');
+    if (savedFavorites) {
+      const favoriteIds = JSON.parse(savedFavorites);
+      setFavorites(new Set(favoriteIds));
+    }
+  }, []);
 
   const handleInputChange = (field, value) => {
     setSearchParams(prev => ({ ...prev, [field]: value }));
@@ -35,6 +45,20 @@ const SearchRoom = () => {
     setCurrentPage(page);
     setPageSize(size);
     console.log('Page changed:', page, 'Size:', size);
+  };
+
+  const handleHeartClick = (roomId) => {
+    setFavorites(prev => {
+      const newFavorites = new Set(prev);
+      if (newFavorites.has(roomId)) {
+        newFavorites.delete(roomId);
+      } else {
+        newFavorites.add(roomId);
+      }
+      // Store in localStorage for persistence
+      localStorage.setItem('favoriteRooms', JSON.stringify([...newFavorites]));
+      return newFavorites;
+    });
   };
 
   // Mock room data
@@ -260,6 +284,21 @@ const SearchRoom = () => {
                   alt={room.title}
                   className="search-room-image"
                 />
+                {/* Heart Icon */}
+                <div 
+                  className="search-room-heart-icon" 
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleHeartClick(room.id);
+                  }}
+                >
+                  {favorites.has(room.id) ? (
+                    <HeartFilled className="search-room-heart-filled" />
+                  ) : (
+                    <HeartOutlined className="search-room-heart-outlined" />
+                  )}
+                </div>
+                {/* Verified Badge */}
                 {room.isVerified && (
                   <div className="search-room-verified-badge">
                     <div className="search-room-verified-badge-icon">
@@ -325,4 +364,4 @@ const SearchRoom = () => {
   );
 };
 
-export default SearchRoom;
+export default FindRoom;

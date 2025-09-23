@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import './Suggest.css';
-import { CheckOutlined, StarFilled, LeftOutlined, RightOutlined } from '@ant-design/icons';
+import { CheckOutlined, StarFilled, LeftOutlined, RightOutlined, HeartOutlined, HeartFilled } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 
 const Suggest = ({ 
@@ -54,9 +54,19 @@ const Suggest = ({
 }) => {
   
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [favorites, setFavorites] = useState(new Set()); // Track favorited room IDs
   const roomsPerView = 3;
   const maxIndex = Math.max(0, suggestedRooms.length - roomsPerView);
   const navigate = useNavigate();
+  
+  // Load favorites from localStorage on component mount
+  useEffect(() => {
+    const savedFavorites = localStorage.getItem('favoriteRooms');
+    if (savedFavorites) {
+      const favoriteIds = JSON.parse(savedFavorites);
+      setFavorites(new Set(favoriteIds));
+    }
+  }, []);
   
   const formatPrice = (price) => {
     return price.toLocaleString('vi-VN');
@@ -80,6 +90,20 @@ const Suggest = ({
     setCurrentIndex(prev => Math.min(maxIndex, prev + 1));
   };
 
+  const handleHeartClick = (roomId) => {
+    setFavorites(prev => {
+      const newFavorites = new Set(prev);
+      if (newFavorites.has(roomId)) {
+        newFavorites.delete(roomId);
+      } else {
+        newFavorites.add(roomId);
+      }
+      // Store in localStorage for persistence
+      localStorage.setItem('favoriteRooms', JSON.stringify([...newFavorites]));
+      return newFavorites;
+    });
+  };
+
   const renderStars = () => {
     return Array.from({ length: 5 }, (_, index) => (
       <StarFilled 
@@ -99,6 +123,21 @@ const Suggest = ({
           alt={room.title}
           className="suggest-room-image"
         />
+        
+        {/* Heart Icon */}
+        <div 
+          className="suggest-heart-icon" 
+          onClick={(e) => {
+            e.stopPropagation();
+            handleHeartClick(room.id);
+          }}
+        >
+          {favorites.has(room.id) ? (
+            <HeartFilled className="suggest-heart-filled" />
+          ) : (
+            <HeartOutlined className="suggest-heart-outlined" />
+          )}
+        </div>
         
         {/* Verified Badge */}
         {room.isVerified && (

@@ -1,4 +1,4 @@
-.saved-container {
+﻿.saved-container {
   width: 100%;
   position: relative;
   background: transparent;
@@ -113,7 +113,7 @@
 /* Rooms Grid */
 .saved-rooms-grid {
   width: 100%;
-  height: 388px;
+  height: 419px;
   overflow: hidden;
   background: transparent;
 }
@@ -127,13 +127,13 @@
 /* Room Card */
 .saved-room-card {
   width: 369.33px;
-  height: 388px;
+  height: 419px;
   background: white;
   box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.05);
   overflow: hidden;
   border-radius: 12px;
   flex-shrink: 0;
-    border: 1px solid #4739F0;
+  border: 1px solid #4739F0;
 }
 
 /* Room Image */
@@ -150,43 +150,109 @@
   object-fit: cover;
 }
 
-/* Heart/Save Button */
-.saved-heart-button {
-  width: 32px;
-  height: 32px;
+/* Verified Badge */
+.saved-verified-badge {
+  width: 106.12px;
+  height: 24px;
   position: absolute;
   top: 12px;
   right: 12px;
-  background: white;
+  background: #4739F0;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  gap: 4px;
+}
+
+.saved-verified-icon {
+  width: 10.5px;
+  height: 12px;
+  color: white;
+  font-size: 10px;
+}
+
+.saved-verified-text {
+  color: white;
+  font-size: 12px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
+  word-wrap: break-word;
+}
+
+/* Heart Icon */
+.saved-heart-icon {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  width: 32px;
+  height: 32px;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+  z-index: 10;
 }
 
-.saved-heart-button:hover {
+.saved-heart-icon:hover {
+  background: rgba(255, 255, 255, 1);
   transform: scale(1.1);
-  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-.saved-heart-icon {
-  width: 16px;
-  height: 16px;
-  color: #4739F0;
+.saved-heart-outlined {
+  color: #6B7280;
   font-size: 16px;
+  transition: color 0.3s ease;
+}
+
+.saved-heart-filled {
+  color: #EF4444;
+  font-size: 16px;
+  animation: heartPulse 0.3s ease-in-out;
+}
+
+@keyframes heartPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+.saved-heart-icon:hover .saved-heart-outlined {
+  color: #EF4444;
 }
 
 /* Room Details */
 .saved-room-details {
   width: 100%;
-  height: 208px;
+  height: 239px;
   padding: 16px;
   background: transparent;
   display: flex;
   flex-direction: column;
+}
+
+/* AI Badge */
+.saved-ai-badge {
+  width: 77.27px;
+  height: 20px;
+  background: #FFF3E0;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 7px;
+}
+
+.saved-ai-text {
+  color: #4739F0;
+  font-size: 12px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 500;
+  word-wrap: break-word;
 }
 
 /* Room Title */
@@ -298,6 +364,40 @@
   font-family: 'Montserrat', sans-serif;
   font-weight: 500;
   word-wrap: break-word;
+}
+
+/* Empty State */
+.saved-empty-state {
+  width: 100%;
+  height: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 16px;
+}
+
+.saved-empty-icon {
+  font-size: 48px;
+  color: #E5E7EB;
+}
+
+.saved-empty-title {
+  font-size: 20px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  color: #374151;
+  margin: 0;
+}
+
+.saved-empty-description {
+  font-size: 14px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
+  color: #6B7280;
+  margin: 0;
+  max-width: 400px;
 }
 
 /* Responsive Design */
