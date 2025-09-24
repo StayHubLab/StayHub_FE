@@ -5,8 +5,6 @@ import {
   CheckCircleOutlined
 } from '@ant-design/icons';
 import './TenantSection.css';
-import tenantImage from '../../../../assets/images/landing/tenant.png'
-
 
 const { Title, Text } = Typography;
 
@@ -28,8 +26,8 @@ const TenantSection = () => {
                 alt="Tenant Searching"
                 className="tenant-img"
                 onError={(e) => {
-                  e.target.src = tenantImage;
-                }}  
+                  e.target.src = "https://via.placeholder.com/600x400/FAC227/4739F0?text=Tenant+Experience";
+                }}
               />
               <div className="search-overlay">
                 <div className="search-card">
