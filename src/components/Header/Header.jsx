@@ -5,7 +5,6 @@ import {
     HistoryOutlined, QuestionCircleOutlined, HeartOutlined, MenuOutlined
 } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
-import PropTypes from 'prop-types';
 import logoRemoveBG from '../../assets/images/logo/logoRemoveBG.png';
 import './Header.css';
 
@@ -149,10 +148,6 @@ const Header = ({ isAuthenticated = true, user = null }) => {
             </Drawer>
         </header>
     );
-};
-Header.propTypes = {
-    isAuthenticated: PropTypes.bool,
-    user: PropTypes.object
 };
 
 export default Header;

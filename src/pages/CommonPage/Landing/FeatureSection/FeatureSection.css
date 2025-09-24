@@ -1,19 +1,19 @@
-.landing-feature-section {
+.feature-section {
     padding: 50px 0;
     background-color: #FFFFFF;
 }
 
-.landing-feature-container {
+.feature-container {
     margin: 0 auto;
     padding: 0 80px;
 }
 
-.landing-feature-header {
+.feature-header {
     text-align: center;
     margin-bottom: 80px;
 }
 
-.landing-feature-title {
+.feature-title {
     font-size: 36px !important;
     font-weight: 700 !important;
     line-height: 56px !important;
@@ -22,7 +22,7 @@
     font-family: 'Montserrat', sans-serif !important;
 }
 
-.landing-feature-subtitle {
+.feature-subtitle {
     font-size: 20px !important;
     font-weight: 400 !important;
     line-height: 30px !important;
@@ -32,11 +32,11 @@
     font-family: 'Montserrat', sans-serif !important;
 }
 
-.landing-feature-cards .ant-row {
+.feature-cards .ant-row {
     justify-content: center;
 }
 
-.landing-feature-card {
+.feature-card {
     background: #FFFFFF !important;
     border: 1px solid #E5E7EB !important;
     border-radius: 12px !important;
@@ -46,17 +46,17 @@
     box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
 }
 
-.landing-feature-card:hover {
+.feature-card:hover {
     transform: translateY(-4px);
     box-shadow: 0 10px 25px 0 rgba(0, 0, 0, 0.1), 0 4px 6px 0 rgba(0, 0, 0, 0.05);
     border-color: #4739F0;
 }
 
-.landing-feature-card .ant-card-body {
+.feature-card .ant-card-body {
     padding: 0 !important;
 }
 
-.landing-feature-card-content {
+.feature-card-content {
     text-align: center;
     height: 100%;
     display: flex;
@@ -64,7 +64,7 @@
     align-items: center;
 }
 
-.landing-feature-icon-wrapper {
+.feature-icon-wrapper {
     width: 80px;
     height: 80px;
     background: #F3F4F6;
@@ -76,21 +76,21 @@
     transition: all 0.3s ease;
 }
 
-.landing-feature-card:hover .landing-feature-icon-wrapper {
+.feature-card:hover .feature-icon-wrapper {
     background: #4739F0;
 }
 
-.landing-feature-icon {
+.feature-icon {
     font-size: 32px;
     color: #6B7280;
     transition: all 0.3s ease;
 }
 
-.landing-feature-card:hover .landing-feature-icon {
+.feature-card:hover .feature-icon {
     color: white;
 }
 
-.landing-feature-card-title {
+.feature-card-title {
     font-size: 24px !important;
     font-weight: 600 !important;
     line-height: 32px !important;
@@ -99,7 +99,7 @@
     font-family: 'Montserrat', sans-serif !important;
 }
 
-.landing-feature-card-description {
+.feature-card-description {
     font-size: 16px !important;
     font-weight: 400 !important;
     line-height: 24px !important;
@@ -110,81 +110,81 @@
 
 /* Responsive Design */
 @media (max-width: 1200px) {
-    .landing-feature-container {
+    .feature-container {
         padding: 0 40px;
     }
 }
 
 @media (max-width: 768px) {
-    .landing-feature-section {
+    .feature-section {
         padding: 60px 0;
     }
 
-    .landing-feature-container {
+    .feature-container {
         padding: 0 20px;
     }
 
-    .landing-feature-header {
+    .feature-header {
         margin-bottom: 48px;
     }
 
-    .landing-feature-title {
+    .feature-title {
         font-size: 36px !important;
         line-height: 44px !important;
     }
 
-    .landing-feature-subtitle {
+    .feature-subtitle {
         font-size: 18px !important;
         line-height: 28px !important;
     }
 
-    .landing-feature-card {
+    .feature-card {
         padding: 32px 24px !important;
         margin-bottom: 24px;
     }
 
-    .landing-feature-icon-wrapper {
+    .feature-icon-wrapper {
         width: 64px;
         height: 64px;
         margin-bottom: 20px;
     }
 
-    .landing-feature-icon {
+    .feature-icon {
         font-size: 24px;
     }
 
-    .landing-feature-card-title {
+    .feature-card-title {
         font-size: 20px !important;
         line-height: 28px !important;
         margin-bottom: 12px !important;
     }
 
-    .landing-feature-card-description {
+    .feature-card-description {
         font-size: 14px !important;
         line-height: 22px !important;
     }
 }
 
 @media (max-width: 480px) {
-    .landing-feature-section {
+    .feature-section {
         padding: 40px 0;
     }
 
-    .landing-feature-container {
+    .feature-container {
         padding: 0 16px;
     }
 
-    .landing-feature-title {
+    .feature-title {
         font-size: 28px !important;
         line-height: 36px !important;
     }
 
-    .landing-feature-subtitle {
+    .feature-subtitle {
         font-size: 16px !important;
         line-height: 24px !important;
     }
 
-    .landing-feature-card {
+    .feature-card {
         padding: 24px 20px !important;
     }
 }
