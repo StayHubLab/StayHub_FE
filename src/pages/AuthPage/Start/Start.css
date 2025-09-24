@@ -1,7 +1,7 @@
 .start-container {
   width: auto;
   height: 100vh;
-  background: linear-gradient(90deg, white 0%, #EEEAFF 100%);
+  background: linear-gradient(90deg, white 0%, #eeeaff 100%);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -38,7 +38,7 @@
 }
 
 .welcome-title {
-  color: #4739F0 !important;
+  color: #4739f0 !important;
   font-size: 30px !important;
   font-weight: 700 !important;
   line-height: 36px !important;
@@ -47,15 +47,15 @@
 }
 
 .stay-text {
-  color: #4739F0 !important;
+  color: #4739f0 !important;
 }
 
 .hub-text {
-  color: #FAC227 !important;
+  color: #fac227 !important;
 }
 
 .welcome-subtitle {
-  color: #4B5563 !important;
+  color: #4b5563 !important;
   font-size: 18px !important;
   font-weight: 400 !important;
   line-height: 28px !important;
@@ -73,7 +73,7 @@
   height: 112px !important;
   border: none !important;
   border-radius: 12px !important;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.10) !important;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1) !important;
   cursor: pointer;
   transition: all 0.3s ease;
 }
@@ -84,11 +84,11 @@
 }
 
 .tenant-card {
-  background: #4739F0 !important;
+  background: #4739f0 !important;
 }
 
 .landlord-card {
-  background: #FAC227 !important;
+  background: #fac227 !important;
 }
 
 .role-card-content {
@@ -102,7 +102,7 @@
   width: 59px;
   height: 64px;
   border-radius: 9999px;
-  background: rgba(255, 255, 255, 0.20);
+  background: rgba(255, 255, 255, 0.2);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -132,7 +132,7 @@
 }
 
 .role-description {
-  color: rgba(255, 255, 255, 0.90) !important;
+  color: rgba(255, 255, 255, 0.9) !important;
   font-size: 14px !important;
   font-weight: 400 !important;
   line-height: 20px !important;
@@ -145,14 +145,14 @@
 }
 
 .login-text {
-  color: #4B5563 !important;
+  color: #4b5563 !important;
   font-size: 16px !important;
   font-weight: 500 !important;
   line-height: 24px !important;
 }
 
 .login-link {
-  color: #4739F0 !important;
+  color: #4739f0 !important;
   font-size: 16px !important;
   font-weight: 600 !important;
   line-height: 24px !important;
@@ -176,7 +176,7 @@
 .decoration-top-right {
   width: 54px;
   height: 72px;
-  background: #4739F0;
+  background: #4739f0;
   top: 40px;
   right: 40px;
 }
@@ -184,7 +184,7 @@
 .decoration-bottom-left {
   width: 81px;
   height: 72px;
-  background: #FAC227;
+  background: #fac227;
   bottom: 40px;
   left: 40px;
 }
@@ -194,36 +194,36 @@
   .start-container {
     padding: 20px;
   }
-  
+
   .start-content {
     width: 100%;
     gap: 30px;
   }
-  
+
   .logo-image {
     width: 200px;
     height: 200px;
   }
-  
+
   .welcome-title {
     font-size: 24px !important;
     line-height: 30px !important;
   }
-  
+
   .welcome-subtitle {
     font-size: 16px !important;
     line-height: 24px !important;
   }
-  
+
   .role-card {
     height: 100px !important;
   }
-  
+
   .role-icon {
     width: 50px;
     height: 55px;
   }
-  
+
   .decoration {
     display: none;
   }
@@ -233,17 +233,17 @@
   .start-content {
     gap: 20px;
   }
-  
+
   .logo-image {
     width: 150px;
     height: 150px;
   }
-  
+
   .welcome-title {
     font-size: 20px !important;
     line-height: 26px !important;
   }
-  
+
   .welcome-subtitle {
     font-size: 14px !important;
     line-height: 20px !important;

@@ -18,7 +18,7 @@ const theme = {
 // Component to handle conditional layout based on route
 const AppLayout = () => {
   const location = useLocation();
-  
+
   // Define auth routes that should hide Header and Footer
   const authRoutes = ['/start', '/login', '/register', '/forgot', '/verify'];
   const isAuthRoute = authRoutes.includes(location.pathname);
@@ -37,12 +37,12 @@ const AppLayout = () => {
 function App() {
   return (
     <>
-    <ConfigProvider theme={theme}>
-      <Router>
-        <AppLayout />
-      </Router>
-    </ConfigProvider>
-  </>
+      <ConfigProvider theme={theme}>
+        <Router>
+          <AppLayout />
+        </Router>
+      </ConfigProvider>
+    </>
   );
 }
 

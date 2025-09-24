@@ -14,15 +14,15 @@ const CTASection = () => {
             Sẵn Sàng Bắt Đầu Với StayHub?
           </Title>
           <Text className="cta-subtitle">
-            Tham gia cộng đồng hơn 100,000 người dùng đang tin tưởng StayHub 
-            để tìm kiếm và quản lý chỗ ở một cách hiệu quả nhất.
+            Tham gia cộng đồng hơn 100,000 người dùng đang tin tưởng StayHub để tìm kiếm và quản lý
+            chỗ ở một cách hiệu quả nhất.
           </Text>
 
           <Row gutter={[24, 16]} className="cta-buttons" justify="center">
             <Col xs={24} sm={12} md={8}>
-              <Button 
-                type="primary" 
-                size="large" 
+              <Button
+                type="primary"
+                size="large"
                 className="cta-btn primary-btn"
                 icon={<ArrowRightOutlined />}
                 iconPosition="end"
@@ -32,8 +32,8 @@ const CTASection = () => {
               </Button>
             </Col>
             <Col xs={24} sm={12} md={8}>
-              <Button 
-                size="large" 
+              <Button
+                size="large"
                 className="cta-btn secondary-btn"
                 icon={<ArrowRightOutlined />}
                 iconPosition="end"
@@ -56,19 +56,25 @@ const CTASection = () => {
           <Row gutter={[32, 16]} justify="center">
             <Col xs={24} sm={8} className="cta-feature">
               <div className="feature-item">
-                <Title level={4} className="feature-number">24/7</Title>
+                <Title level={4} className="feature-number">
+                  24/7
+                </Title>
                 <Text className="feature-text">Hỗ trợ khách hàng</Text>
               </div>
             </Col>
             <Col xs={24} sm={8} className="cta-feature">
               <div className="feature-item">
-                <Title level={4} className="feature-number">100%</Title>
+                <Title level={4} className="feature-number">
+                  100%
+                </Title>
                 <Text className="feature-text">Miễn phí cho người thuê</Text>
               </div>
             </Col>
             <Col xs={24} sm={8} className="cta-feature">
               <div className="feature-item">
-                <Title level={4} className="feature-number">30 ngày</Title>
+                <Title level={4} className="feature-number">
+                  30 ngày
+                </Title>
                 <Text className="feature-text">Dùng thử miễn phí</Text>
               </div>
             </Col>
