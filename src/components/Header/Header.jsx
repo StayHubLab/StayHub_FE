@@ -7,41 +7,41 @@ import {
   QuestionCircleOutlined,
   SearchOutlined,
   UserOutlined,
-} from '@ant-design/icons';
-import { Avatar, Badge, Button, Drawer, Dropdown, Input, Space } from 'antd';
-import PropTypes from 'prop-types';
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import logoRemoveBG from '../../assets/images/logo/logoRemoveBG.png';
-import './Header.css';
+} from "@ant-design/icons";
+import { Avatar, Badge, Button, Drawer, Dropdown, Input, Space } from "antd";
+import PropTypes from "prop-types";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import logoRemoveBG from "../../assets/images/logo/logoRemoveBG.png";
+import "./Header.css";
 const Header = ({ isAuthenticated = true, user = null }) => {
-  const [searchValue, setSearchValue] = useState('');
+  const [searchValue, setSearchValue] = useState("");
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const navigate = useNavigate();
 
   const handleSearch = () => {
     if (searchValue.trim()) {
-      console.log('Searching for:', searchValue);
+      console.log("Searching for:", searchValue);
     }
   };
 
   const handleLogout = () => {
-    console.log('Logging out...');
-    navigate('/');
+    console.log("Logging out...");
+    navigate("/");
   };
 
   // User dropdown menu items
   const userMenuItems = [
     {
-      key: 'profile',
+      key: "profile",
       icon: <UserOutlined />,
-      label: 'Thông tin cá nhân',
-      onClick: () => navigate('/profile'),
+      label: "Thông tin cá nhân",
+      onClick: () => navigate("/profile"),
     },
     {
-      key: 'logout',
+      key: "logout",
       icon: <LogoutOutlined />,
-      label: 'Đăng xuất',
+      label: "Đăng xuất",
       onClick: handleLogout,
     },
   ];
@@ -50,7 +50,7 @@ const Header = ({ isAuthenticated = true, user = null }) => {
     <header className="header-container">
       <div className="header-content">
         {/* Logo */}
-        <div className="logo-section" onClick={() => navigate('/')}>
+        <div className="logo-section" onClick={() => navigate("/")}>
           <img src={logoRemoveBG} alt="StayHub Logo" className="header-logo" />
         </div>
 
@@ -66,7 +66,11 @@ const Header = ({ isAuthenticated = true, user = null }) => {
               className="search-input"
               bordered={false}
             />
-            <Button type="primary" onClick={handleSearch} className="search-button">
+            <Button
+              type="primary"
+              onClick={handleSearch}
+              className="search-button"
+            >
               Tìm kiếm
             </Button>
           </div>
@@ -79,7 +83,7 @@ const Header = ({ isAuthenticated = true, user = null }) => {
               <Button
                 type="text"
                 icon={<HeartOutlined />}
-                onClick={() => navigate('/saved-rooms')}
+                onClick={() => navigate("/saved-rooms")}
                 className="nav-link"
               >
                 Phòng yêu thích
@@ -87,7 +91,7 @@ const Header = ({ isAuthenticated = true, user = null }) => {
               <Button
                 type="text"
                 icon={<HistoryOutlined />}
-                onClick={() => navigate('/rental-history')}
+                onClick={() => navigate("/rental-history")}
                 className="nav-link"
               >
                 Lịch sử thuê
@@ -95,7 +99,7 @@ const Header = ({ isAuthenticated = true, user = null }) => {
               <Button
                 type="text"
                 icon={<QuestionCircleOutlined />}
-                onClick={() => navigate('/support')}
+                onClick={() => navigate("/support")}
                 className="nav-link"
               >
                 Hỗ trợ
@@ -107,26 +111,34 @@ const Header = ({ isAuthenticated = true, user = null }) => {
                     <BellOutlined className="notification-icon" />
                   </Badge>
                 }
-                onClick={() => navigate('/notifications')}
+                onClick={() => navigate("/notifications")}
                 className="notification-btn"
               />
-              <Dropdown menu={{ items: userMenuItems }} trigger={['click']} placement="bottomRight">
+              <Dropdown
+                menu={{ items: userMenuItems }}
+                trigger={["click"]}
+                placement="bottomRight"
+              >
                 <Avatar
                   size={40}
-                  src={user?.avatar || 'https://placehold.co/36x36'}
+                  src={user?.avatar || "https://placehold.co/36x36"}
                   className="user-avatar"
-                  style={{ cursor: 'pointer' }}
+                  style={{ cursor: "pointer" }}
                 />
               </Dropdown>
             </Space>
           ) : (
             <Space size={16}>
-              <Button type="default" onClick={() => navigate('/login')} className="login-button">
+              <Button
+                type="default"
+                onClick={() => navigate("/login")}
+                className="login-button"
+              >
                 Đăng nhập
               </Button>
               <Button
                 type="primary"
-                onClick={() => navigate('/register')}
+                onClick={() => navigate("/register")}
                 className="register-button"
               >
                 Đăng ký
@@ -149,7 +161,7 @@ const Header = ({ isAuthenticated = true, user = null }) => {
         open={isDrawerOpen}
       >
         {isAuthenticated ? (
-          <Space direction="vertical" size="large" style={{ width: '100%' }}>
+          <Space direction="vertical" size="large" style={{ width: "100%" }}>
             <div className="search-container">
               <SearchOutlined className="search-icon" />
               <Input
@@ -160,43 +172,64 @@ const Header = ({ isAuthenticated = true, user = null }) => {
                 className="search-input"
                 bordered={false}
               />
-              <Button type="primary" onClick={handleSearch} className="search-button">
+              <Button
+                type="primary"
+                onClick={handleSearch}
+                className="search-button"
+              >
                 Tìm kiếm
               </Button>
             </div>
-            <Button type="text" icon={<HeartOutlined />} onClick={() => navigate('/saved-rooms')}>
+            <Button
+              type="text"
+              icon={<HeartOutlined />}
+              onClick={() => navigate("/saved-rooms")}
+            >
               Phòng yêu thích
             </Button>
             <Button
               type="text"
               icon={<HistoryOutlined />}
-              onClick={() => navigate('/rental-history')}
+              onClick={() => navigate("/rental-history")}
             >
               Lịch sử thuê
             </Button>
             <Button
               type="text"
               icon={<QuestionCircleOutlined />}
-              onClick={() => navigate('/support')}
+              onClick={() => navigate("/support")}
             >
               Hỗ trợ
             </Button>
-            <Button type="text" icon={<BellOutlined />} onClick={() => navigate('/notifications')}>
+            <Button
+              type="text"
+              icon={<BellOutlined />}
+              onClick={() => navigate("/notifications")}
+            >
               Thông báo
             </Button>
-            <Button type="text" icon={<UserOutlined />} onClick={() => navigate('/profile')}>
+            <Button
+              type="text"
+              icon={<UserOutlined />}
+              onClick={() => navigate("/profile")}
+            >
               Thông tin cá nhân
             </Button>
-            <Button danger type="text" icon={<LogoutOutlined />} onClick={handleLogout}>
+            <Button
+              danger
+              type="text"
+              icon={<LogoutOutlined />}
+              onClick={handleLogout}
+            >
               Đăng xuất
             </Button>
           </Space>
         ) : (
-          <Space direction="vertical" size="large" style={{ width: '100%' }}>
-            <Button type="default" onClick={() => navigate('/login')}>
+          <Space direction="vertical" size="large" style={{ width: "100%" }}>
+            <Button type="default" onClick={() => navigate("/login")}>
               Đăng nhập
             </Button>
-            <Button type="primary" onClick={() => navigate('/register')}>
+            <Button type="primary" onClick={() => navigate("/register")}>
               Đăng ký
             </Button>
           </Space>
@@ -214,4 +247,9 @@ Header.propTypes = {
     avatar: PropTypes.string,
   }),
 };
+Header.propTypes = {
+  isAuthenticated: PropTypes.bool,
+  user: PropTypes.object,
+};
+
 export default Header;

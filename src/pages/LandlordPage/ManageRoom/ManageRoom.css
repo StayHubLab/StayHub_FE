@@ -1,0 +1,26 @@
+.manage-room-container {
+  padding: 24px;
+}
+
+.manage-room-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.manage-room-header h2 {
+  color: #ff7a00;
+  margin: 0;
+}
+
+.ant-table {
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.ant-table-thead > tr > th {
+  background: #fff7e6;
+  color: #ff7a00;
+  font-weight: 600;
+}

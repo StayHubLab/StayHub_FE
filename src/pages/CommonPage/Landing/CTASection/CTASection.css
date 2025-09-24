@@ -24,7 +24,7 @@
   line-height: 56px !important;
   color: #ffffff !important;
   margin-bottom: 24px !important;
-  font-family: 'Montserrat', sans-serif !important;
+  font-family: "Montserrat", sans-serif !important;
 }
 
 .cta-subtitle {
@@ -35,7 +35,7 @@
   max-width: 768px;
   margin: 0 auto 40px auto !important;
   display: block;
-  font-family: 'Montserrat', sans-serif !important;
+  font-family: "Montserrat", sans-serif !important;
 }
 
 .cta-buttons {
@@ -47,7 +47,7 @@
   border-radius: 8px !important;
   font-size: 16px !important;
   font-weight: 500 !important;
-  font-family: 'Montserrat', sans-serif !important;
+  font-family: "Montserrat", sans-serif !important;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -95,7 +95,7 @@
   font-size: 16px !important;
   font-weight: 400 !important;
   color: #e5e7eb !important;
-  font-family: 'Montserrat', sans-serif !important;
+  font-family: "Montserrat", sans-serif !important;
 }
 
 .contact-text strong {
@@ -124,14 +124,14 @@
   line-height: 40px !important;
   color: #fac227 !important;
   margin: 0 0 8px 0 !important;
-  font-family: 'Montserrat', sans-serif !important;
+  font-family: "Montserrat", sans-serif !important;
 }
 
 .feature-text {
   font-size: 14px !important;
   font-weight: 400 !important;
   color: #e5e7eb !important;
-  font-family: 'Montserrat', sans-serif !important;
+  font-family: "Montserrat", sans-serif !important;
 }
 
 .cta-background {

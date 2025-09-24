@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Button, Upload, message, Row, Col, Typography } from 'antd';
+import React, { useState } from "react";
+import { Button, Upload, message, Row, Col, Typography } from "antd";
 import {
   UploadOutlined,
   CameraOutlined,
@@ -8,9 +8,9 @@ import {
   SafetyOutlined,
   SafetyCertificateFilled,
   InfoCircleOutlined,
-} from '@ant-design/icons';
-import { useNavigate } from 'react-router-dom';
-import './Verify.css';
+} from "@ant-design/icons";
+import { useNavigate } from "react-router-dom";
+import "./Verify.css";
 
 const { Title, Text } = Typography;
 const { Dragger } = Upload;
@@ -24,9 +24,9 @@ const Verify = () => {
 
   // Upload configuration
   const uploadProps = {
-    name: 'file',
+    name: "file",
     multiple: false,
-    accept: 'image/*',
+    accept: "image/*",
     beforeUpload: () => false, // Prevent auto upload
     showUploadList: false,
   };
@@ -57,19 +57,19 @@ const Verify = () => {
 
   const handleCameraCapture = () => {
     // TODO: Implement camera capture functionality
-    message.info('Chức năng chụp ảnh sẽ được triển khai');
+    message.info("Chức năng chụp ảnh sẽ được triển khai");
   };
 
   const handleSubmitVerification = async () => {
     if (!frontIdFile || !backIdFile || !selfieFile) {
-      message.error('Vui lòng tải lên đủ 3 ảnh để xác thực!');
+      message.error("Vui lòng tải lên đủ 3 ảnh để xác thực!");
       return;
     }
 
     setLoading(true);
     try {
       // TODO: Implement verification API call
-      console.log('Submitting verification:', {
+      console.log("Submitting verification:", {
         frontId: frontIdFile,
         backId: backIdFile,
         selfie: selfieFile,
@@ -78,17 +78,19 @@ const Verify = () => {
       // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 2000));
 
-      message.success('Gửi xác thực thành công! Chúng tôi sẽ xem xét trong vòng 24h.');
-      navigate('/login');
+      message.success(
+        "Gửi xác thực thành công! Chúng tôi sẽ xem xét trong vòng 24h."
+      );
+      navigate("/login");
     } catch (error) {
-      message.error('Có lỗi xảy ra khi gửi xác thực!');
+      message.error("Có lỗi xảy ra khi gửi xác thực!");
     } finally {
       setLoading(false);
     }
   };
 
   const handleVerifyLater = () => {
-    navigate('/login');
+    navigate("/login");
   };
 
   return (
@@ -102,8 +104,8 @@ const Verify = () => {
               Xác thực thông tin tài khoản
             </Title>
             <Text className="verify-subtitle">
-              Vui lòng cung cấp thông tin CMND/CCCD để xác thực tài khoản, tăng độ tin cậy và mở
-              khóa các tính năng nâng cao.
+              Vui lòng cung cấp thông tin CMND/CCCD để xác thực tài khoản, tăng
+              độ tin cậy và mở khóa các tính năng nâng cao.
             </Text>
           </div>
 
@@ -127,12 +129,16 @@ const Verify = () => {
                     <div className="upload-icon">
                       <UploadOutlined />
                     </div>
-                    <p className="upload-text">Kéo thả ảnh hoặc click để tải lên</p>
+                    <p className="upload-text">
+                      Kéo thả ảnh hoặc click để tải lên
+                    </p>
                     <Button type="primary" className="upload-btn">
                       Chọn file
                     </Button>
                   </Dragger>
-                  <Text className="upload-note">Đảm bảo ảnh rõ nét, không bị chói, mất góc.</Text>
+                  <Text className="upload-note">
+                    Đảm bảo ảnh rõ nét, không bị chói, mất góc.
+                  </Text>
                 </div>
 
                 {/* Step 2: Back ID */}
@@ -151,12 +157,16 @@ const Verify = () => {
                     <div className="upload-icon">
                       <UploadOutlined />
                     </div>
-                    <p className="upload-text">Kéo thả ảnh hoặc click để tải lên</p>
+                    <p className="upload-text">
+                      Kéo thả ảnh hoặc click để tải lên
+                    </p>
                     <Button type="primary" className="upload-btn">
                       Chọn file
                     </Button>
                   </Dragger>
-                  <Text className="upload-note">Đảm bảo ảnh rõ nét, không bị chói, mất góc.</Text>
+                  <Text className="upload-note">
+                    Đảm bảo ảnh rõ nét, không bị chói, mất góc.
+                  </Text>
                 </div>
 
                 {/* Step 3: Selfie */}
@@ -176,8 +186,8 @@ const Verify = () => {
                       <CameraOutlined />
                     </div>
                     <p className="upload-text">
-                      Hãy chụp ảnh selfie rõ mặt, không đội mũ, không đeo kính. Đảm bảo ánh sáng
-                      tốt.
+                      Hãy chụp ảnh selfie rõ mặt, không đội mũ, không đeo kính.
+                      Đảm bảo ánh sáng tốt.
                     </p>
                     <div className="selfie-buttons">
                       <Button
@@ -188,7 +198,11 @@ const Verify = () => {
                       >
                         Mở camera
                       </Button>
-                      <Button type="default" icon={<UploadOutlined />} className="upload-file-btn">
+                      <Button
+                        type="default"
+                        icon={<UploadOutlined />}
+                        className="upload-file-btn"
+                      >
                         Tải lên ảnh
                       </Button>
                     </div>
@@ -213,7 +227,9 @@ const Verify = () => {
                       <Title level={5} className="benefit-title">
                         Tăng độ tin cậy
                       </Title>
-                      <Text className="benefit-description">Tăng độ tin cậy khi thuê/cho thuê</Text>
+                      <Text className="benefit-description">
+                        Tăng độ tin cậy khi thuê/cho thuê
+                      </Text>
                     </div>
                   </div>
 
@@ -239,7 +255,9 @@ const Verify = () => {
                       <Title level={5} className="benefit-title">
                         Bảo vệ an toàn
                       </Title>
-                      <Text className="benefit-description">Bảo vệ bạn khỏi lừa đảo</Text>
+                      <Text className="benefit-description">
+                        Bảo vệ bạn khỏi lừa đảo
+                      </Text>
                     </div>
                   </div>
                 </div>
@@ -254,8 +272,8 @@ const Verify = () => {
                   </div>
                   <div className="notice-content">
                     <Text className="notice-text">
-                      Thông tin của bạn được mã hóa và bảo vệ theo tiêu chuẩn quốc tế. Chúng tôi
-                      không chia sẻ dữ liệu với bên thứ ba.
+                      Thông tin của bạn được mã hóa và bảo vệ theo tiêu chuẩn
+                      quốc tế. Chúng tôi không chia sẻ dữ liệu với bên thứ ba.
                     </Text>
                   </div>
                 </div>
@@ -273,7 +291,11 @@ const Verify = () => {
             >
               Gửi xác thực
             </Button>
-            <Button type="link" onClick={handleVerifyLater} className="later-btn">
+            <Button
+              type="link"
+              onClick={handleVerifyLater}
+              className="later-btn"
+            >
               Tôi sẽ xác thực sau
             </Button>
           </div>

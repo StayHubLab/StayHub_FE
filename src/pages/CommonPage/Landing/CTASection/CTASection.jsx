@@ -1,7 +1,7 @@
-import React from 'react';
-import { Typography, Button, Row, Col } from 'antd';
-import { ArrowRightOutlined, PhoneOutlined } from '@ant-design/icons';
-import './CTASection.css';
+import React from "react";
+import { Typography, Button, Row, Col } from "antd";
+import { ArrowRightOutlined, PhoneOutlined } from "@ant-design/icons";
+import "./CTASection.css";
 
 const { Title, Text } = Typography;
 
@@ -14,8 +14,8 @@ const CTASection = () => {
             Sẵn Sàng Bắt Đầu Với StayHub?
           </Title>
           <Text className="cta-subtitle">
-            Tham gia cộng đồng hơn 100,000 người dùng đang tin tưởng StayHub để tìm kiếm và quản lý
-            chỗ ở một cách hiệu quả nhất.
+            Tham gia cộng đồng hơn 100,000 người dùng đang tin tưởng StayHub để
+            tìm kiếm và quản lý chỗ ở một cách hiệu quả nhất.
           </Text>
 
           <Row gutter={[24, 16]} className="cta-buttons" justify="center">

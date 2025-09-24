@@ -1,0 +1,46 @@
+.settings-container {
+  padding: 24px;
+}
+
+.settings-container h2 {
+  color: #ff7a00;
+  margin-bottom: 24px;
+}
+
+.settings-card {
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.settings-card .ant-card-head {
+  background: #fff7e6;
+  border-bottom: 1px solid #ffe7ba;
+}
+
+.settings-card .ant-card-head-title {
+  color: #ff7a00;
+  font-weight: 600;
+}
+
+.notification-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.notification-item:last-child {
+  border-bottom: none;
+}
+
+.notification-title {
+  font-weight: 500;
+  color: #262626;
+  margin-bottom: 4px;
+}
+
+.notification-desc {
+  font-size: 14px;
+  color: #8c8c8c;
+}

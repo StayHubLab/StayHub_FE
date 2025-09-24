@@ -1,14 +1,15 @@
-import { ArrowRightOutlined, CheckCircleOutlined } from '@ant-design/icons';
-import { Button, Col, List, Row, Typography } from 'antd';
-import './TenantSection.css';
+import { ArrowRightOutlined, CheckCircleOutlined } from "@ant-design/icons";
+import { Button, Col, List, Row, Typography } from "antd";
+import "./TenantSection.css";
+import tenantImage from "../../../../assets/images/landing/tenant.png";
 
 const { Title, Text } = Typography;
 
 const TenantSection = () => {
   const features = [
-    'Tìm kiếm thông minh với bộ lọc đa tiêu chí và bản đồ tương tác',
-    'Bảo mật thông tin cá nhân và hỗ trợ sự cố nhanh chóng',
-    'Ký hợp đồng trực tuyến, thanh toán an toàn qua ứng dụng',
+    "Tìm kiếm thông minh với bộ lọc đa tiêu chí và bản đồ tương tác",
+    "Bảo mật thông tin cá nhân và hỗ trợ sự cố nhanh chóng",
+    "Ký hợp đồng trực tuyến, thanh toán an toàn qua ứng dụng",
   ];
 
   return (
@@ -22,8 +23,7 @@ const TenantSection = () => {
                 alt="Tenant Searching"
                 className="tenant-img"
                 onError={(e) => {
-                  e.target.src =
-                    'https://via.placeholder.com/600x400/FAC227/4739F0?text=Tenant+Experience';
+                  e.target.src = tenantImage;
                 }}
               />
               <div className="search-overlay">
@@ -31,7 +31,9 @@ const TenantSection = () => {
                   <Title level={5} className="search-title">
                     Tìm kiếm thông minh
                   </Title>
-                  <Text className="search-subtitle">50,000+ phòng trọ đã được xác minh</Text>
+                  <Text className="search-subtitle">
+                    50,000+ phòng trọ đã được xác minh
+                  </Text>
                 </div>
               </div>
             </div>
@@ -43,8 +45,9 @@ const TenantSection = () => {
                 Dành Cho Người Thuê
               </Title>
               <Text className="tenant-subtitle">
-                Tìm kiếm và thuê phòng trọ chưa bao giờ dễ dàng đến thế. Với StayHub, bạn có thể
-                khám phá hàng ngàn lựa chọn phù hợp với nhu cầu và ngân sách.
+                Tìm kiếm và thuê phòng trọ chưa bao giờ dễ dàng đến thế. Với
+                StayHub, bạn có thể khám phá hàng ngàn lựa chọn phù hợp với nhu
+                cầu và ngân sách.
               </Text>
 
               <List
@@ -54,7 +57,7 @@ const TenantSection = () => {
                   <List.Item className="tenant-feature-item">
                     <CheckCircleOutlined
                       className="feature-check-icon"
-                      style={{ color: '#e6af22' }}
+                      style={{ color: "#e6af22" }}
                     />
                     <Text className="texttenant">{item}</Text>
                   </List.Item>
@@ -71,7 +74,9 @@ const TenantSection = () => {
                 >
                   Tìm Phòng Ngay
                 </Button>
-                <Text className="tenant-note">Hoàn toàn miễn phí cho người thuê</Text>
+                <Text className="tenant-note">
+                  Hoàn toàn miễn phí cho người thuê
+                </Text>
               </div>
             </div>
           </Col>
