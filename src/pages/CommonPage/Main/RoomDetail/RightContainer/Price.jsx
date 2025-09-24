@@ -1,16 +1,16 @@
-import React, { useState } from "react";
-import PropTypes from "prop-types";
-import { Button, Avatar, message } from "antd";
 import {
+  CheckCircleOutlined,
+  FileTextOutlined,
   InfoCircleOutlined,
   StarFilled,
   UserOutlined,
-  FileTextOutlined,
-  CheckCircleOutlined,
 } from "@ant-design/icons";
-import "./Price.css";
+import { Avatar, Button, message } from "antd";
+import PropTypes from "prop-types";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import ScheduleBookingModal from "../../../../../components/ScheduleBookingModal/ScheduleBookingModal";
-
+import "./Price.css";
 const Price = ({
   priceData = {
     costs: [
@@ -39,7 +39,7 @@ const Price = ({
   onViewContract,
 }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
-
+  const navigate = useNavigate();
   const handleScheduleViewing = () => {
     setIsModalVisible(true);
   };
@@ -64,6 +64,7 @@ const Price = ({
     if (onContactLandlord) {
       onContactLandlord();
     }
+    navigate("/chat");
   };
 
   const handleViewContract = () => {

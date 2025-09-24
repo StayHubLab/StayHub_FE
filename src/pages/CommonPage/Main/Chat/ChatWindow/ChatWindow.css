@@ -1,0 +1,355 @@
+.chat-window {
+    flex: 1; /* chiếm toàn bộ không gian còn lại giữa sidebar trái và phải */
+    display: flex;
+    flex-direction: column;
+    border-left: 1px solid #eee;
+    border-right: 1px solid #eee;
+    font-family: Arial, sans-serif;
+    background: #fff;
+    height: 100vh; /* full màn hình */
+  }
+  
+  /* Header */
+  .chat-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    border-bottom: 1px solid #eee;
+    background: #fff;
+  }
+  
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .avatar {
+    width: 42px;
+    height: 42px;
+    background: #f5f5f5;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+  }
+  
+  .subtitle {
+    font-size: 13px;
+    color: gray;
+  }
+  
+  .header-actions button {
+    background: none;
+    border: none;
+    font-size: 18px;
+    margin-left: 10px;
+    cursor: pointer;
+    color: #555;
+  }
+  
+  /* Messages */
+  .chat-messages {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    background: #fafafa;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .message {
+    margin-bottom: 14px;
+    padding: 12px 16px;
+    border-radius: 16px;
+    max-width: 70%;
+    position: relative;
+    font-size: 14px;
+  }
+  
+  .message.user {
+    background: #4f46e5;
+    color: white;
+    align-self: flex-end;
+  }
+  
+  .message.landlord {
+    background: #f3f4f6;
+    align-self: flex-start;
+  }
+  
+  .message.system {
+    background: #dcfce7;
+    text-align: center;
+    font-size: 13px;
+    align-self: center;
+    border-radius: 10px;
+    padding: 10px 14px;
+  }
+  
+  .message.file {
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 280px;
+    margin-bottom: 8px;
+  }
+  
+  .file-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .file-icon {
+    font-size: 28px;
+    color: #ef4444; /* đỏ PDF */
+  }
+  
+  .file-info {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .filename {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 500;
+    color: #111827;
+  }
+  
+  .filesize {
+    font-size: 12px;
+    color: #6b7280;
+  }
+  
+  .download-btn {
+    background: none;
+    border: none;
+    font-size: 18px;
+    color: #4f46e5;
+    cursor: pointer;
+  }
+  
+  .download-btn:hover {
+    color: #4338ca;
+  }
+  
+  /* 3 chấm typing */
+  .typing {
+    display: flex;
+    gap: 4px;
+    margin-top: 6px;
+    margin-left: 12px;
+  }
+  
+  .typing span {
+    width: 6px;
+    height: 6px;
+    background: #9ca3af;
+    border-radius: 50%;
+    display: inline-block;
+    animation: blink 1.4s infinite both;
+  }
+  
+  .typing span:nth-child(2) {
+    animation-delay: 0.2s;
+  }
+  
+  .typing span:nth-child(3) {
+    animation-delay: 0.4s;
+  }
+  
+  @keyframes blink {
+    0%, 80%, 100% {
+      opacity: 0.3;
+    }
+    40% {
+      opacity: 1;
+    }
+  }
+  
+  
+  .message .time {
+    display: block;
+    font-size: 11px;
+    color: gray;
+    margin-top: 4px;
+    text-align: right;
+  }
+  
+  .message.proposal {
+    display: inline-block;
+    max-width: 280px;
+    font-family: "Inter", sans-serif;
+  }
+  
+  .proposal-card {
+    background: #fff;
+    padding: 16px;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  }
+  
+  .title {
+    margin: 0 0 12px 0;
+    font-weight: 600;
+    font-size: 14px;
+    color: #111827;
+  }
+  
+  .label {
+    display: block;
+    font-size: 13px;
+    color: #374151;
+    margin: 8px 0 4px;
+  }
+  
+  .input {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 13px;
+    margin-bottom: 10px;
+    background: #fff;
+  }
+  
+  .time-options {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+  
+  .time-btn {
+    flex: 1;
+    padding: 6px 0;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+    cursor: pointer;
+    font-size: 13px;
+    background: #f9fafb;
+    color: #374151;
+    transition: 0.2s;
+  }
+  
+  .time-btn.active {
+    background: #4f46e5;
+    color: #fff;
+    border-color: #4f46e5;
+  }
+  
+  .time-btn.disabled {
+    background: #f3f4f6;
+    color: #9ca3af;
+    cursor: not-allowed;
+  }
+  
+  .actions {
+    display: flex;
+    gap: 8px;
+  }
+  
+  .btn-primary {
+    flex: 1;
+    background: #4f46e5;
+    color: #fff;
+    padding: 8px 0;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13px;
+  }
+  
+  .btn-secondary {
+    flex: 1;
+    background: #fff;
+    color: #374151;
+    padding: 8px 0;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13px;
+  }
+  
+  .message.proposal .time {
+    display: block;
+    text-align: right;
+    font-size: 11px;
+    color: #6b7280;
+    margin-top: 4px;
+  }
+  
+  
+  /* Suggestions (gợi ý nhanh) */
+  .chat-suggestions {
+    padding: 12px 16px;
+    background: #fff;
+    border-top: 1px solid #eee;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  
+  .chat-suggestions button {
+    background: #f3f4f6;
+    border: 1px solid #e5e7eb;
+    border-radius: 20px;
+    padding: 8px 14px;
+    font-size: 13px;
+    cursor: pointer;
+  }
+  
+  /* Input */
+  .chat-input {
+    display: flex;
+    align-items: center;
+    border-top: 1px solid #ddd;
+    padding: 8px;
+    background: #fff;
+    gap: 6px;
+  }
+  
+  .chat-input input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    outline: none;
+    font-size: 14px;
+  }
+  
+  .icon-btn {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: #6b7280;
+    transition: color 0.2s ease;
+  }
+  
+  .icon-btn:hover {
+    color: #4f46e5;
+  }
+  
+  .send-btn {
+    background: #4f46e5;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    cursor: pointer;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
