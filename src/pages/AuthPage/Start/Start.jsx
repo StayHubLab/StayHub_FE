@@ -1,9 +1,9 @@
-import React from 'react';
-import { Button, Card, Space, Typography } from 'antd';
-import { useNavigate } from 'react-router-dom';
-import { HomeOutlined, UserOutlined } from '@ant-design/icons';
-import logoRemoveBG from '../../../assets/images/logo/logoRemoveBG.png';
-import './Start.css';
+import React from "react";
+import { Button, Card, Space, Typography } from "antd";
+import { useNavigate } from "react-router-dom";
+import { HomeOutlined, UserOutlined } from "@ant-design/icons";
+import logoRemoveBG from "../../../assets/images/logo/logoRemoveBG.png";
+import "./Start.css";
 
 const { Title, Text } = Typography;
 
@@ -11,12 +11,12 @@ const Start = () => {
   const navigate = useNavigate();
 
   const handleRoleSelect = (role) => {
-    console.log('Selected role:', role);
+    console.log("Selected role:", role);
     navigate(`/register?role=${role}`);
   };
 
   const handleLogin = () => {
-    navigate('/login');
+    navigate("/login");
   };
 
   return (
@@ -43,7 +43,7 @@ const Start = () => {
           <Card
             className="role-card tenant-card"
             hoverable
-            onClick={() => handleRoleSelect('tenant')}
+            onClick={() => handleRoleSelect("tenant")}
           >
             <div className="role-card-content">
               <div className="role-icon tenant-icon">
@@ -53,7 +53,9 @@ const Start = () => {
                 <Title level={4} className="role-title">
                   Tôi là Người Thuê
                 </Title>
-                <Text className="role-description">Tìm phòng trọ lý tưởng, tiện nghi.</Text>
+                <Text className="role-description">
+                  Tìm phòng trọ lý tưởng, tiện nghi.
+                </Text>
               </div>
             </div>
           </Card>
@@ -61,7 +63,7 @@ const Start = () => {
           <Card
             className="role-card landlord-card"
             hoverable
-            onClick={() => handleRoleSelect('landlord')}
+            onClick={() => handleRoleSelect("landlord")}
           >
             <div className="role-card-content">
               <div className="role-icon landlord-icon">
@@ -71,7 +73,9 @@ const Start = () => {
                 <Title level={4} className="role-title">
                   Tôi là Chủ Trọ
                 </Title>
-                <Text className="role-description">Quản lý tài sản hiệu quả, tự động.</Text>
+                <Text className="role-description">
+                  Quản lý tài sản hiệu quả, tự động.
+                </Text>
               </div>
             </div>
           </Card>
@@ -80,7 +84,7 @@ const Start = () => {
         {/* Login link */}
         <div className="login-section">
           <Text className="login-text">
-            Đã có tài khoản?{' '}
+            Đã có tài khoản?{" "}
             <Button type="link" className="login-link" onClick={handleLogin}>
               Đăng nhập
             </Button>

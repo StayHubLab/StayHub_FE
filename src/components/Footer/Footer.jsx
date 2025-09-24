@@ -1,5 +1,5 @@
-import React from 'react';
-import { Row, Col, Typography, Space } from 'antd';
+import React from "react";
+import { Row, Col, Typography, Space } from "antd";
 import {
   FacebookOutlined,
   TwitterOutlined,
@@ -8,9 +8,9 @@ import {
   EnvironmentOutlined,
   MailOutlined,
   PhoneOutlined,
-} from '@ant-design/icons';
-import logoRemoveBG from '../../assets/images/logo/logoRemoveBG.png';
-import './Footer.css';
+} from "@ant-design/icons";
+import logoRemoveBG from "../../assets/images/logo/logoRemoveBG.png";
+import "./Footer.css";
 
 const { Title, Text } = Typography;
 
@@ -33,7 +33,11 @@ const Footer = () => {
             {/* Logo and Description Column */}
             <Col xs={24} sm={12} md={6} lg={6}>
               <div className="footer-brand">
-                <img src={logoRemoveBG} alt="StayHub Logo" className="footer-logo" />
+                <img
+                  src={logoRemoveBG}
+                  alt="StayHub Logo"
+                  className="footer-logo"
+                />
                 <Text className="brand-description">
                   Giải pháp trọ toàn diện trong kỷ nguyên số
                 </Text>
@@ -41,16 +45,28 @@ const Footer = () => {
                 {/* Social Media Icons */}
                 <div className="social-media">
                   <Space size={16}>
-                    <div className="social-icon" onClick={() => handleSocialClick('facebook')}>
+                    <div
+                      className="social-icon"
+                      onClick={() => handleSocialClick("facebook")}
+                    >
                       <FacebookOutlined />
                     </div>
-                    <div className="social-icon" onClick={() => handleSocialClick('twitter')}>
+                    <div
+                      className="social-icon"
+                      onClick={() => handleSocialClick("twitter")}
+                    >
                       <TwitterOutlined />
                     </div>
-                    <div className="social-icon" onClick={() => handleSocialClick('instagram')}>
+                    <div
+                      className="social-icon"
+                      onClick={() => handleSocialClick("instagram")}
+                    >
                       <InstagramOutlined />
                     </div>
-                    <div className="social-icon" onClick={() => handleSocialClick('linkedin')}>
+                    <div
+                      className="social-icon"
+                      onClick={() => handleSocialClick("linkedin")}
+                    >
                       <LinkedinOutlined />
                     </div>
                   </Space>
@@ -65,16 +81,28 @@ const Footer = () => {
                   Dành cho người thuê
                 </Title>
                 <div className="footer-links">
-                  <div className="footer-link" onClick={() => handleLinkClick('search-rooms')}>
+                  <div
+                    className="footer-link"
+                    onClick={() => handleLinkClick("search-rooms")}
+                  >
                     Tìm phòng trọ
                   </div>
-                  <div className="footer-link" onClick={() => handleLinkClick('payment')}>
+                  <div
+                    className="footer-link"
+                    onClick={() => handleLinkClick("payment")}
+                  >
                     Cọc, Thanh toán online
                   </div>
-                  <div className="footer-link" onClick={() => handleLinkClick('contract')}>
+                  <div
+                    className="footer-link"
+                    onClick={() => handleLinkClick("contract")}
+                  >
                     Hợp đồng thuê
                   </div>
-                  <div className="footer-link" onClick={() => handleLinkClick('support')}>
+                  <div
+                    className="footer-link"
+                    onClick={() => handleLinkClick("support")}
+                  >
                     Hỗ trợ sự cố
                   </div>
                 </div>
@@ -88,16 +116,28 @@ const Footer = () => {
                   Dành cho chủ trọ
                 </Title>
                 <div className="footer-links">
-                  <div className="footer-link" onClick={() => handleLinkClick('post-listing')}>
+                  <div
+                    className="footer-link"
+                    onClick={() => handleLinkClick("post-listing")}
+                  >
                     Đăng tin
                   </div>
-                  <div className="footer-link" onClick={() => handleLinkClick('manage-rooms')}>
+                  <div
+                    className="footer-link"
+                    onClick={() => handleLinkClick("manage-rooms")}
+                  >
                     Quản lý phòng trọ
                   </div>
-                  <div className="footer-link" onClick={() => handleLinkClick('manage-contracts')}>
+                  <div
+                    className="footer-link"
+                    onClick={() => handleLinkClick("manage-contracts")}
+                  >
                     Quản lý hợp đồng
                   </div>
-                  <div className="footer-link" onClick={() => handleLinkClick('financial-reports')}>
+                  <div
+                    className="footer-link"
+                    onClick={() => handleLinkClick("financial-reports")}
+                  >
                     Báo cáo tài chính
                   </div>
                 </div>
@@ -113,7 +153,9 @@ const Footer = () => {
                 <div className="contact-info">
                   <div className="contact-item">
                     <EnvironmentOutlined className="contact-icon" />
-                    <Text className="contact-footer">FPT Da Nang University</Text>
+                    <Text className="contact-footer">
+                      FPT Da Nang University
+                    </Text>
                   </div>
                   <div className="contact-item">
                     <MailOutlined className="contact-icon" />

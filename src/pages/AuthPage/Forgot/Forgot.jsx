@@ -1,9 +1,14 @@
-import { EyeInvisibleOutlined, EyeTwoTone, LockOutlined, MailOutlined } from '@ant-design/icons';
-import { Button, Checkbox, Col, Form, Input, Row, notification } from 'antd';
-import axios from 'axios';
-import { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import './Forgot.css';
+import {
+  EyeInvisibleOutlined,
+  EyeTwoTone,
+  LockOutlined,
+  MailOutlined,
+} from "@ant-design/icons";
+import { Button, Checkbox, Col, Form, Input, Row, notification } from "antd";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import "./Forgot.css";
 const Forgot = () => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
@@ -40,28 +45,31 @@ const Forgot = () => {
   const handleSendCode = async () => {
     try {
       // Validate field email trước khi gọi API
-      await form.validateFields(['email']);
+      await form.validateFields(["email"]);
       setSendingCode(true);
-      const email = form.getFieldValue('email');
+      const email = form.getFieldValue("email");
       // Call API thực sự
-      const res = await axios.post('http://localhost:5000/api/auth/resend-verification-email', {
-        email,
-      });
+      const res = await axios.post(
+        "http://localhost:5000/api/auth/resend-verification-email",
+        {
+          email,
+        }
+      );
       // Nếu backend trả về success
       api.success({
-        message: 'Gửi mã thành công!',
+        message: "Gửi mã thành công!",
         description: res.data?.message,
-        placement: 'topRight',
+        placement: "topRight",
         duration: 4.5,
       });
       setStep(2);
       startCountdown();
     } catch (error) {
-      console.error('Send code error:', error);
+      console.error("Send code error:", error);
       api.error({
-        message: 'Lỗi gửi mã!',
+        message: "Lỗi gửi mã!",
         description: error.response?.data?.error,
-        placement: 'topRight',
+        placement: "topRight",
       });
     } finally {
       setSendingCode(false);
@@ -71,25 +79,34 @@ const Forgot = () => {
   const handleResetPassword = async (values) => {
     setLoading(true);
     try {
-      console.log('Reset password values:', values);
-      const res = await axios.post('http://localhost:5000/api/auth/reset-password', {
-        email: values.email,
-        code: values.code,
-        newPassword: values.password,
-      });
+      console.log("Reset password values:", values);
+      const res = await axios.post(
+        "http://localhost:5000/api/auth/reset-password",
+        {
+          email: values.email,
+          code: values.code,
+          newPassword: values.password,
+        }
+      );
       api.success({
-        message: 'Mật khẩu đã được thay đổi thành công!',
-        description: res.data?.message || 'Bạn có thể sử dụng mật khẩu mới để đăng nhập.',
-        placement: 'topRight',
+        message: "Mật khẩu đã được thay đổi thành công!",
+        description:
+          res.data?.message || "Bạn có thể sử dụng mật khẩu mới để đăng nhập.",
+        placement: "topRight",
         duration: 4.5,
       });
-      navigate('/login');
+      navigate("/login");
     } catch (error) {
-      console.error('Reset password error:', error.response?.data || error.message);
+      console.error(
+        "Reset password error:",
+        error.response?.data || error.message
+      );
       api.error({
-        message: 'Có lỗi xảy ra!',
-        description: error.response?.data?.error || 'Không thể đặt lại mật khẩu. Vui lòng thử lại.',
-        placement: 'topRight',
+        message: "Có lỗi xảy ra!",
+        description:
+          error.response?.data?.error ||
+          "Không thể đặt lại mật khẩu. Vui lòng thử lại.",
+        placement: "topRight",
       });
     } finally {
       setLoading(false);
@@ -97,7 +114,7 @@ const Forgot = () => {
   };
 
   const handleLoginRedirect = () => {
-    navigate('/login');
+    navigate("/login");
   };
 
   return (
@@ -136,11 +153,11 @@ const Forgot = () => {
               rules={[
                 {
                   required: true,
-                  message: 'Vui lòng nhập email!',
+                  message: "Vui lòng nhập email!",
                 },
                 {
-                  type: 'email',
-                  message: 'Email không hợp lệ!',
+                  type: "email",
+                  message: "Email không hợp lệ!",
                 },
               ]}
             >
@@ -157,7 +174,9 @@ const Forgot = () => {
                 <Col span={13}>
                   <Form.Item
                     name="verificationCode"
-                    rules={[{ required: true, message: 'Vui lòng nhập mã xác nhận!' }]}
+                    rules={[
+                      { required: true, message: "Vui lòng nhập mã xác nhận!" },
+                    ]}
                   >
                     <Input
                       placeholder="Nhập mã xác nhận"
@@ -173,7 +192,7 @@ const Forgot = () => {
                     className="send-code-btn"
                     block
                   >
-                    {!canResend ? `Gửi lại (${countdown}s)` : 'Gửi lại'}
+                    {!canResend ? `Gửi lại (${countdown}s)` : "Gửi lại"}
                   </Button>
                 </Col>
               </Row>
@@ -202,11 +221,11 @@ const Forgot = () => {
                   rules={[
                     {
                       required: true,
-                      message: 'Vui lòng nhập mật khẩu mới!',
+                      message: "Vui lòng nhập mật khẩu mới!",
                     },
                     {
                       min: 8,
-                      message: 'Mật khẩu phải có ít nhất 8 ký tự!',
+                      message: "Mật khẩu phải có ít nhất 8 ký tự!",
                     },
                   ]}
                 >
@@ -214,25 +233,29 @@ const Forgot = () => {
                     prefix={<LockOutlined className="input-icon" />}
                     placeholder="Ít nhất 8 ký tự"
                     className="custom-input"
-                    iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
+                    iconRender={(visible) =>
+                      visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
+                    }
                   />
                 </Form.Item>
 
                 {/* Confirm Password Field */}
                 <Form.Item
                   name="confirmPassword"
-                  dependencies={['newPassword']}
+                  dependencies={["newPassword"]}
                   rules={[
                     {
                       required: true,
-                      message: 'Vui lòng xác nhận mật khẩu!',
+                      message: "Vui lòng xác nhận mật khẩu!",
                     },
                     ({ getFieldValue }) => ({
                       validator(_, value) {
-                        if (!value || getFieldValue('newPassword') === value) {
+                        if (!value || getFieldValue("newPassword") === value) {
                           return Promise.resolve();
                         }
-                        return Promise.reject(new Error('Mật khẩu xác nhận không khớp!'));
+                        return Promise.reject(
+                          new Error("Mật khẩu xác nhận không khớp!")
+                        );
                       },
                     }),
                   ]}
@@ -241,7 +264,9 @@ const Forgot = () => {
                     prefix={<LockOutlined className="input-icon" />}
                     placeholder="Xác nhận mật khẩu"
                     className="custom-input"
-                    iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
+                    iconRender={(visible) =>
+                      visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
+                    }
                   />
                 </Form.Item>
 
@@ -254,21 +279,23 @@ const Forgot = () => {
                       validator: (_, value) =>
                         value
                           ? Promise.resolve()
-                          : Promise.reject(new Error('Vui lòng đồng ý với các điều khoản!')),
+                          : Promise.reject(
+                              new Error("Vui lòng đồng ý với các điều khoản!")
+                            ),
                     },
                   ]}
                   className="agreement-checkbox"
                 >
                   <Checkbox>
                     <span className="agreement-text">
-                      Tôi đồng ý với{' '}
+                      Tôi đồng ý với{" "}
                       <Link to="/terms" className="terms-link">
                         Điều khoản sử dụng
-                      </Link>{' '}
-                      và{' '}
+                      </Link>{" "}
+                      và{" "}
                       <Link to="/privacy" className="privacy-link">
                         Chính sách bảo mật
-                      </Link>{' '}
+                      </Link>{" "}
                       của StayHub
                     </span>
                   </Checkbox>
@@ -292,8 +319,12 @@ const Forgot = () => {
             {/* Login Link */}
             <div className="login-link-section">
               <span className="login-text">
-                Bạn đã có tài khoản ?{' '}
-                <Button type="link" onClick={handleLoginRedirect} className="login-link-btn">
+                Bạn đã có tài khoản ?{" "}
+                <Button
+                  type="link"
+                  onClick={handleLoginRedirect}
+                  className="login-link-btn"
+                >
                   Đăng Nhập
                 </Button>
               </span>

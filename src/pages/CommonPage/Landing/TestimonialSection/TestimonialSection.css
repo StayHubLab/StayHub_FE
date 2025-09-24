@@ -20,7 +20,7 @@
   line-height: 56px !important;
   color: #111827 !important;
   margin-bottom: 24px !important;
-  font-family: 'Montserrat', sans-serif !important;
+  font-family: "Montserrat", sans-serif !important;
 }
 
 .testimonial-subtitle {
@@ -30,7 +30,7 @@
   color: #6b7280 !important;
   max-width: 768px;
   margin: 0 auto;
-  font-family: 'Montserrat', sans-serif !important;
+  font-family: "Montserrat", sans-serif !important;
 }
 
 .testimonial-cards .ant-row {
@@ -85,7 +85,7 @@
   font-style: italic;
   margin-bottom: 24px !important;
   flex-grow: 1;
-  font-family: 'Montserrat', sans-serif !important;
+  font-family: "Montserrat", sans-serif !important;
 }
 
 .testimonial-author {
@@ -109,14 +109,14 @@
   line-height: 24px !important;
   color: #111827 !important;
   margin: 0 0 4px 0 !important;
-  font-family: 'Montserrat', sans-serif !important;
+  font-family: "Montserrat", sans-serif !important;
 }
 
 .author-role {
   font-size: 14px !important;
   font-weight: 400 !important;
   color: #6b7280 !important;
-  font-family: 'Montserrat', sans-serif !important;
+  font-family: "Montserrat", sans-serif !important;
 }
 
 .testimonial-stats {
@@ -135,14 +135,14 @@
   line-height: 56px !important;
   color: #4739f0 !important;
   margin: 0 0 8px 0 !important;
-  font-family: 'Montserrat', sans-serif !important;
+  font-family: "Montserrat", sans-serif !important;
 }
 
 .stat-label {
   font-size: 16px !important;
   font-weight: 500 !important;
   color: #6b7280 !important;
-  font-family: 'Montserrat', sans-serif !important;
+  font-family: "Montserrat", sans-serif !important;
 }
 
 /* Responsive Design */
