@@ -1,28 +1,19 @@
+/* Dashboard Container Styles */
 .dashboard-container {
+  width: 100%;
   padding: 24px;
+  background: #f8f9fa;
+  min-height: 100vh;
 }
 
-.dashboard-header {
-  margin-bottom: 24px;
+@media (max-width: 768px) {
+  .dashboard-container {
+    padding: 16px;
+  }
 }
 
-.dashboard-header h2 {
-  color: #FF7A00;
-  margin-bottom: 8px;
-}
-
-.dashboard-stats .ant-card {
-  text-align: center;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.dashboard-stats .ant-statistic-title {
-  font-weight: 500;
-  color: #666;
-}
-
-.dashboard-stats .ant-statistic-content {
-  font-size: 24px;
-  font-weight: 600;
+@media (max-width: 480px) {
+  .dashboard-container {
+    padding: 12px;
+  }
 }

@@ -102,7 +102,7 @@
 }
 
 /* Contact Section */
-.contact-info {
+.stayhub-contact-info {
     display: flex;
     flex-direction: column;
     gap: 16px;
@@ -189,7 +189,7 @@
         gap: 16px;
     }
 
-    .contact-info {
+    .stayhub-contact-info {
         gap: 12px;
     }
 

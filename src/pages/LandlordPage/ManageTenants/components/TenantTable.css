@@ -1,0 +1,328 @@
+.landlords-tenant-table-container {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  border: 1px solid #f0f0f0;
+}
+
+.landlords-tenant-table .ant-table {
+  background: white;
+}
+
+.landlords-tenant-table .ant-table-thead > tr > th {
+  background: #f8f9fa;
+  border-bottom: 2px solid #f0f0f0;
+  font-weight: 600;
+  color: #333;
+  font-size: 14px;
+}
+
+.landlords-tenant-table .ant-table-tbody > tr > td {
+  border-bottom: 1px solid #f5f5f5;
+  padding: 16px 16px;
+  vertical-align: middle;
+}
+
+.landlords-tenant-table .ant-table-tbody > tr:hover > td {
+  background: #f8f7ff;
+}
+
+/* Serial Number */
+.landlords-serial-number {
+  font-weight: 600;
+  color: #666;
+  background: #f0f0f0;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+}
+
+/* Tenant Info */
+.landlords-tenant-info {
+  display: flex;
+  align-items: center;
+}
+
+.landlords-tenant-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+
+.landlords-tenant-avatar {
+  flex-shrink: 0;
+  background-color: #4739F0;
+}
+
+.landlords-tenant-details {
+  flex: 1;
+  min-width: 0;
+}
+
+.landlords-tenant-name {
+  font-weight: 600;
+  color: #1f1f1f;
+  font-size: 14px;
+  margin-bottom: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.landlords-tenant-phone {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: #666;
+  font-size: 12px;
+}
+
+.landlords-phone-icon {
+  color: #4739F0;
+  font-size: 11px;
+}
+
+/* Room Number */
+.landlords-room-number {
+  text-align: center;
+}
+
+.landlords-room-code {
+  color: rgb(0, 0, 0);
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+/* Rent Amount */
+.landlords-rent-amount {
+  font-weight: 700;
+  color: #4739F0;
+  font-size: 15px;
+  text-align: right;
+}
+
+/* Term */
+.landlords-term {
+  text-align: center;
+}
+
+.landlords-term-text {
+  background: #f0f0f0;
+  color: #666;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+/* Status Tags */
+.landlords-status-tag {
+  font-size: 12px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-weight: 600;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.landlords-status-tag .anticon {
+  font-size: 11px;
+}
+
+/* Specific status styling */
+.landlords-status-paid {
+  background: #f6ffed !important;
+  border: 1px solid #b7eb8f !important;
+  color: #389e0d !important;
+}
+
+.landlords-status-pending {
+  background: #fffbe6 !important;
+  border: 1px solid #ffe58f !important;
+  color: #d48806 !important;
+}
+
+.landlords-status-overdue {
+  background: #fff2f0 !important;
+  border: 1px solid #ffccc7 !important;
+  color: #cf1322 !important;
+}
+
+.landlords-status-partial {
+  background: #e6f7ff !important;
+  border: 1px solid #91d5ff !important;
+  color: #0958d9 !important;
+}
+
+/* Contract Info */
+.landlords-contract-info {
+  font-size: 12px;
+}
+
+.landlords-contract-dates {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.landlords-contract-start,
+.landlords-contract-end {
+  color: #666;
+  white-space: nowrap;
+}
+
+.landlords-contract-start {
+  color: #52c41a;
+  font-weight: 500;
+}
+
+.landlords-contract-end {
+  color: #FAC227;
+  font-weight: 500;
+}
+
+/* Action Buttons */
+.landlords-action-buttons {
+  display: flex;
+  justify-content: center;
+}
+
+.landlords-remind-btn {
+  border-radius: 6px;
+  font-size: 12px;
+  height: 32px;
+  padding: 0 12px;
+  font-weight: 500;
+}
+
+.landlords-remind-enabled {
+  background: #4739F0;
+  border-color: #4739F0;
+}
+
+.landlords-remind-enabled:hover {
+  background: #3a2dd6;
+  border-color: #3a2dd6;
+}
+
+.landlords-remind-disabled {
+  background: #f0f0f0;
+  border-color: #d9d9d9;
+  color: #999;
+}
+
+/* Row Styling Based on Status */
+.landlords-row-overdue {
+  background-color: rgba(255, 77, 79, 0.02) !important;
+}
+
+.landlords-row-overdue:hover {
+  background-color: rgba(255, 77, 79, 0.05) !important;
+}
+
+.landlords-row-pending {
+  background-color: rgba(250, 194, 39, 0.02) !important;
+}
+
+.landlords-row-pending:hover {
+  background-color: rgba(250, 194, 39, 0.05) !important;
+}
+
+.landlords-row-normal:hover {
+  background-color: #f8f7ff !important;
+}
+
+/* Pagination */
+.landlords-pagination {
+  padding: 16px 24px;
+  border-top: 1px solid #f0f0f0;
+  background: #fafafa;
+}
+
+.landlords-pagination .ant-pagination-item-active {
+  border-color: #4739F0;
+}
+
+.landlords-pagination .ant-pagination-item-active a {
+  color: #4739F0;
+}
+
+.landlords-pagination .ant-pagination-item:hover {
+  border-color: #4739F0;
+}
+
+.landlords-pagination .ant-pagination-item:hover a {
+  color: #4739F0;
+}
+
+.landlords-pagination .ant-pagination-jump-prev:hover .ant-pagination-item-link-icon,
+.landlords-pagination .ant-pagination-jump-next:hover .ant-pagination-item-link-icon {
+  color: #4739F0;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .landlords-tenant-table .ant-table-tbody > tr > td {
+    padding: 12px 8px;
+  }
+  
+  .landlords-tenant-name {
+    font-size: 13px;
+  }
+  
+  .landlords-tenant-phone {
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 992px) {
+  .landlords-tenant-header {
+    flex-direction: column;
+    text-align: center;
+    gap: 8px;
+  }
+  
+  .landlords-tenant-avatar {
+    align-self: center;
+  }
+  
+  .landlords-contract-dates {
+    text-align: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .landlords-tenant-table-container {
+    margin: 0 -16px;
+    border-radius: 0;
+  }
+  
+  .landlords-tenant-table .ant-table-tbody > tr > td {
+    padding: 8px 4px;
+    font-size: 12px;
+  }
+  
+  .landlords-room-code {
+    padding: 4px 8px;
+    font-size: 11px;
+  }
+  
+  .landlords-remind-btn {
+    font-size: 11px;
+    height: 28px;
+    padding: 0 8px;
+  }
+}
