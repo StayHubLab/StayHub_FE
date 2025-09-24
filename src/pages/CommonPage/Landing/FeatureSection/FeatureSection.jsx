@@ -10,21 +10,24 @@ const FeatureSection = () => {
     {
       id: 1,
       icon: <SafetyOutlined className="feature-icon" />,
-      title: "Minh bạch & Tin cậy",
-      description: "Thông tin phòng trọ được xác thực, đánh giá thực tế từ người thuê trước, không còn lo lắng về tin đăng ảo."
+      title: 'Minh bạch & Tin cậy',
+      description:
+        'Thông tin phòng trọ được xác thực, đánh giá thực tế từ người thuê trước, không còn lo lắng về tin đăng ảo.',
     },
     {
       id: 2,
       icon: <ThunderboltOutlined className="feature-icon" />,
-      title: "Tiện lợi & Nhanh chóng",
-      description: "Tìm kiếm, lọc phòng theo nhu cầu, lịch xem và thanh toán trực tuyến dễ đặt dàng chỉ trong vài phút."
+      title: 'Tiện lợi & Nhanh chóng',
+      description:
+        'Tìm kiếm, lọc phòng theo nhu cầu, lịch xem và thanh toán trực tuyến dễ đặt dàng chỉ trong vài phút.',
     },
     {
       id: 3,
       icon: <AppstoreOutlined className="feature-icon" />,
-      title: "Hệ sinh thái kết nối",
-      description: "Kết nối chủ trọ và người thuê, tích hợp dịch vụ hỗ trợ chuyển nhà, sửa chữa và các tiện ích khác."
-    }
+      title: 'Hệ sinh thái kết nối',
+      description:
+        'Kết nối chủ trọ và người thuê, tích hợp dịch vụ hỗ trợ chuyển nhà, sửa chữa và các tiện ích khác.',
+    },
   ];
 
   return (
@@ -35,7 +38,8 @@ const FeatureSection = () => {
             Tại Sao Chọn StayHub?
           </Title>
           <Text className="feature-subtitle">
-            Chúng tôi đang xây dựng nền tảng toàn diện nhất cho việc tìm kiếm, thuê và quản lý nhà trọ tại Việt Nam
+            Chúng tôi đang xây dựng nền tảng toàn diện nhất cho việc tìm kiếm, thuê và quản lý nhà
+            trọ tại Việt Nam
           </Text>
         </div>
 
@@ -44,15 +48,11 @@ const FeatureSection = () => {
             <Col xs={24} md={8} key={feature.id}>
               <Card className="feature-card" bordered={false}>
                 <div className="feature-card-content">
-                  <div className="feature-icon-wrapper">
-                    {feature.icon}
-                  </div>
+                  <div className="feature-icon-wrapper">{feature.icon}</div>
                   <Title level={4} className="feature-card-title">
                     {feature.title}
                   </Title>
-                  <Text className="feature-card-description">
-                    {feature.description}
-                  </Text>
+                  <Text className="feature-card-description">{feature.description}</Text>
                 </div>
               </Card>
             </Col>

@@ -7,7 +7,6 @@ import './Start.css';
 
 const { Title, Text } = Typography;
 
-
 const Start = () => {
   const navigate = useNavigate();
 
@@ -18,7 +17,6 @@ const Start = () => {
 
   const handleLogin = () => {
     navigate('/login');
-
   };
 
   return (
@@ -26,17 +24,14 @@ const Start = () => {
       <div className="start-content">
         {/* Logo placeholder */}
         <div className="logo-container">
-          <img
-            src={logoRemoveBG}
-            alt="StayHub Logo"
-            className="logo-image"
-          />
+          <img src={logoRemoveBG} alt="StayHub Logo" className="logo-image" />
         </div>
 
         {/* Welcome message */}
         <div className="welcome-section">
           <Title level={1} className="welcome-title">
-            Chào mừng bạn đến với <span className="stay-text">Stay</span><span className="hub-text">Hub</span>!
+            Chào mừng bạn đến với <span className="stay-text">Stay</span>
+            <span className="hub-text">Hub</span>!
           </Title>
           <Text className="welcome-subtitle">
             Chọn vai trò của bạn để khám phá những tính năng tối ưu.
@@ -58,9 +53,7 @@ const Start = () => {
                 <Title level={4} className="role-title">
                   Tôi là Người Thuê
                 </Title>
-                <Text className="role-description">
-                  Tìm phòng trọ lý tưởng, tiện nghi.
-                </Text>
+                <Text className="role-description">Tìm phòng trọ lý tưởng, tiện nghi.</Text>
               </div>
             </div>
           </Card>
@@ -78,9 +71,7 @@ const Start = () => {
                 <Title level={4} className="role-title">
                   Tôi là Chủ Trọ
                 </Title>
-                <Text className="role-description">
-                  Quản lý tài sản hiệu quả, tự động.
-                </Text>
+                <Text className="role-description">Quản lý tài sản hiệu quả, tự động.</Text>
               </div>
             </div>
           </Card>
@@ -90,11 +81,7 @@ const Start = () => {
         <div className="login-section">
           <Text className="login-text">
             Đã có tài khoản?{' '}
-            <Button
-              type="link"
-              className="login-link"
-              onClick={handleLogin}
-            >
+            <Button type="link" className="login-link" onClick={handleLogin}>
               Đăng nhập
             </Button>
           </Text>
