@@ -7,11 +7,11 @@ const HeroSection = () => {
     const navigate = useNavigate();
 
     const handleFindRoom = () => {
-        navigate('/find-room');
+        navigate('/main/find');
     };
 
     const handleRoomManage = () => {
-        navigate('/home');
+        navigate('/main/home');
     };
 
     return (
