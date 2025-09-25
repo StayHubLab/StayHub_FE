@@ -24,9 +24,9 @@
   position: absolute;
   left: 0;
   top: -6px;
-  color: #4739F0;
+  color: #4739f0;
   font-size: 30px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 700;
   line-height: 36px;
   word-wrap: break-word;
@@ -38,9 +38,9 @@
   position: absolute;
   left: 0;
   top: 38.88px;
-  color: #4B5563;
+  color: #4b5563;
   font-size: 16px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 400;
   line-height: 24px;
   word-wrap: break-word;
@@ -48,7 +48,7 @@
 
 /* Action Buttons Section */
 .welcome-actions {
-  width: 623.80px;
+  width: 623.8px;
   height: 46px;
   position: relative;
   background: rgba(0, 0, 0, 0);
@@ -80,7 +80,7 @@
 /* Primary Button (Find New Room) */
 .action-button.primary {
   width: 191.69px;
-  background: #4739F0;
+  background: #4739f0;
 }
 
 .action-button.primary:hover {
@@ -91,7 +91,7 @@
 .action-button.secondary {
   width: 220.34px;
   background: rgba(0, 0, 0, 0);
-  border: 1px solid #4739F0;
+  border: 1px solid #4739f0;
 }
 
 .action-button.secondary:hover {
@@ -101,7 +101,7 @@
 /* Warning Button (Report Issue) */
 .action-button.warning {
   width: 179.77px;
-  background: #FFF3E0;
+  background: #fff3e0;
 }
 
 .action-button.warning:hover {
@@ -154,14 +154,14 @@
   width: 16px;
   height: 13.66px;
   top: 1.34px;
-  background: #4739F0;
+  background: #4739f0;
 }
 
 .warning-icon {
   width: 16px;
   height: 14px;
   top: 1px;
-  background: #FAC227;
+  background: #fac227;
 }
 
 /* Button Text */
@@ -171,7 +171,7 @@
   left: 44px;
   text-align: center;
   font-size: 16px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 700;
   word-wrap: break-word;
   display: flex;
@@ -187,13 +187,13 @@
 .secondary-text {
   width: 155px;
   top: 11.56px;
-  color: #4739F0;
+  color: #4739f0;
 }
 
 .warning-text {
   width: 116px;
   top: 11.32px;
-  color: #FAC227;
+  color: #fac227;
 }
 
 /* Responsive Design */
@@ -204,32 +204,32 @@
     align-items: flex-start;
     height: auto;
   }
-  
+
   .welcome-text-section {
     width: 100%;
     position: static;
     height: auto;
   }
-  
+
   .welcome-title-home,
   .welcome-subtitle-home {
     position: static;
     width: 100%;
   }
-  
+
   .welcome-actions {
     width: 100%;
     position: static;
     flex-wrap: wrap;
     gap: 12px;
   }
-  
+
   .action-button {
     flex: 1;
     min-width: 160px;
     justify-content: center;
   }
-  
+
   .action-button.primary,
   .action-button.secondary,
   .action-button.warning {
@@ -247,22 +247,22 @@
     font-size: 14px;
     line-height: 20px;
   }
-  
+
   .welcome-actions {
     flex-direction: column;
     gap: 12px;
   }
-  
+
   .action-button {
     width: 100% !important;
     max-width: none;
   }
-  
+
   .button-text {
     position: static;
     margin-left: 8px;
   }
-  
+
   .button-icon-container {
     position: static;
     margin-right: 8px;
@@ -274,16 +274,16 @@
     font-size: 20px;
     line-height: 26px;
   }
-  
+
   .welcome-subtitle-home {
     font-size: 13px;
     line-height: 18px;
   }
-  
+
   .action-button {
     height: 40px;
   }
-  
+
   .button-text {
     font-size: 14px;
   }

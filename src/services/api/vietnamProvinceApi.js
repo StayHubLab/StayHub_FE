@@ -5,7 +5,7 @@
  */
 
 // Base URL for Vietnam Province API - using working endpoint
-const BASE_URL = 'https://provinces.open-api.vn/api/v2';
+const BASE_URL = "https://provinces.open-api.vn/api/v2";
 
 /**
  * Fetch all provinces/cities with latest mergers
@@ -13,21 +13,21 @@ const BASE_URL = 'https://provinces.open-api.vn/api/v2';
  */
 export const fetchProvinces = async () => {
   try {
-    console.log('Fetching provinces from:', `${BASE_URL}/p/`);
+    console.log("Fetching provinces from:", `${BASE_URL}/p/`);
     const response = await fetch(`${BASE_URL}/p/`);
-    
+
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
-    
+
     const data = await response.json();
-    console.log('Provinces data received:', data.slice(0, 3)); // Log first 3 items for debugging
-    
+    console.log("Provinces data received:", data.slice(0, 3)); // Log first 3 items for debugging
+
     // This API returns array directly
     return Array.isArray(data) ? data : [];
   } catch (error) {
-    console.error('Error fetching provinces:', error);
-    throw new Error('Không thể tải danh sách tỉnh/thành phố');
+    console.error("Error fetching provinces:", error);
+    throw new Error("Không thể tải danh sách tỉnh/thành phố");
   }
 };
 
@@ -39,48 +39,55 @@ export const fetchProvinces = async () => {
  */
 export const fetchWards = async (provinceCode) => {
   try {
-    console.log('Fetching wards for province:', provinceCode);
+    console.log("Fetching wards for province:", provinceCode);
     const response = await fetch(`${BASE_URL}/p/${provinceCode}?depth=2`);
-    
+
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
-    
+
     const data = await response.json();
-    console.log('Province data received:', data);
-    console.log('Data structure check - districts:', data.districts);
-    
+    console.log("Province data received:", data);
+    console.log("Data structure check - districts:", data.districts);
+
     // Extract all wards from all districts in the province
     const allWards = [];
     if (data.districts && Array.isArray(data.districts)) {
-      data.districts.forEach(district => {
-        console.log('Processing district:', district.name, 'wards:', district.wards?.length || 0);
+      data.districts.forEach((district) => {
+        console.log(
+          "Processing district:",
+          district.name,
+          "wards:",
+          district.wards?.length || 0
+        );
         if (district.wards && Array.isArray(district.wards)) {
           allWards.push(...district.wards);
         }
       });
     }
-    
-    console.log('Total extracted wards:', allWards.length);
-    console.log('First few wards:', allWards.slice(0, 3));
-    
+
+    console.log("Total extracted wards:", allWards.length);
+    console.log("First few wards:", allWards.slice(0, 3));
+
     // If no wards found through districts, check if wards are directly in the data
     if (allWards.length === 0) {
-      console.log('No wards found in districts, checking direct wards in data...');
+      console.log(
+        "No wards found in districts, checking direct wards in data..."
+      );
       if (data.wards && Array.isArray(data.wards)) {
-        console.log('Found direct wards:', data.wards.length);
+        console.log("Found direct wards:", data.wards.length);
         allWards.push(...data.wards);
       } else if (Array.isArray(data)) {
-        console.log('Data is array, checking if it contains wards...');
+        console.log("Data is array, checking if it contains wards...");
         allWards.push(...data);
       }
     }
-    
-    console.log('Final wards count:', allWards.length);
+
+    console.log("Final wards count:", allWards.length);
     return allWards;
   } catch (error) {
-    console.error('Error fetching wards:', error);
-    throw new Error('Không thể tải danh sách phường/xã');
+    console.error("Error fetching wards:", error);
+    throw new Error("Không thể tải danh sách phường/xã");
   }
 };
 
@@ -92,16 +99,16 @@ export const fetchWards = async (provinceCode) => {
 export const getProvinceById = async (provinceCode) => {
   try {
     const response = await fetch(`${BASE_URL}/p/${provinceCode}`);
-    
+
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
-    
+
     const data = await response.json();
     return data || {};
   } catch (error) {
-    console.error('Error fetching province details:', error);
-    throw new Error('Không thể tải thông tin chi tiết tỉnh/thành phố');
+    console.error("Error fetching province details:", error);
+    throw new Error("Không thể tải thông tin chi tiết tỉnh/thành phố");
   }
 };
 
@@ -113,18 +120,19 @@ export const getProvinceById = async (provinceCode) => {
 export const searchProvinces = async (searchTerm) => {
   try {
     const provinces = await fetchProvinces();
-    
+
     if (!searchTerm) return provinces;
-    
+
     const normalizedSearch = searchTerm.toLowerCase().trim();
-    
-    return provinces.filter(province => 
-      province.name?.toLowerCase().includes(normalizedSearch) ||
-      province.codename?.toLowerCase().includes(normalizedSearch)
+
+    return provinces.filter(
+      (province) =>
+        province.name?.toLowerCase().includes(normalizedSearch) ||
+        province.codename?.toLowerCase().includes(normalizedSearch)
     );
   } catch (error) {
-    console.error('Error searching provinces:', error);
-    throw new Error('Không thể tìm kiếm tỉnh/thành phố');
+    console.error("Error searching provinces:", error);
+    throw new Error("Không thể tìm kiếm tỉnh/thành phố");
   }
 };
 
@@ -137,18 +145,19 @@ export const searchProvinces = async (searchTerm) => {
 export const searchWards = async (provinceCode, searchTerm) => {
   try {
     const wards = await fetchWards(provinceCode);
-    
+
     if (!searchTerm) return wards;
-    
+
     const normalizedSearch = searchTerm.toLowerCase().trim();
-    
-    return wards.filter(ward => 
-      ward.name?.toLowerCase().includes(normalizedSearch) ||
-      ward.codename?.toLowerCase().includes(normalizedSearch)
+
+    return wards.filter(
+      (ward) =>
+        ward.name?.toLowerCase().includes(normalizedSearch) ||
+        ward.codename?.toLowerCase().includes(normalizedSearch)
     );
   } catch (error) {
-    console.error('Error searching wards:', error);
-    throw new Error('Không thể tìm kiếm phường/xã');
+    console.error("Error searching wards:", error);
+    throw new Error("Không thể tìm kiếm phường/xã");
   }
 };
 
@@ -158,8 +167,8 @@ export const searchWards = async (provinceCode, searchTerm) => {
  * @returns {string} Formatted display name
  */
 export const formatProvinceName = (province) => {
-  if (!province) return '';
-  return province.name || '';
+  if (!province) return "";
+  return province.name || "";
 };
 
 /**
@@ -168,8 +177,8 @@ export const formatProvinceName = (province) => {
  * @returns {string} Formatted display name
  */
 export const formatWardName = (ward) => {
-  if (!ward) return '';
-  return ward.name || '';
+  if (!ward) return "";
+  return ward.name || "";
 };
 
 /**
@@ -182,20 +191,20 @@ export const formatWardName = (ward) => {
  */
 export const getFullAddress = ({ ward, province, detailedAddress }) => {
   const addressParts = [];
-  
+
   if (detailedAddress) {
     addressParts.push(detailedAddress);
   }
-  
+
   if (ward) {
     addressParts.push(formatWardName(ward));
   }
-  
+
   if (province) {
     addressParts.push(formatProvinceName(province));
   }
-  
-  return addressParts.join(', ');
+
+  return addressParts.join(", ");
 };
 
 // Export default object with all functions
@@ -207,5 +216,5 @@ export default {
   searchWards,
   formatProvinceName,
   formatWardName,
-  getFullAddress
+  getFullAddress,
 };

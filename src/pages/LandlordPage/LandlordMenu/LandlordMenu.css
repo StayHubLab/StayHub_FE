@@ -60,7 +60,7 @@
   justify-content: center;
   align-items: center;
   display: inline-flex;
-  color: #4B5563;
+  color: #4b5563;
   font-size: 16px;
   transition: color 0.3s ease;
 }
@@ -83,7 +83,7 @@
   left: 0;
   top: 0;
   position: absolute;
-  background: #4B5563;
+  background: #4b5563;
   transition: background-color 0.3s ease;
 }
 
@@ -103,9 +103,9 @@
   height: 24px;
   left: 0;
   top: 0.44px;
-  color: #4B5563;
+  color: #4b5563;
   font-size: 16px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 500;
   line-height: 24px;
   word-wrap: break-word;
@@ -124,12 +124,12 @@
     width: 100%;
     max-width: 220px;
   }
-  
+
   .landlord-menu-content {
     width: 100%;
     max-width: 188px;
   }
-  
+
   .landlord-menu-item,
   .landlord-menu-item-background {
     width: 100%;

@@ -1,9 +1,9 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import './RoomInfo.css';
-import { 
-  StarFilled, 
-  EnvironmentOutlined, 
+import React from "react";
+import PropTypes from "prop-types";
+import "./RoomInfo.css";
+import {
+  StarFilled,
+  EnvironmentOutlined,
   CheckCircleOutlined,
   WifiOutlined,
   CarOutlined,
@@ -12,14 +12,10 @@ import {
   ClockCircleOutlined,
   SettingOutlined,
   SafetyCertificateOutlined,
-  CleaningServicesOutlined
-} from '@ant-design/icons';
+  CleaningServicesOutlined,
+} from "@ant-design/icons";
 
-const RoomInfo = ({ 
-  roomData,
-  onViewAllReviews,
-  onViewOnMap
-}) => {
+const RoomInfo = ({ roomData, onViewAllReviews, onViewOnMap }) => {
   // Safety check for roomData
   if (!roomData) {
     return <div>Loading room information...</div>;
@@ -27,7 +23,7 @@ const RoomInfo = ({
 
   // Format price display
   const formatPrice = (price) => {
-    return price.toLocaleString('vi-VN');
+    return price.toLocaleString("vi-VN");
   };
 
   // Render star rating
@@ -62,7 +58,7 @@ const RoomInfo = ({
       flexible: <ClockCircleOutlined />,
       furniture: <HomeOutlined />,
       security: <SafetyCertificateOutlined />,
-      cleaning: "🧹"
+      cleaning: "🧹",
     };
     return iconMap[iconType] || <CheckCircleOutlined />;
   };
@@ -86,19 +82,23 @@ const RoomInfo = ({
       {/* Header Section */}
       <div className="room-header-section">
         <h1 className="room-title">{roomData.title}</h1>
-        
+
         <div className="room-price-rating">
           <div className="price-section">
-            <span className="room-price">{formatPrice(roomData.price)} VND </span>
+            <span className="room-price">
+              {formatPrice(roomData.price)} VND{" "}
+            </span>
             <span className="price-period">/tháng</span>
           </div>
-          
+
           <div className="rating-section">
             <div className="stars-rating">
               {renderStars(roomData.rating)}
               <span className="rating-number">{roomData.rating}</span>
             </div>
-            <span className="review-users-count">({roomData.reviewCount} đánh giá)</span>
+            <span className="review-users-count">
+              ({roomData.reviewCount} đánh giá)
+            </span>
           </div>
         </div>
 
@@ -113,7 +113,9 @@ const RoomInfo = ({
           </div>
           <button className="view-map-btn" onClick={handleViewOnMap}>
             <EnvironmentOutlined className="map-icon" />
-            <span className="address-text" style={{ color: '#4739F0' }}>Xem trên bản đồ</span>
+            <span className="address-text" style={{ color: "#4739F0" }}>
+              Xem trên bản đồ
+            </span>
           </button>
         </div>
       </div>
@@ -136,9 +138,7 @@ const RoomInfo = ({
         <div className="amenities-grid">
           {roomData.amenities.map((amenity, index) => (
             <div key={index} className="amenity-item">
-              <div className="amenity-icon">
-                {getAmenityIcon(amenity.icon)}
-              </div>
+              <div className="amenity-icon">{getAmenityIcon(amenity.icon)}</div>
               <span className="amenity-name">{amenity.name}</span>
             </div>
           ))}
@@ -169,7 +169,9 @@ const RoomInfo = ({
             </div>
             <div className="detail-item">
               <span className="detail-label">Số người tối đa:</span>
-              <span className="detail-value">{roomData.details.maxOccupancy}</span>
+              <span className="detail-value">
+                {roomData.details.maxOccupancy}
+              </span>
             </div>
           </div>
           <div className="detail-row">
@@ -185,11 +187,15 @@ const RoomInfo = ({
           <div className="detail-row">
             <div className="detail-item">
               <span className="detail-label">Tình trạng:</span>
-              <span className="detail-value status-available">{roomData.details.status}</span>
+              <span className="detail-value status-available">
+                {roomData.details.status}
+              </span>
             </div>
             <div className="detail-item">
               <span className="detail-label">Có thể dọn vào:</span>
-              <span className="detail-value">{roomData.details.availability}</span>
+              <span className="detail-value">
+                {roomData.details.availability}
+              </span>
             </div>
           </div>
         </div>
@@ -199,7 +205,10 @@ const RoomInfo = ({
       <div className="reviews-users-section">
         <div className="reviews-users-header">
           <h2 className="section-title">Đánh giá từ người thuê</h2>
-          <button className="view-all-reviews-users-link" onClick={handleViewAllReviews}>
+          <button
+            className="view-all-reviews-users-link"
+            onClick={handleViewAllReviews}
+          >
             Xem tất cả đánh giá
           </button>
         </div>
@@ -211,7 +220,9 @@ const RoomInfo = ({
               {renderStars(roomData.rating)}
               <span className="rating-number">{roomData.rating}</span>
             </div>
-            <span className="review-users-count">({roomData.reviewCount} đánh giá)</span>
+            <span className="review-users-count">
+              ({roomData.reviewCount} đánh giá)
+            </span>
           </div>
         </div>
 
@@ -220,42 +231,58 @@ const RoomInfo = ({
           <div className="rating-category">
             <span className="category-label">Vị trí</span>
             <div className="rating-bar">
-              <div 
-                className="rating-fill" 
-                style={{ width: `${(roomData.ratingBreakdown.location / 5) * 100}%` }}
+              <div
+                className="rating-fill"
+                style={{
+                  width: `${(roomData.ratingBreakdown.location / 5) * 100}%`,
+                }}
               />
             </div>
-            <span className="category-score">{roomData.ratingBreakdown.location}</span>
+            <span className="category-score">
+              {roomData.ratingBreakdown.location}
+            </span>
           </div>
           <div className="rating-category">
             <span className="category-label">Sạch sẽ</span>
             <div className="rating-bar">
-              <div 
-                className="rating-fill" 
-                style={{ width: `${(roomData.ratingBreakdown.cleanliness / 5) * 100}%` }}
+              <div
+                className="rating-fill"
+                style={{
+                  width: `${(roomData.ratingBreakdown.cleanliness / 5) * 100}%`,
+                }}
               />
             </div>
-            <span className="category-score">{roomData.ratingBreakdown.cleanliness}</span>
+            <span className="category-score">
+              {roomData.ratingBreakdown.cleanliness}
+            </span>
           </div>
           <div className="rating-category">
             <span className="category-label">Tiện nghi</span>
             <div className="rating-bar">
-              <div 
-                className="rating-fill" 
-                style={{ width: `${(roomData.ratingBreakdown.amenities / 5) * 100}%` }}
+              <div
+                className="rating-fill"
+                style={{
+                  width: `${(roomData.ratingBreakdown.amenities / 5) * 100}%`,
+                }}
               />
             </div>
-            <span className="category-score">{roomData.ratingBreakdown.amenities}</span>
+            <span className="category-score">
+              {roomData.ratingBreakdown.amenities}
+            </span>
           </div>
           <div className="rating-category">
             <span className="category-label">Chủ nhà</span>
             <div className="rating-bar">
-              <div 
-                className="rating-fill" 
-                style={{ width: `${(roomData.ratingBreakdown.landlord / 5) * 100}%` }}
+              <div
+                className="rating-fill"
+                style={{
+                  width: `${(roomData.ratingBreakdown.landlord / 5) * 100}%`,
+                }}
               />
             </div>
-            <span className="category-score">{roomData.ratingBreakdown.landlord}</span>
+            <span className="category-score">
+              {roomData.ratingBreakdown.landlord}
+            </span>
           </div>
         </div>
 
@@ -264,8 +291,8 @@ const RoomInfo = ({
           {roomData.reviews.map((review) => (
             <div key={review.id} className="review-users-item">
               <div className="review-users-header">
-                <img 
-                  src={review.avatar} 
+                <img
+                  src={review.avatar}
                   alt={review.name}
                   className="reviewer-users-avatar"
                 />
@@ -294,17 +321,19 @@ RoomInfo.propTypes = {
     reviewCount: PropTypes.number,
     address: PropTypes.string,
     description: PropTypes.arrayOf(PropTypes.string),
-    amenities: PropTypes.arrayOf(PropTypes.shape({
-      icon: PropTypes.string,
-      name: PropTypes.string
-    })),
+    amenities: PropTypes.arrayOf(
+      PropTypes.shape({
+        icon: PropTypes.string,
+        name: PropTypes.string,
+      })
+    ),
     rules: PropTypes.arrayOf(PropTypes.string),
     details: PropTypes.object,
     ratingBreakdown: PropTypes.object,
-    reviews: PropTypes.arrayOf(PropTypes.object)
+    reviews: PropTypes.arrayOf(PropTypes.object),
   }).isRequired,
   onViewAllReviews: PropTypes.func,
-  onViewOnMap: PropTypes.func
+  onViewOnMap: PropTypes.func,
 };
 
 export default RoomInfo;

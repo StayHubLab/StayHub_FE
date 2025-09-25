@@ -1,12 +1,14 @@
-import React from 'react';
-import { Routes, Route } from 'react-router-dom';
-import LandingPage from '../../pages/CommonPage/Landing/LandingPage';
-import Main from 'pages/CommonPage/Main/Main';
-import Home from '../../pages/CommonPage/Main/Home/Home';
-import Review from '../../pages/CommonPage/Main/Review/Review';
-import Find from '../../pages/CommonPage/Main/FindRoom/FindRoom';
-import RoomDetail from 'pages/CommonPage/Main/RoomDetail/Detail';
-import Saved from '../../pages/CommonPage/Main/Saved/SavedRoom';
+import React from "react";
+import { Routes, Route } from "react-router-dom";
+import LandingPage from "../../pages/CommonPage/Landing/LandingPage";
+import ProtectedRedirect from "../../components/ProtectedRedirect/ProtectedRedirect";
+import Main from "pages/CommonPage/Main/Main";
+import Home from "../../pages/CommonPage/Main/Home/Home";
+import Review from "../../pages/CommonPage/Main/Review/Review";
+import Find from "../../pages/CommonPage/Main/FindRoom/FindRoom";
+import RoomDetail from "pages/CommonPage/Main/RoomDetail/Detail";
+import Saved from "../../pages/CommonPage/Main/Saved/SavedRoom";
+import Profile from "../../pages/CommonPage/Profile/Profile";
 // import Contract from '../../pages/CommonPage/Main/Contract/Contract';
 // import History from '../../pages/CommonPage/Main/History/History';
 // import Support from '../../pages/CommonPage/Main/Support/Support';
@@ -15,8 +17,9 @@ import Saved from '../../pages/CommonPage/Main/Saved/SavedRoom';
 const CommonRoutes = () => {
   return (
     <Routes>
-      <Route path="/" element={<LandingPage />} />
+      <Route path="/" element={<ProtectedRedirect />} />
       <Route path="/landing" element={<LandingPage />} />
+      <Route path="/profile" element={<Profile />} />
       <Route path="/main" element={<Main />}>
         <Route path="home" element={<Home />} />
         <Route path="room-detail/:id" element={<RoomDetail />} />

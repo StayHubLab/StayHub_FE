@@ -1,59 +1,45 @@
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
-import { Button, Avatar, message } from 'antd';
-import { 
-  InfoCircleOutlined, 
+import React from "react";
+import PropTypes from "prop-types";
+import { Button, Avatar } from "antd";
+import {
+  InfoCircleOutlined,
   StarFilled,
   UserOutlined,
   FileTextOutlined,
-  CheckCircleOutlined
-} from '@ant-design/icons';
-import './Price.css';
-import ScheduleBookingModal from '../../../../../components/ScheduleBookingModal/ScheduleBookingModal';
+  CheckCircleOutlined,
+} from "@ant-design/icons";
+import "./Price.css";
 
-const Price = ({ 
+const Price = ({
   priceData = {
     costs: [
       { label: "Tiền điện", value: "4.000 VNĐ/kWh" },
       { label: "Tiền nước", value: "20.000 VNĐ/m³" },
       { label: "Phí Internet", value: "100.000 VNĐ/tháng" },
       { label: "Phí giữ xe", value: "50.000 VNĐ/xe/tháng" },
-      { label: "Phí dịch vụ", value: "100.000 VNĐ/tháng" }
+      { label: "Phí dịch vụ", value: "100.000 VNĐ/tháng" },
     ],
     deposit: {
       title: "Đặt cọc: 1 tháng tiền nhà",
-      description: "Được hoàn trả khi kết thúc hợp đồng"
-    }
+      description: "Được hoàn trả khi kết thúc hợp đồng",
+    },
   },
   landlordData = {
     name: "Chị Lan Anh",
     since: "Chủ trọ từ 2020",
     rating: 4.9,
-    description: "Luôn hỗ trợ nhanh chóng và giải quyết mọi vấn đề trong vòng 24h.",
+    description:
+      "Luôn hỗ trợ nhanh chóng và giải quyết mọi vấn đề trong vòng 24h.",
     isVerified: true,
-    avatar: "https://placehold.co/64x64"
+    avatar: "https://placehold.co/64x64",
   },
   onScheduleViewing,
   onContactLandlord,
-  onViewContract
+  onViewContract,
 }) => {
-  const [isModalVisible, setIsModalVisible] = useState(false);
-
   const handleScheduleViewing = () => {
-    setIsModalVisible(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsModalVisible(false);
-  };
-
-  const handleConfirmBooking = (bookingData) => {
-    console.log('Booking confirmed:', bookingData);
-    message.success(`Đã đặt lịch xem phòng ngày ${bookingData.date} lúc ${bookingData.time}`);
-    
-    // Call the original onScheduleViewing if provided
     if (onScheduleViewing) {
-      onScheduleViewing(bookingData);
+      onScheduleViewing();
     }
   };
 
@@ -94,22 +80,24 @@ const Price = ({
             <InfoCircleOutlined className="deposit-icon" />
             <div className="deposit-text">
               <div className="deposit-title">{priceData.deposit.title}</div>
-              <div className="deposit-description">{priceData.deposit.description}</div>
+              <div className="deposit-description">
+                {priceData.deposit.description}
+              </div>
             </div>
           </div>
         </div>
 
         <div className="action-buttons">
-          <Button 
-            type="primary" 
-            size="large" 
+          <Button
+            type="primary"
+            size="large"
             className="schedule-button"
             onClick={handleScheduleViewing}
           >
             Đặt lịch xem phòng
           </Button>
-          <Button 
-            size="large" 
+          <Button
+            size="large"
             className="contact-button"
             onClick={handleContactLandlord}
           >
@@ -125,8 +113,8 @@ const Price = ({
         </div>
 
         <div className="landlord-profile">
-          <Avatar 
-            size={64} 
+          <Avatar
+            size={64}
             src={landlordData.avatar}
             icon={<UserOutlined />}
             className="landlord-avatar"
@@ -143,14 +131,14 @@ const Price = ({
           <StarFilled className="rating-star" />
         </div>
 
-        <div className="landlord-description">
-          {landlordData.description}
-        </div>
+        <div className="landlord-description">{landlordData.description}</div>
 
         {landlordData.isVerified && (
           <div className="verification-status">
             <CheckCircleOutlined className="verification-landlord-icon" />
-            <span className="verification-landlords">Đã xác minh danh tính</span>
+            <span className="verification-landlords">
+              Đã xác minh danh tính
+            </span>
           </div>
         )}
       </div>
@@ -165,8 +153,8 @@ const Price = ({
           Xem trước các điều khoản cơ bản của hợp đồng thuê trọ.
         </div>
 
-        <Button 
-          size="large" 
+        <Button
+          size="large"
           className="contract-button"
           icon={<FileTextOutlined />}
           onClick={handleViewContract}
@@ -174,27 +162,22 @@ const Price = ({
           Xem Hợp đồng Mẫu
         </Button>
       </div>
-
-      {/* Schedule Booking Modal */}
-      <ScheduleBookingModal
-        visible={isModalVisible}
-        onClose={handleCloseModal}
-        onConfirm={handleConfirmBooking}
-      />
     </div>
   );
 };
 
 Price.propTypes = {
   priceData: PropTypes.shape({
-    costs: PropTypes.arrayOf(PropTypes.shape({
-      label: PropTypes.string,
-      value: PropTypes.string
-    })),
+    costs: PropTypes.arrayOf(
+      PropTypes.shape({
+        label: PropTypes.string,
+        value: PropTypes.string,
+      })
+    ),
     deposit: PropTypes.shape({
       title: PropTypes.string,
-      description: PropTypes.string
-    })
+      description: PropTypes.string,
+    }),
   }),
   landlordData: PropTypes.shape({
     name: PropTypes.string,
@@ -202,11 +185,11 @@ Price.propTypes = {
     rating: PropTypes.number,
     description: PropTypes.string,
     isVerified: PropTypes.bool,
-    avatar: PropTypes.string
+    avatar: PropTypes.string,
   }),
   onScheduleViewing: PropTypes.func,
   onContactLandlord: PropTypes.func,
-  onViewContract: PropTypes.func
+  onViewContract: PropTypes.func,
 };
 
 export default Price;

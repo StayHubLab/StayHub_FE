@@ -247,3 +247,4 @@ const ManageTenants = () => {
 };
 
 export default ManageTenants;
+

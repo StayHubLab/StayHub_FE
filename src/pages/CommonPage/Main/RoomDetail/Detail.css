@@ -20,13 +20,12 @@
   }
 }
 
-
 /* Ensure proper spacing between columns */
 @media (min-width: 992px) {
   .detail-container .ant-col:first-child {
     padding-right: 12px !important;
   }
-  
+
   .detail-container .ant-col:last-child {
     padding-left: 12px !important;
   }
@@ -37,7 +36,7 @@
   .detail-container .ant-col {
     margin-bottom: 24px;
   }
-  
+
   .detail-container .ant-col:last-child {
     margin-bottom: 0;
   }

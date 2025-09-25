@@ -39,7 +39,7 @@
 }
 
 .menu-item-background.active-bg {
-  background: #EBE9FE;
+  background: #ebe9fe;
 }
 
 .menu-icon-container {
@@ -76,12 +76,12 @@
   left: 0;
   top: 0;
   position: absolute;
-  background: #4B5563;
+  background: #4b5563;
   transition: background-color 0.3s ease;
 }
 
 .icon-background.active-icon {
-  background: #4739F0;
+  background: #4739f0;
 }
 
 .menu-text-container {
@@ -96,9 +96,9 @@
   height: 24px;
   left: 0;
   top: 0.44px;
-  color: #4B5563;
+  color: #4b5563;
   font-size: 16px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 500;
   line-height: 24px;
   word-wrap: break-word;
@@ -106,7 +106,7 @@
 }
 
 .menu-text.active-text {
-  color: #4739F0;
+  color: #4739f0;
   font-weight: 600;
 }
 
@@ -133,7 +133,7 @@
 }
 
 .menu-rating.active {
-  background: #EBE9FE;
+  background: #ebe9fe;
 }
 
 .rating-icon-container {
@@ -165,12 +165,12 @@
 }
 
 .rating-icon-background {
-  width: 16.50px;
+  width: 16.5px;
   height: 16px;
   left: 0.75px;
   top: 0;
   position: absolute;
-  background: #4B5563;
+  background: #4b5563;
 }
 
 .rating-text {
@@ -179,9 +179,9 @@
   left: 39px;
   top: 10px;
   position: absolute;
-  color: #4B5563;
+  color: #4b5563;
   font-size: 16px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 400;
   word-wrap: break-word;
 }
@@ -192,18 +192,18 @@
     width: 100%;
     max-width: 220px;
   }
-  
+
   .menu-content {
     width: 100%;
     max-width: 188px;
   }
-  
+
   .menu-item,
   .menu-item-background {
     width: 100%;
     max-width: 188px;
   }
-  
+
   .menu-rating {
     width: 100%;
     max-width: 181px;

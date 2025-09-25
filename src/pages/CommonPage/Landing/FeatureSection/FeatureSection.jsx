@@ -1,7 +1,11 @@
-import React from 'react';
-import { Row, Col, Typography, Card } from 'antd';
-import { ThunderboltOutlined, SafetyOutlined, AppstoreOutlined } from '@ant-design/icons';
-import './FeatureSection.css';
+import React from "react";
+import { Row, Col, Typography, Card } from "antd";
+import {
+  ThunderboltOutlined,
+  SafetyOutlined,
+  AppstoreOutlined,
+} from "@ant-design/icons";
+import "./FeatureSection.css";
 
 const { Title, Text } = Typography;
 
@@ -11,20 +15,23 @@ const FeatureSection = () => {
       id: 1,
       icon: <SafetyOutlined className="landing-feature-icon" />,
       title: "Minh bạch & Tin cậy",
-      description: "Thông tin phòng trọ được xác thực, đánh giá thực tế từ người thuê trước, không còn lo lắng về tin đăng ảo."
+      description:
+        "Thông tin phòng trọ được xác thực, đánh giá thực tế từ người thuê trước, không còn lo lắng về tin đăng ảo.",
     },
     {
       id: 2,
       icon: <ThunderboltOutlined className="landing-feature-icon" />,
       title: "Tiện lợi & Nhanh chóng",
-      description: "Tìm kiếm, lọc phòng theo nhu cầu, lịch xem và thanh toán trực tuyến dễ đặt dàng chỉ trong vài phút."
+      description:
+        "Tìm kiếm, lọc phòng theo nhu cầu, lịch xem và thanh toán trực tuyến dễ đặt dàng chỉ trong vài phút.",
     },
     {
       id: 3,
       icon: <AppstoreOutlined className="landing-feature-icon" />,
       title: "Hệ sinh thái kết nối",
-      description: "Kết nối chủ trọ và người thuê, tích hợp dịch vụ hỗ trợ chuyển nhà, sửa chữa và các tiện ích khác."
-    }
+      description:
+        "Kết nối chủ trọ và người thuê, tích hợp dịch vụ hỗ trợ chuyển nhà, sửa chữa và các tiện ích khác.",
+    },
   ];
 
   return (
@@ -35,7 +42,8 @@ const FeatureSection = () => {
             Tại Sao Chọn StayHub?
           </Title>
           <Text className="landing-feature-subtitle">
-            Chúng tôi đang xây dựng nền tảng toàn diện nhất cho việc tìm kiếm, thuê và quản lý nhà trọ tại Việt Nam
+            Chúng tôi đang xây dựng nền tảng toàn diện nhất cho việc tìm kiếm,
+            thuê và quản lý nhà trọ tại Việt Nam
           </Text>
         </div>
 

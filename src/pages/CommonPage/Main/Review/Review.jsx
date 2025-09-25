@@ -1,27 +1,26 @@
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
-import './Review.css';
-import { StarOutlined, StarFilled } from '@ant-design/icons';
+import React, { useState } from "react";
+import PropTypes from "prop-types";
+import "./Review.css";
+import { StarOutlined, StarFilled } from "@ant-design/icons";
 
-const Review = ({ 
+const Review = ({
   roomData = {
     id: 1,
     name: "Phòng Trọ Hiện Đại Tầng 3",
     address: "K20/28 Nguyễn Hữu Thọ, Đà Nẵng",
-    image: "https://placehold.co/64x64"
+    image: "https://placehold.co/64x64",
   },
   landlordData = {
     id: 1,
     name: "Anh Minh Tuấn",
     role: "Chủ trọ",
-    avatar: "https://placehold.co/48x48"
-  }
+    avatar: "https://placehold.co/48x48",
+  },
 }) => {
-  
   const [roomRating, setRoomRating] = useState(0);
   const [landlordRating, setLandlordRating] = useState(0);
-  const [roomReview, setRoomReview] = useState('');
-  const [landlordReview, setLandlordReview] = useState('');
+  const [roomReview, setRoomReview] = useState("");
+  const [landlordReview, setLandlordReview] = useState("");
   const [isAnonymous, setIsAnonymous] = useState(false);
 
   const handleRoomRating = (rating) => {
@@ -40,14 +39,14 @@ const Review = ({
       landlordRating,
       roomReview,
       landlordReview,
-      isAnonymous
+      isAnonymous,
     };
-    console.log('Submitting review:', reviewData);
+    console.log("Submitting review:", reviewData);
     // Handle review submission logic here
   };
 
   const handleLater = () => {
-    console.log('Review later clicked');
+    console.log("Review later clicked");
     // Handle review later logic here
   };
 
@@ -55,8 +54,8 @@ const Review = ({
     return Array.from({ length: 5 }, (_, index) => {
       const starNumber = index + 1;
       return (
-        <div 
-          key={index} 
+        <div
+          key={index}
           className="star-container"
           onClick={() => onStarClick(starNumber)}
         >
@@ -83,12 +82,12 @@ const Review = ({
       {/* Room Review Section */}
       <div className="review-section">
         <div className="section-title">Đánh giá phòng trọ</div>
-        
+
         {/* Room Info */}
         <div className="room-info-card">
           <div className="room-info-content">
-            <img 
-              src={roomData.image} 
+            <img
+              src={roomData.image}
               alt={roomData.name}
               className="room-image"
             />
@@ -121,12 +120,12 @@ const Review = ({
       {/* Landlord Review Section */}
       <div className="review-section">
         <div className="section-title">Đánh giá chủ trọ</div>
-        
+
         {/* Landlord Info */}
         <div className="landlord-info-card">
           <div className="landlord-info-content">
-            <img 
-              src={landlordData.avatar} 
+            <img
+              src={landlordData.avatar}
               alt={landlordData.name}
               className="landlord-avatar"
             />
@@ -190,14 +189,14 @@ Review.propTypes = {
     id: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired,
     address: PropTypes.string.isRequired,
-    image: PropTypes.string.isRequired
+    image: PropTypes.string.isRequired,
   }),
   landlordData: PropTypes.shape({
     id: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired,
     role: PropTypes.string.isRequired,
-    avatar: PropTypes.string.isRequired
-  })
+    avatar: PropTypes.string.isRequired,
+  }),
 };
 
 export default Review;

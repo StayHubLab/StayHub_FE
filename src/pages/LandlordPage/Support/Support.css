@@ -3,7 +3,7 @@
 }
 
 .support-container h2 {
-  color: #FF7A00;
+  color: #ff7a00;
   margin-bottom: 24px;
 }
 
@@ -17,14 +17,14 @@
 .contact-card .ant-card-head,
 .support-form-card .ant-card-head,
 .faq-card .ant-card-head {
-  background: #FFF7E6;
-  border-bottom: 1px solid #FFE7BA;
+  background: #fff7e6;
+  border-bottom: 1px solid #ffe7ba;
 }
 
 .contact-card .ant-card-head-title,
 .support-form-card .ant-card-head-title,
 .faq-card .ant-card-head-title {
-  color: #FF7A00;
+  color: #ff7a00;
   font-weight: 600;
 }
 
@@ -41,7 +41,7 @@
 
 .contact-icon {
   font-size: 20px;
-  color: #FF7A00;
+  color: #ff7a00;
   margin-right: 16px;
   width: 24px;
   text-align: center;
@@ -71,7 +71,7 @@
 
 .faq-question {
   font-weight: 500;
-  color: #FF7A00;
+  color: #ff7a00;
   margin-bottom: 8px;
   display: flex;
   align-items: center;

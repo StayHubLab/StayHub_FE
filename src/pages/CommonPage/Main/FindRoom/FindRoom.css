@@ -6,6 +6,27 @@
   padding-bottom: 80px; /* Extra space for footer and pagination */
 }
 
+/* Loading and Error States */
+.search-room-loading,
+.search-room-error,
+.search-room-empty {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+  grid-column: 1 / -1;
+  width: 100%;
+}
+
+.search-room-loading .ant-spin {
+  font-size: 24px;
+}
+
+.search-room-error .ant-empty,
+.search-room-empty .ant-empty {
+  margin: 0;
+}
+
 .search-room-container {
   width: 1136px;
   height: 194px;
@@ -24,7 +45,7 @@
   background: white;
   box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.05);
   border-radius: 12px;
-  border: 1px solid #E5E7EB;
+  border: 1px solid #e5e7eb;
 }
 
 .search-room-bar-content {
@@ -39,7 +60,7 @@
 
 /* Location Field */
 .search-room-location-field {
-  width: 259.50px;
+  width: 259.5px;
   height: 78px;
   position: absolute;
   left: 0;
@@ -54,13 +75,13 @@
   top: 1px;
   color: #374151;
   font-size: 14px;
-  font-family: 'Montserrat';
+  font-family: "Montserrat";
   font-weight: 500;
   word-wrap: break-word;
 }
 
 .search-room-location-input-wrapper {
-  width: 259.50px;
+  width: 259.5px;
   height: 50px;
   position: absolute;
   left: 0;
@@ -68,14 +89,14 @@
 }
 
 .search-room-location-input-container {
-  width: 259.50px;
+  width: 259.5px;
   height: 50px;
   position: absolute;
   left: 0;
   top: 0;
   background: white;
   border-radius: 8px;
-  border: 1px solid #D1D5DB;
+  border: 1px solid #d1d5db;
 }
 
 .search-room-location-input {
@@ -90,9 +111,9 @@
   display: flex;
   justify-content: center;
   flex-direction: column;
-  color: #ADAEBC;
+  color: #adaebc;
   font-size: 16px;
-  font-family: 'Montserrat';
+  font-family: "Montserrat";
   font-weight: 400;
   line-height: 24px;
   word-wrap: break-word;
@@ -100,7 +121,7 @@
 }
 
 .search-room-location-input::placeholder {
-  color: #ADAEBC;
+  color: #adaebc;
 }
 
 .search-room-location-input:focus {
@@ -117,10 +138,10 @@
 
 /* Price Field */
 .search-room-price-field {
-  width: 259.50px;
+  width: 259.5px;
   height: 78px;
   position: absolute;
-  left: 275.50px;
+  left: 275.5px;
   top: 0;
 }
 
@@ -132,13 +153,13 @@
   top: 1px;
   color: #374151;
   font-size: 14px;
-  font-family: 'Montserrat';
+  font-family: "Montserrat";
   font-weight: 500;
   word-wrap: break-word;
 }
 
 .search-room-price-inputs-wrapper {
-  width: 259.50px;
+  width: 259.5px;
   height: 50px;
   position: absolute;
   left: 0;
@@ -152,7 +173,7 @@
   height: 50px;
   background: white;
   border-radius: 8px;
-  border: 1px solid #D1D5DB;
+  border: 1px solid #d1d5db;
   position: relative;
 }
 
@@ -168,9 +189,9 @@
   display: flex;
   justify-content: center;
   flex-direction: column;
-  color: #ADAEBC;
+  color: #adaebc;
   font-size: 16px;
-  font-family: 'Montserrat';
+  font-family: "Montserrat";
   font-weight: 400;
   line-height: 24px;
   word-wrap: break-word;
@@ -178,7 +199,7 @@
 }
 
 .search-room-price-input::placeholder {
-  color: #ADAEBC;
+  color: #adaebc;
 }
 
 .search-room-price-input:focus {
@@ -187,7 +208,7 @@
 
 /* Room Type Field */
 .search-room-type-field {
-  width: 259.50px;
+  width: 259.5px;
   height: 75px;
   position: absolute;
   left: 551px;
@@ -202,20 +223,20 @@
   top: 1px;
   color: #374151;
   font-size: 14px;
-  font-family: 'Montserrat';
+  font-family: "Montserrat";
   font-weight: 500;
   word-wrap: break-word;
 }
 
 .search-room-type-select-wrapper {
-  width: 259.50px;
+  width: 259.5px;
   height: 47px;
   position: absolute;
   left: 0;
   top: 28px;
   background: white;
   border-radius: 8px;
-  border: 1px solid #D1D5DB;
+  border: 1px solid #d1d5db;
   cursor: pointer;
 }
 
@@ -230,7 +251,7 @@
   flex-direction: column;
   color: black;
   font-size: 16px;
-  font-family: 'Montserrat';
+  font-family: "Montserrat";
   font-weight: 400;
   word-wrap: break-word;
 }
@@ -239,7 +260,7 @@
   width: 31px;
   height: 31px;
   position: absolute;
-  left: 220.50px;
+  left: 220.5px;
   top: 8px;
   overflow: hidden;
   display: flex;
@@ -252,17 +273,17 @@
   width: 259px;
   height: 48px;
   position: absolute;
-  left: 826.50px;
+  left: 826.5px;
   top: 30px;
   display: flex;
   gap: 12px;
 }
 
 .search-room-button {
-  width: 197.50px;
+  width: 197.5px;
   height: 48px;
   position: relative;
-  background: #4739F0;
+  background: #4739f0;
   border-radius: 8px;
   cursor: pointer;
   display: flex;
@@ -281,20 +302,20 @@
 .search-room-text {
   color: white;
   font-size: 16px;
-  font-family: 'Montserrat';
+  font-family: "Montserrat";
   font-weight: 500;
   text-align: center;
   word-wrap: break-word;
 }
 
 .search-room-button:hover {
-  background: #3B2FDB;
+  background: #3b2fdb;
 }
 
 .search-room-filter-button {
   width: 50px;
   height: 48px;
-  background: #FAC227;
+  background: #fac227;
   border-radius: 8px;
   cursor: pointer;
   display: flex;
@@ -305,12 +326,12 @@
 .search-room-filter-icon {
   width: 18px;
   height: 19px;
-  color: #1F2937;
+  color: #1f2937;
   font-size: 18px;
 }
 
 .search-room-filter-button:hover {
-  background: #F59E0B;
+  background: #f59e0b;
 }
 
 /* Secondary Filters */
@@ -329,7 +350,7 @@
   height: 42px;
   background: white;
   border-radius: 8px;
-  border: 1px solid #D1D5DB;
+  border: 1px solid #d1d5db;
   cursor: pointer;
   position: relative;
 }
@@ -364,7 +385,7 @@
   flex-direction: column;
   color: black;
   font-size: 16px;
-  font-family: 'Montserrat';
+  font-family: "Montserrat";
   font-weight: 400;
   word-wrap: break-word;
 }
@@ -405,8 +426,8 @@
 }
 
 .search-room-secondary-filter:hover {
-  background: #F9FAFB;
-  border-color: #4739F0;
+  background: #f9fafb;
+  border-color: #4739f0;
 }
 
 /* Verified Filter */
@@ -417,7 +438,7 @@
   top: 0;
   background: white;
   border-radius: 8px;
-  border: 1px solid #D1D5DB;
+  border: 1px solid #d1d5db;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -428,7 +449,7 @@
 .search-room-verified-icon {
   width: 16px;
   height: 24px;
-  color: #FAC227;
+  color: #fac227;
   font-size: 16px;
   display: flex;
   align-items: center;
@@ -438,20 +459,20 @@
 .search-room-verified-text {
   color: black;
   font-size: 16px;
-  font-family: 'Montserrat';
+  font-family: "Montserrat";
   font-weight: 400;
   text-align: center;
   word-wrap: break-word;
 }
 
 .search-room-verified-filter:hover {
-  background: #F9FAFB;
-  border-color: #4739F0;
+  background: #f9fafb;
+  border-color: #4739f0;
 }
 
 .search-room-verified-filter.active {
-  background: #4739F0;
-  border-color: #4739F0;
+  background: #4739f0;
+  border-color: #4739f0;
 }
 
 .search-room-verified-filter.active .search-room-verified-text {
@@ -486,9 +507,9 @@
   position: absolute;
   left: 0;
   top: 9px;
-  color: #4739F0;
+  color: #4739f0;
   font-size: 20px;
-  font-family: 'Montserrat';
+  font-family: "Montserrat";
   font-weight: 700;
   line-height: 28px;
   word-wrap: break-word;
@@ -506,9 +527,9 @@
 .search-room-sort-label {
   width: 96px;
   height: 20px;
-  color: #4B5563;
+  color: #4b5563;
   font-size: 14px;
-  font-family: 'Montserrat';
+  font-family: "Montserrat";
   font-weight: 400;
   line-height: 20px;
   word-wrap: break-word;
@@ -521,7 +542,7 @@
   height: 38px;
   background: white;
   border-radius: 8px;
-  border: 1px solid #D1D5DB;
+  border: 1px solid #d1d5db;
   position: relative;
   cursor: pointer;
   display: flex;
@@ -539,7 +560,7 @@
   flex-direction: column;
   color: black;
   font-size: 14px;
-  font-family: 'Montserrat';
+  font-family: "Montserrat";
   font-weight: 400;
   word-wrap: break-word;
 }
@@ -557,8 +578,8 @@
 }
 
 .search-room-sort-dropdown:hover {
-  background: #F9FAFB;
-  border-color: #4739F0;
+  background: #f9fafb;
+  border-color: #4739f0;
 }
 
 /* Room Cards Grid */
@@ -634,25 +655,31 @@
 }
 
 .search-room-heart-outlined {
-  color: #6B7280;
+  color: #6b7280;
   font-size: 16px;
   transition: color 0.3s ease;
 }
 
 .search-room-heart-filled {
-  color: #EF4444;
+  color: #ef4444;
   font-size: 16px;
   animation: heartPulse 0.3s ease-in-out;
 }
 
 @keyframes heartPulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.2); }
-  100% { transform: scale(1); }
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 
 .search-room-heart-icon:hover .search-room-heart-outlined {
-  color: #EF4444;
+  color: #ef4444;
 }
 
 /* Verified Badge */
@@ -660,9 +687,9 @@
   width: 106.12px;
   height: 24px;
   position: absolute;
-  left: 251.20px;
+  left: 251.2px;
   top: 12px;
-  background: #4739F0;
+  background: #4739f0;
   border-radius: 4px;
   display: flex;
   align-items: center;
@@ -671,7 +698,7 @@
 }
 
 .search-room-verified-badge-icon {
-  width: 10.50px;
+  width: 10.5px;
   height: 15px;
   color: white;
   font-size: 10px;
@@ -683,7 +710,7 @@
 .search-room-verified-badge-text {
   color: white;
   font-size: 12px;
-  font-family: 'Montserrat';
+  font-family: "Montserrat";
   font-weight: 400;
   word-wrap: break-word;
 }
@@ -700,7 +727,7 @@
 .search-room-ai-badge {
   width: 77.27px;
   height: 20px;
-  background: #FFF3E0;
+  background: #fff3e0;
   border-radius: 4px;
   margin-bottom: 12px;
   display: flex;
@@ -709,9 +736,9 @@
 }
 
 .search-room-ai-badge-text {
-  color: #4739F0;
+  color: #4739f0;
   font-size: 12px;
-  font-family: 'Montserrat';
+  font-family: "Montserrat";
   font-weight: 500;
   word-wrap: break-word;
 }
@@ -720,7 +747,7 @@
 .search-room-card-title {
   color: black;
   font-size: 18px;
-  font-family: 'Montserrat';
+  font-family: "Montserrat";
   font-weight: 600;
   line-height: 28px;
   word-wrap: break-word;
@@ -738,18 +765,18 @@
 }
 
 .search-room-card-price {
-  color: #4739F0;
+  color: #4739f0;
   font-size: 20px;
-  font-family: 'Montserrat';
+  font-family: "Montserrat";
   font-weight: 700;
   line-height: 28px;
   word-wrap: break-word;
 }
 
 .search-room-price-period {
-  color: #6B7280;
+  color: #6b7280;
   font-size: 14px;
-  font-family: 'Montserrat';
+  font-family: "Montserrat";
   font-weight: 400;
   line-height: 20px;
   word-wrap: break-word;
@@ -757,13 +784,34 @@
 
 /* Location */
 .search-room-card-location {
-  color: #4B5563;
+  color: #4b5563;
   font-size: 14px;
-  font-family: 'Montserrat';
+  font-family: "Montserrat";
   font-weight: 400;
   line-height: 20px;
   word-wrap: break-word;
-  margin-bottom: 16px;
+  margin-bottom: 8px;
+}
+
+/* Utilities */
+.search-room-utilities {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 8px 0;
+}
+
+.search-room-utility-item {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 11px;
+  color: #555;
+  background-color: #f0f0f0;
+  padding: 3px 8px;
+  border-radius: 10px;
+  border: 1px solid #e0e0e0;
+  font-family: "Montserrat";
 }
 
 /* Rating Section */
@@ -773,6 +821,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
+  margin-top: 8px;
 }
 
 .search-room-stars {
@@ -783,7 +832,7 @@
 .search-room-star {
   width: 18px;
   height: 16px;
-  color: #FAC227;
+  color: #fac227;
   font-size: 16px;
   display: flex;
   align-items: center;
@@ -791,9 +840,9 @@
 }
 
 .search-room-review-count {
-  color: #6B7280;
+  color: #6b7280;
   font-size: 14px;
-  font-family: 'Montserrat';
+  font-family: "Montserrat";
   font-weight: 400;
   line-height: 20px;
   word-wrap: break-word;
@@ -816,9 +865,9 @@
 }
 
 .search-room-view-details-text {
-  color: #4739F0;
+  color: #4739f0;
   font-size: 16px;
-  font-family: 'Montserrat';
+  font-family: "Montserrat";
   font-weight: 500;
   text-align: center;
   word-wrap: break-word;
@@ -860,7 +909,7 @@
 .search-room-location-input-container:focus-within,
 .search-room-price-input-container:focus-within,
 .search-room-type-select-wrapper:focus-within {
-  border-color: #4739F0;
+  border-color: #4739f0;
   box-shadow: 0 0 0 2px rgba(71, 57, 240, 0.1);
 }
 
@@ -872,11 +921,11 @@
     left: 20px;
     right: 20px;
   }
-  
+
   .search-room-bar-main {
     width: 100%;
   }
-  
+
   .search-room-secondary-filters {
     width: 100%;
     flex-wrap: wrap;
@@ -924,7 +973,7 @@
     padding: 20px;
     gap: 16px;
   }
-  
+
   .search-room-location-field,
   .search-room-price-field,
   .search-room-type-field,
@@ -934,7 +983,7 @@
     top: 0;
     width: 100%;
   }
-  
+
   .search-room-bar-main {
     height: auto;
   }
@@ -971,22 +1020,22 @@
     right: 16px;
     width: calc(100% - 32px);
   }
-  
+
   .search-room-price-inputs-wrapper {
     flex-direction: column;
     height: auto;
     gap: 8px;
   }
-  
+
   .search-room-price-input-container {
     width: 100%;
   }
-  
+
   .search-room-secondary-filters {
     flex-direction: column;
     align-items: stretch;
   }
-  
+
   .search-room-secondary-filter,
   .search-room-verified-filter {
     width: 100% !important;
@@ -1002,7 +1051,7 @@
   .search-room-cards-grid {
     padding: 0 16px;
   }
-  
+
   .search-room-pagination-container {
     margin-top: 40px !important;
     padding: 0 16px;
@@ -1022,19 +1071,19 @@
 }
 
 .search-room-pagination {
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
 }
 
 .search-room-pagination .ant-pagination-item {
-  border: 1px solid #E5E7EB;
+  border: 1px solid #e5e7eb;
   border-radius: 8px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 500;
 }
 
 .search-room-pagination .ant-pagination-item-active {
-  background-color: #4739F0;
-  border-color: #4739F0;
+  background-color: #4739f0;
+  border-color: #4739f0;
 }
 
 .search-room-pagination .ant-pagination-item-active a {
@@ -1042,31 +1091,31 @@
 }
 
 .search-room-pagination .ant-pagination-item:hover {
-  border-color: #4739F0;
+  border-color: #4739f0;
 }
 
 .search-room-pagination .ant-pagination-item:hover a {
-  color: #4739F0;
+  color: #4739f0;
 }
 
 .search-room-pagination .ant-pagination-prev,
 .search-room-pagination .ant-pagination-next {
-  border: 1px solid #E5E7EB;
+  border: 1px solid #e5e7eb;
   border-radius: 8px;
 }
 
 .search-room-pagination .ant-pagination-prev:hover,
 .search-room-pagination .ant-pagination-next:hover {
-  border-color: #4739F0;
-  color: #4739F0;
+  border-color: #4739f0;
+  color: #4739f0;
 }
 
 .search-room-pagination .ant-pagination-options-size-changer {
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
 }
 
 .search-room-pagination .ant-pagination-total-text {
-  font-family: 'Montserrat', sans-serif;
-  color: #6B7280;
+  font-family: "Montserrat", sans-serif;
+  color: #6b7280;
   font-size: 14px;
 }

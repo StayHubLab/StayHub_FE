@@ -1,94 +1,93 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import './Activity.css';
-import { 
-  BellOutlined, 
-  MessageOutlined, 
-  HomeOutlined, 
-  CheckCircleOutlined, 
-  StarOutlined 
-} from '@ant-design/icons';
+import React from "react";
+import PropTypes from "prop-types";
+import "./Activity.css";
+import {
+  BellOutlined,
+  MessageOutlined,
+  HomeOutlined,
+  CheckCircleOutlined,
+  StarOutlined,
+} from "@ant-design/icons";
 
-const Activity = ({ 
+const Activity = ({
   activities = [
     {
       id: 1,
-      type: 'payment_due',
-      icon: 'bell',
-      iconColor: '#FAC227',
-      title: 'Phòng 201:',
-      message: ' Sắp đến kỳ thanh toán tháng 7/2025.',
-      time: '2 giờ trước',
-      actionText: 'Thanh toán',
-      isHighlighted: true
+      type: "payment_due",
+      icon: "bell",
+      iconColor: "#FAC227",
+      title: "Phòng 201:",
+      message: " Sắp đến kỳ thanh toán tháng 7/2025.",
+      time: "2 giờ trước",
+      actionText: "Thanh toán",
+      isHighlighted: true,
     },
     {
       id: 2,
-      type: 'response',
-      icon: 'message',
-      iconColor: '#4739F0',
-      title: 'Chủ trọ',
-      highlightedText: ' chị Lan Anh',
-      message: ' đã trả lời yêu cầu sửa chữa vòi nước của bạn.',
-      time: 'Hôm qua',
-      actionText: 'Xem chi tiết',
-      isHighlighted: false
+      type: "response",
+      icon: "message",
+      iconColor: "#4739F0",
+      title: "Chủ trọ",
+      highlightedText: " chị Lan Anh",
+      message: " đã trả lời yêu cầu sửa chữa vòi nước của bạn.",
+      time: "Hôm qua",
+      actionText: "Xem chi tiết",
+      isHighlighted: false,
     },
     {
       id: 3,
-      type: 'new_room',
-      icon: 'home',
-      iconColor: '#4739F0',
-      title: 'Phòng mới',
-      highlightedText: ' P305',
-      message: ' phù hợp tiêu chí của bạn đã được đăng.',
-      time: '2 ngày trước',
-      actionText: 'Xem phòng',
-      isHighlighted: false
+      type: "new_room",
+      icon: "home",
+      iconColor: "#4739F0",
+      title: "Phòng mới",
+      highlightedText: " P305",
+      message: " phù hợp tiêu chí của bạn đã được đăng.",
+      time: "2 ngày trước",
+      actionText: "Xem phòng",
+      isHighlighted: false,
     },
     {
       id: 4,
-      type: 'payment_confirmed',
-      icon: 'check',
-      iconColor: '#28A745',
-      title: '',
-      message: 'Thanh toán tiền phòng tháng 6/2025 đã được xác nhận.',
-      time: '1 tuần trước',
-      actionText: 'Xem hóa đơn',
-      isHighlighted: false
+      type: "payment_confirmed",
+      icon: "check",
+      iconColor: "#28A745",
+      title: "",
+      message: "Thanh toán tiền phòng tháng 6/2025 đã được xác nhận.",
+      time: "1 tuần trước",
+      actionText: "Xem hóa đơn",
+      isHighlighted: false,
     },
     {
       id: 5,
-      type: 'review_available',
-      icon: 'star',
-      iconColor: '#4739F0',
-      title: 'Bạn có thể đánh giá phòng',
-      highlightedText: ' 201',
-      message: ' sau 1 tháng sử dụng.',
-      time: '1 tuần trước',
-      actionText: 'Đánh giá ngay',
-      isHighlighted: false
-    }
-  ]
+      type: "review_available",
+      icon: "star",
+      iconColor: "#4739F0",
+      title: "Bạn có thể đánh giá phòng",
+      highlightedText: " 201",
+      message: " sau 1 tháng sử dụng.",
+      time: "1 tuần trước",
+      actionText: "Đánh giá ngay",
+      isHighlighted: false,
+    },
+  ],
 }) => {
-  
   const handleActivityAction = (activityId, actionType) => {
-    console.log('Activity action clicked:', activityId, actionType);
+    console.log("Activity action clicked:", activityId, actionType);
   };
 
   const getIcon = (iconType, color) => {
-    const iconStyle = { color, fontSize: '16px' };
-    
+    const iconStyle = { color, fontSize: "16px" };
+
     switch (iconType) {
-      case 'bell':
+      case "bell":
         return <BellOutlined style={iconStyle} />;
-      case 'message':
+      case "message":
         return <MessageOutlined style={iconStyle} />;
-      case 'home':
+      case "home":
         return <HomeOutlined style={iconStyle} />;
-      case 'check':
+      case "check":
         return <CheckCircleOutlined style={iconStyle} />;
-      case 'star':
+      case "star":
         return <StarOutlined style={iconStyle} />;
       default:
         return <BellOutlined style={iconStyle} />;
@@ -100,7 +99,9 @@ const Activity = ({
       <div className="activity-content">
         <span className="activity-title">{activity.title}</span>
         {activity.highlightedText && (
-          <span className="activity-highlighted">{activity.highlightedText}</span>
+          <span className="activity-highlighted">
+            {activity.highlightedText}
+          </span>
         )}
         <span className="activity-message">{activity.message}</span>
       </div>
@@ -108,9 +109,9 @@ const Activity = ({
   };
 
   const renderActivityItem = (activity, index) => (
-    <div 
-      key={activity.id} 
-      className={`activity-item ${activity.isHighlighted ? 'highlighted' : ''} ${index > 0 ? 'with-border' : ''}`}
+    <div
+      key={activity.id}
+      className={`activity-item ${activity.isHighlighted ? "highlighted" : ""} ${index > 0 ? "with-border" : ""}`}
     >
       <div className="activity-main-content">
         <div className="activity-left">
@@ -119,10 +120,10 @@ const Activity = ({
           </div>
           {renderActivityContent(activity)}
         </div>
-        
+
         <div className="activity-right">
           <div className="activity-time">{activity.time}</div>
-          <div 
+          <div
             className="activity-action"
             onClick={() => handleActivityAction(activity.id, activity.type)}
           >
@@ -143,7 +144,9 @@ const Activity = ({
       {/* Activities Card */}
       <div className="activity-card">
         <div className="activity-content-wrapper">
-          {activities.map((activity, index) => renderActivityItem(activity, index))}
+          {activities.map((activity, index) =>
+            renderActivityItem(activity, index)
+          )}
         </div>
       </div>
     </div>
@@ -162,9 +165,9 @@ Activity.propTypes = {
       message: PropTypes.string.isRequired,
       time: PropTypes.string.isRequired,
       actionText: PropTypes.string.isRequired,
-      isHighlighted: PropTypes.bool
+      isHighlighted: PropTypes.bool,
     })
-  )
+  ),
 };
 
 export default Activity;

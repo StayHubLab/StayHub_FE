@@ -4,7 +4,7 @@
   max-width: 810.67px;
   position: relative;
   background: rgba(0, 0, 0, 0);
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
 }
 
 /* Header Section */
@@ -22,9 +22,9 @@
   position: absolute;
   left: 0;
   top: -17px;
-  color: #4739F0;
+  color: #4739f0;
   font-size: 36px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 400;
   line-height: 40px;
   word-wrap: break-word;
@@ -55,9 +55,9 @@
 .room-price {
   width: 235px;
   height: 38px;
-  color: #4739F0;
+  color: #4739f0;
   font-size: 30px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 400;
   word-wrap: break-word;
   line-height: 1;
@@ -66,9 +66,9 @@
 .price-period {
   width: 83px;
   height: 28px;
-  color: #6B7280;
+  color: #6b7280;
   font-size: 18px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 400;
   line-height: 28px;
   word-wrap: break-word;
@@ -96,21 +96,21 @@
 .star-filled {
   width: 18px;
   height: 16px;
-  color: #FAC227;
+  color: #fac227;
   font-size: 16px;
 }
 
 .star-half {
   width: 20px;
   height: 16px;
-  color: #FAC227;
+  color: #fac227;
   font-size: 16px;
 }
 
 .star-empty {
   width: 18px;
   height: 16px;
-  color: #E5E7EB;
+  color: #e5e7eb;
   font-size: 16px;
 }
 
@@ -119,7 +119,7 @@
   height: 24px;
   color: black;
   font-size: 16px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 400;
   line-height: 24px;
   word-wrap: break-word;
@@ -129,9 +129,9 @@
 .review-users-count {
   width: 108px;
   height: 24px;
-  color: #6B7280;
+  color: #6b7280;
   font-size: 16px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 400;
   line-height: 24px;
   word-wrap: break-word;
@@ -145,9 +145,9 @@
   top: 120px;
   background: none;
   border: none;
-  color: #4739F0;
+  color: #4739f0;
   font-size: 16px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 400;
   line-height: 24px;
   word-wrap: break-word;
@@ -181,16 +181,16 @@
 .location-icon {
   width: 12px;
   height: 16px;
-  color: #4B5563;
+  color: #4b5563;
   font-size: 12px;
 }
 
 .address-text {
   width: 652px;
   height: 24px;
-  color: #4B5563;
+  color: #4b5563;
   font-size: 16px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 400;
   line-height: 24px;
   word-wrap: break-word;
@@ -211,10 +211,9 @@
 .map-icon {
   width: 12px;
   height: 16px;
-  color: #4739F0;
+  color: #4739f0;
   font-size: 12px;
 }
-
 
 .view-map-btn:hover span {
   text-decoration: underline;
@@ -222,9 +221,9 @@
 
 /* Section Styles */
 .section-title {
-  color: #1E1E2D;
+  color: #1e1e2d;
   font-size: 24px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 400;
   line-height: 32px;
   word-wrap: break-word;
@@ -234,7 +233,7 @@
 /* Description Section */
 .description-section {
   width: 810.67px;
-  height: 224px;
+  height: fit-content;
   position: relative;
   background: rgba(0, 0, 0, 0);
   margin-bottom: 32px;
@@ -242,14 +241,14 @@
 
 .description-content {
   width: 810.67px;
-  height: 176px;
+  height: fit-content;
   background: rgba(0, 0, 0, 0);
 }
 
 .description-paragraph {
   color: #374151;
   font-size: 16px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 400;
   line-height: 24px;
   word-wrap: break-word;
@@ -294,14 +293,14 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  color: #4739F0;
+  color: #4739f0;
   font-size: 16px;
 }
 
 .amenity-name {
   color: #374151;
   font-size: 16px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 400;
   line-height: 24px;
   word-wrap: break-word;
@@ -310,7 +309,7 @@
 /* Rules Section */
 .rules-section {
   width: 810.67px;
-  height: 296px;
+  height: fit-content;
   position: relative;
   background: rgba(0, 0, 0, 0);
   margin-bottom: 32px;
@@ -318,7 +317,7 @@
 
 .rules-list {
   width: 810.67px;
-  height: 248px;
+  height: fit-content;
   background: rgba(0, 0, 0, 0);
 }
 
@@ -335,7 +334,7 @@
   width: 22px;
   color: #374151;
   font-size: 16px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 400;
   text-align: center;
 }
@@ -343,7 +342,7 @@
 .rule-text {
   color: #374151;
   font-size: 16px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 400;
   word-wrap: break-word;
   flex: 1;
@@ -383,7 +382,7 @@
 .detail-label {
   color: #374151;
   font-size: 16px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 400;
   line-height: 24px;
   word-wrap: break-word;
@@ -393,14 +392,14 @@
 .detail-value {
   color: #374151;
   font-size: 16px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 400;
   word-wrap: break-word;
   margin-left: 12px;
 }
 
 .status-available {
-  color: #16A34A;
+  color: #16a34a;
 }
 
 /* Reviews Section */
@@ -426,9 +425,9 @@
   height: 24px;
   background: none;
   border: none;
-  color: #4739F0;
+  color: #4739f0;
   font-size: 16px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 400;
   line-height: 24px;
   word-wrap: break-word;
@@ -479,7 +478,7 @@
   width: 98px;
   color: #374151;
   font-size: 16px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 400;
   line-height: 24px;
   word-wrap: break-word;
@@ -488,7 +487,7 @@
 .rating-bar {
   width: 238px;
   height: 8px;
-  background: #E5E7EB;
+  background: #e5e7eb;
   border-radius: 9999px;
   overflow: hidden;
   position: relative;
@@ -496,7 +495,7 @@
 
 .rating-fill {
   height: 8px;
-  background: #FAC227;
+  background: #fac227;
   border-radius: 9999px;
   transition: width 0.3s ease;
 }
@@ -505,7 +504,7 @@
   width: 43px;
   color: black;
   font-size: 16px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 400;
   line-height: 24px;
   word-wrap: break-word;
@@ -522,7 +521,7 @@
   width: 810.67px;
   height: 161px;
   background: rgba(0, 0, 0, 0);
-  border-bottom: 1px solid #E5E7EB;
+  border-bottom: 1px solid #e5e7eb;
   padding-bottom: 24px;
   margin-bottom: 24px;
 }
@@ -556,16 +555,16 @@
 .reviewer-users-name {
   color: black;
   font-size: 16px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 400;
   word-wrap: break-word;
   margin-bottom: 4px;
 }
 
 .review-users-date {
-  color: #6B7280;
+  color: #6b7280;
   font-size: 14px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 400;
   word-wrap: break-word;
 }
@@ -583,7 +582,7 @@
 .review-users-comment {
   color: #374151;
   font-size: 16px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 400;
   line-height: 24px;
   word-wrap: break-word;
@@ -602,13 +601,13 @@
     width: 100%;
     max-width: 810.67px;
   }
-  
+
   .room-title {
     width: 100%;
     font-size: 32px;
     line-height: 36px;
   }
-  
+
   .room-price-rating {
     width: 100%;
     flex-direction: column;
@@ -616,22 +615,22 @@
     gap: 12px;
     height: auto;
   }
-  
+
   .view-all-reviews-users-btn {
     position: static;
     margin-top: 12px;
   }
-  
+
   .amenities-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 12px;
   }
-  
+
   .rating-breakdown {
     grid-template-columns: 1fr;
     gap: 12px;
   }
-  
+
   .rating-category {
     width: 100%;
   }
@@ -642,35 +641,35 @@
     font-size: 28px;
     line-height: 32px;
   }
-  
+
   .room-price {
     font-size: 26px;
   }
-  
+
   .price-period {
     font-size: 16px;
   }
-  
+
   .section-title {
     font-size: 20px;
     line-height: 28px;
   }
-  
+
   .amenities-grid {
     grid-template-columns: 1fr;
     gap: 8px;
   }
-  
+
   .amenity-item {
     width: 100%;
   }
-  
+
   .detail-row {
     flex-direction: column;
     gap: 8px;
     margin-bottom: 12px;
   }
-  
+
   .detail-item {
     width: 100%;
   }
@@ -681,22 +680,22 @@
     font-size: 24px;
     line-height: 28px;
   }
-  
+
   .room-price {
     font-size: 24px;
   }
-  
+
   .rating-section {
     flex-direction: column;
     align-items: flex-start;
     gap: 4px;
     height: auto;
   }
-  
+
   .address-text {
     font-size: 14px;
   }
-  
+
   .description-paragraph,
   .rule-text,
   .detail-label,
@@ -705,11 +704,11 @@
   .review-users-comment {
     font-size: 14px;
   }
-  
+
   .amenity-name {
     font-size: 14px;
   }
-  
+
   .review-users-header {
     flex-direction: column;
     align-items: flex-start;

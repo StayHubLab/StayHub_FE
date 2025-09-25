@@ -5,13 +5,13 @@
   display: flex;
   flex-direction: column;
   gap: 24px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
 }
 
 /* Booking Card Styles */
 .booking-card {
   background: white;
-  box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.10);
+  box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.1);
   border-radius: 16px;
   border: none;
   padding: 24px;
@@ -26,9 +26,9 @@
 }
 
 .booking-title {
-  color: #4739F0;
+  color: #4739f0;
   font-size: 20px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 400;
   margin: 0;
   line-height: 28px;
@@ -42,7 +42,7 @@
 .costs-title {
   color: #374151;
   font-size: 16px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 400;
   line-height: 24px;
   margin: 0 0 12px 0;
@@ -64,7 +64,7 @@
 .cost-label {
   color: #374151;
   font-size: 16px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 400;
   line-height: 24px;
 }
@@ -72,14 +72,14 @@
 .cost-value {
   color: #374151;
   font-size: 16px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 400;
   line-height: 24px;
 }
 
 /* Deposit Section */
 .deposit-section {
-  background: #EFF6FF;
+  background: #eff6ff;
   border-radius: 8px;
   padding: 12px;
   margin: 24px 0;
@@ -92,7 +92,7 @@
 }
 
 .deposit-icon {
-  color: #4739F0;
+  color: #4739f0;
   font-size: 16px;
   margin-top: 4px;
   flex-shrink: 0;
@@ -103,18 +103,18 @@
 }
 
 .deposit-title {
-  color: #1F2937;
+  color: #1f2937;
   font-size: 16px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 400;
   line-height: 24px;
   margin-bottom: 4px;
 }
 
 .deposit-description {
-  color: #4B5563;
+  color: #4b5563;
   font-size: 14px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 400;
   line-height: 20px;
 }
@@ -127,14 +127,14 @@
 }
 
 .schedule-button {
-  background: #4739F0;
+  background: #4739f0;
   border-radius: 12px;
   width: 100%;
   height: 48px;
   border: none;
   color: white;
   font-size: 16px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 400;
 }
 
@@ -144,26 +144,26 @@
 
 .contact-button {
   background: transparent;
-  border: 2px solid #4739F0;
+  border: 2px solid #4739f0;
   border-radius: 12px;
   width: 100%;
   height: 52px;
-  color: #4739F0;
+  color: #4739f0;
   font-size: 16px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 400;
 }
 
 .contact-button:hover {
   background: rgba(71, 57, 240, 0.05);
-  border-color: #4739F0;
-  color: #4739F0;
+  border-color: #4739f0;
+  color: #4739f0;
 }
 
 /* Landlord Card Styles */
 .landlord-card-room {
   background: white;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.10);
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
   border-radius: 16px;
   border: none;
   padding: 24px;
@@ -178,9 +178,9 @@
 }
 
 .landlord-title {
-  color: #4739F0;
+  color: #4739f0;
   font-size: 20px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 400;
   margin: 0;
   line-height: 28px;
@@ -203,18 +203,18 @@
 }
 
 .landlord-name {
-  color: #4739F0;
+  color: #4739f0;
   font-size: 20px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 400;
   line-height: 28px;
   margin-bottom: 4px;
 }
 
 .landlord-since {
-  color: #6B7280;
+  color: #6b7280;
   font-size: 16px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 400;
   line-height: 24px;
 }
@@ -230,7 +230,7 @@
 .rating-price-label {
   color: #374151;
   font-size: 16px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 400;
   line-height: 24px;
 }
@@ -238,13 +238,13 @@
 .rating-value {
   color: black;
   font-size: 16px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 400;
   line-height: 24px;
 }
 
 .rating-star {
-  color: #FAC227;
+  color: #fac227;
   font-size: 16px;
 }
 
@@ -252,7 +252,7 @@
 .landlord-description {
   color: #374151;
   font-size: 16px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 400;
   line-height: 24px;
   margin-bottom: 16px;
@@ -266,14 +266,14 @@
 }
 
 .verification-landlord-icon {
-  color: #4739F0;
+  color: #4739f0;
   font-size: 16px;
 }
 
 .verification-landlords {
-  color: #4739F0;
+  color: #4739f0;
   font-size: 16px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 400;
   line-height: 24px;
 }
@@ -281,7 +281,7 @@
 /* Contract Card Styles */
 .contract-card {
   background: white;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.10);
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
   border-radius: 16px;
   border: none;
   padding: 24px;
@@ -296,9 +296,9 @@
 }
 
 .contract-title {
-  color: #4739F0;
+  color: #4739f0;
   font-size: 20px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 400;
   margin: 0;
   line-height: 28px;
@@ -307,21 +307,21 @@
 .contract-description {
   color: #374151;
   font-size: 16px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 400;
   line-height: 24px;
   margin-bottom: 24px;
 }
 
 .contract-button {
-  background: rgba(250, 194, 39, 0.20);
+  background: rgba(250, 194, 39, 0.2);
   border: none;
   border-radius: 12px;
   height: 48px;
   width: 100%;
-  color: #4739F0;
+  color: #4739f0;
   font-size: 16px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 400;
   display: flex;
   align-items: center;
@@ -330,12 +330,12 @@
 }
 
 .contract-button:hover {
-  background: rgba(250, 194, 39, 0.30);
-  color: #4739F0;
+  background: rgba(250, 194, 39, 0.3);
+  color: #4739f0;
 }
 
 .contract-button .anticon {
-  color: #4739F0;
+  color: #4739f0;
 }
 
 /* Responsive Design */

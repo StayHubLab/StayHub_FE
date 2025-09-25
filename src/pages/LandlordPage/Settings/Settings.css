@@ -3,7 +3,7 @@
 }
 
 .settings-container h2 {
-  color: #FF7A00;
+  color: #ff7a00;
   margin-bottom: 24px;
 }
 
@@ -13,12 +13,12 @@
 }
 
 .settings-card .ant-card-head {
-  background: #FFF7E6;
-  border-bottom: 1px solid #FFE7BA;
+  background: #fff7e6;
+  border-bottom: 1px solid #ffe7ba;
 }
 
 .settings-card .ant-card-head-title {
-  color: #FF7A00;
+  color: #ff7a00;
   font-weight: 600;
 }
 

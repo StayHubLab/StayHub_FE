@@ -1,13 +1,13 @@
-import React from 'react';
-import { Routes, Route } from 'react-router-dom';
-import LandlordPage from '../../pages/LandlordPage/LandlordPage';
-import Dashboard from '../../pages/LandlordPage/Dashboard/Dashboard';
-import ManageRoom from '../../pages/LandlordPage/ManageRoom/ManageRoom';
-import ManageTenants from '../../pages/LandlordPage/ManageTenants/ManageTenants';
-import Transaction from '../../pages/LandlordPage/Transaction/Transaction';
-import Subscription from '../../pages/LandlordPage/Subscription/Subscription';
-import Settings from '../../pages/LandlordPage/Settings/Settings';
-import Support from '../../pages/LandlordPage/Support/Support';
+import React from "react";
+import { Routes, Route } from "react-router-dom";
+import LandlordPage from "../../pages/LandlordPage/LandlordPage";
+import Dashboard from "../../pages/LandlordPage/Dashboard/Dashboard";
+import ManageRoom from "../../pages/LandlordPage/ManageRoom/ManageRoom";
+import ManageTenants from "../../pages/LandlordPage/ManageTenants/ManageTenants";
+import Transaction from "../../pages/LandlordPage/Transaction/Transaction";
+import Subscription from "../../pages/LandlordPage/Subscription/Subscription";
+import Settings from "../../pages/LandlordPage/Settings/Settings";
+import Support from "../../pages/LandlordPage/Support/Support";
 
 const LandlordRoute = () => {
   return (

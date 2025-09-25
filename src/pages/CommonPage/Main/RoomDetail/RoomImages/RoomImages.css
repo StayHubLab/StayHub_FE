@@ -4,7 +4,7 @@
   height: 100%;
   position: relative;
   background: rgba(0, 0, 0, 0);
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
 }
 
 .room-images-layout {
@@ -49,7 +49,7 @@
   position: absolute;
   left: 16px;
   top: 16px;
-  background: #4739F0;
+  background: #4739f0;
   border-radius: 6px;
   display: flex;
   align-items: center;
@@ -70,7 +70,7 @@
 .verification-text {
   color: white;
   font-size: 14px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 400;
   word-wrap: break-word;
   flex: 1;
@@ -146,7 +146,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.50);
+  background: rgba(0, 0, 0, 0.5);
   border-bottom-right-radius: 8px;
   display: flex;
   align-items: center;
@@ -155,13 +155,13 @@
 }
 
 .image-overlay:hover {
-  background: rgba(0, 0, 0, 0.60);
+  background: rgba(0, 0, 0, 0.6);
 }
 
 .overlay-text {
   color: white;
   font-size: 16px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 400;
   text-align: center;
   word-wrap: break-word;
@@ -175,7 +175,7 @@
   left: 1069.23px;
   top: 444px;
   background: white;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.10);
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
   border-radius: 6px;
   display: flex;
   align-items: center;
@@ -198,14 +198,14 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  color: #4739F0;
+  color: #4739f0;
   font-size: 14px;
 }
 
 .view-all-text {
-  color: #4739F0;
+  color: #4739f0;
   font-size: 16px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 400;
   text-align: center;
   word-wrap: break-word;
@@ -218,36 +218,36 @@
     width: 100%;
     max-width: 1200px;
   }
-  
+
   .main-image-section {
     width: 65%;
   }
-  
+
   .main-image {
     width: 100%;
     height: 100%;
   }
-  
+
   .side-images-section {
     width: 35%;
   }
-  
+
   .top-image {
     width: 100%;
   }
-  
+
   .bottom-images-grid {
     width: 100%;
   }
-  
+
   .bottom-left {
     width: 48%;
   }
-  
+
   .bottom-right {
     width: 52%;
   }
-  
+
   .view-all-button {
     right: 20px;
     left: auto;
@@ -260,54 +260,54 @@
     flex-direction: column;
     gap: 12px;
   }
-  
+
   .main-image-section {
     width: 100%;
     height: 300px;
   }
-  
+
   .main-image {
     width: 100%;
     height: 300px;
     border-radius: 8px 8px 0 0;
   }
-  
+
   .side-images-section {
     width: 100%;
     height: auto;
     flex-direction: row;
     gap: 8px;
   }
-  
+
   .top-image {
     width: 33.33%;
     height: 150px;
   }
-  
+
   .top-image .side-image {
     border-radius: 0;
   }
-  
+
   .bottom-images-grid {
     width: 66.67%;
     height: 150px;
     flex-direction: row;
   }
-  
+
   .bottom-left {
     width: 48%;
     height: 100%;
   }
-  
+
   .bottom-right {
     width: 52%;
     height: 100%;
   }
-  
+
   .bottom-right .side-image {
     border-radius: 0 0 8px 0;
   }
-  
+
   .view-all-button {
     position: fixed;
     bottom: 20px;
@@ -316,13 +316,13 @@
     left: auto;
     z-index: 1000;
   }
-  
+
   .verification-badge {
     width: auto;
     max-width: 200px;
     padding: 6px 12px;
   }
-  
+
   .verification-text {
     font-size: 12px;
   }
@@ -333,37 +333,37 @@
     height: auto;
     flex-direction: column;
   }
-  
+
   .main-image-section {
     height: 250px;
   }
-  
+
   .main-image {
     height: 250px;
     border-radius: 8px;
   }
-  
+
   .side-images-section {
     flex-direction: column;
     height: auto;
     gap: 8px;
   }
-  
+
   .top-image {
     width: 100%;
     height: 120px;
   }
-  
+
   .bottom-images-grid {
     width: 100%;
     height: 120px;
   }
-  
+
   .bottom-left,
   .bottom-right {
     height: 120px;
   }
-  
+
   .verification-badge {
     width: auto;
     max-width: 180px;
@@ -371,22 +371,22 @@
     left: 8px;
     top: 8px;
   }
-  
+
   .verification-text {
     font-size: 11px;
   }
-  
+
   .view-all-button {
     width: 140px;
     height: 36px;
     bottom: 16px;
     right: 16px;
   }
-  
+
   .view-all-text {
     font-size: 14px;
   }
-  
+
   .overlay-text {
     font-size: 14px;
   }
@@ -412,7 +412,7 @@
 .main-image:focus,
 .side-image:focus,
 .view-all-button:focus {
-  outline: 2px solid #4739F0;
+  outline: 2px solid #4739f0;
   outline-offset: 2px;
 }
 
@@ -441,12 +441,12 @@
   .verification-badge {
     border: 2px solid white;
   }
-  
+
   .view-all-button {
-    border: 2px solid #4739F0;
+    border: 2px solid #4739f0;
   }
-  
+
   .image-overlay {
-    background: rgba(0, 0, 0, 0.80);
+    background: rgba(0, 0, 0, 0.8);
   }
 }

@@ -10,7 +10,7 @@
 }
 
 .transaction-header h2 {
-  color: #FF7A00;
+  color: #ff7a00;
   margin: 0;
 }
 
@@ -25,7 +25,7 @@
 }
 
 .ant-table-thead > tr > th {
-  background: #FFF7E6;
-  color: #FF7A00;
+  background: #fff7e6;
+  color: #ff7a00;
   font-weight: 600;
 }

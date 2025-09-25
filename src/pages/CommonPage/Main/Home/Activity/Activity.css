@@ -14,9 +14,9 @@
 .activity-title-main {
   width: auto;
   height: 32px;
-  color: #4739F0;
+  color: #4739f0;
   font-size: 24px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 600;
   line-height: 32px;
   word-wrap: break-word;
@@ -49,14 +49,14 @@
 }
 
 .activity-item.highlighted {
-  background: rgba(255, 243, 224, 0.30);
+  background: rgba(255, 243, 224, 0.3);
   border-radius: 8px;
   min-height: 60px;
   padding: 16px 8px;
 }
 
 .activity-item.with-border {
-  border-top: 1px solid #F3F4F6;
+  border-top: 1px solid #f3f4f6;
   min-height: 61px;
   padding: 17px 8px;
 }
@@ -96,27 +96,27 @@
 }
 
 .activity-title {
-  color: #1F2937;
+  color: #1f2937;
   font-size: 16px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 700;
   line-height: 24px;
   word-wrap: break-word;
 }
 
 .activity-highlighted {
-  color: #1F2937;
+  color: #1f2937;
   font-size: 16px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 700;
   line-height: 24px;
   word-wrap: break-word;
 }
 
 .activity-message {
-  color: #1F2937;
+  color: #1f2937;
   font-size: 16px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 400;
   line-height: 24px;
   word-wrap: break-word;
@@ -131,9 +131,9 @@
 }
 
 .activity-time {
-  color: #9CA3AF;
+  color: #9ca3af;
   font-size: 14px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 400;
   line-height: 20px;
   word-wrap: break-word;
@@ -141,9 +141,9 @@
 }
 
 .activity-action {
-  color: #4739F0;
+  color: #4739f0;
   font-size: 14px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 400;
   line-height: 20px;
   word-wrap: break-word;
@@ -153,7 +153,7 @@
 }
 
 .activity-action:hover {
-  color: #3626D3;
+  color: #3626d3;
   text-decoration: underline;
 }
 
@@ -164,7 +164,7 @@
     height: auto;
     min-height: 360px;
   }
-  
+
   .activity-content-wrapper {
     width: calc(100% - 48px);
     height: auto;
@@ -176,47 +176,47 @@
   .activity-container {
     padding: 20px;
   }
-  
+
   .activity-title-main {
     font-size: 20px;
     width: 100%;
   }
-  
+
   .activity-card {
     margin: 0;
   }
-  
+
   .activity-content-wrapper {
     margin: 16px;
     width: calc(100% - 32px);
   }
-  
+
   .activity-main-content {
     flex-direction: column;
     align-items: flex-start;
     height: auto;
     gap: 8px;
   }
-  
+
   .activity-left {
     width: 100%;
   }
-  
+
   .activity-right {
     width: 100%;
     justify-content: space-between;
   }
-  
+
   .activity-item {
     padding: 12px 8px;
     min-height: auto;
   }
-  
+
   .activity-item.with-border {
     padding: 12px 8px;
     min-height: auto;
   }
-  
+
   .activity-item.highlighted {
     padding: 12px 8px;
     min-height: auto;
@@ -228,29 +228,29 @@
     font-size: 18px;
     line-height: 28px;
   }
-  
+
   .activity-content-wrapper {
     margin: 12px;
     width: calc(100% - 24px);
   }
-  
+
   .activity-left {
     gap: 12px;
   }
-  
+
   .activity-content {
     flex-direction: column;
     align-items: flex-start;
     height: auto;
   }
-  
+
   .activity-title,
   .activity-highlighted,
   .activity-message {
     font-size: 14px;
     line-height: 20px;
   }
-  
+
   .activity-time,
   .activity-action {
     font-size: 12px;

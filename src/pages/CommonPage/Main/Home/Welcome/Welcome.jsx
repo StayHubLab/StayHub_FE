@@ -1,23 +1,27 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import './Welcome.css';
-import { SearchOutlined, HeartOutlined, WarningOutlined } from '@ant-design/icons';
+import React from "react";
+import PropTypes from "prop-types";
+import "./Welcome.css";
+import {
+  SearchOutlined,
+  HeartOutlined,
+  WarningOutlined,
+} from "@ant-design/icons";
 
-
-const Welcome = ({ userName = "Nguyễn Hoài An" }) => {
+const Welcome = ({ user }) => {
+  const userName = user?.name || "Người dùng";
   const handleFindNewRoom = () => {
     // Navigate to search page or trigger search functionality
-    console.log('Navigate to find new room');
+    console.log("Navigate to find new room");
   };
 
   const handleViewSavedRooms = () => {
     // Navigate to saved rooms page
-    console.log('Navigate to saved rooms');
+    console.log("Navigate to saved rooms");
   };
 
   const handleReportIssue = () => {
     // Open report issue modal or page
-    console.log('Open report issue');
+    console.log("Open report issue");
   };
 
   return (
@@ -35,8 +39,10 @@ const Welcome = ({ userName = "Nguyễn Hoài An" }) => {
         {/* Find New Room Button */}
         <div className="action-button primary" onClick={handleFindNewRoom}>
           <div className="button-icon-container">
-            <div className="button-icon" >
-              <SearchOutlined style={{ fontSize: '16px', color: '#ffffffff' }} />
+            <div className="button-icon">
+              <SearchOutlined
+                style={{ fontSize: "16px", color: "#ffffffff" }}
+              />
             </div>
           </div>
           <div className="button-text primary-text">Tìm phòng mới</div>
@@ -46,7 +52,7 @@ const Welcome = ({ userName = "Nguyễn Hoài An" }) => {
         <div className="action-button secondary" onClick={handleViewSavedRooms}>
           <div className="button-icon-container">
             <div className="button-icon">
-              <HeartOutlined style={{ fontSize: '16px', color: '#4739F0' }} />
+              <HeartOutlined style={{ fontSize: "16px", color: "#4739F0" }} />
             </div>
           </div>
           <div className="button-text secondary-text">Xem phòng đã lưu</div>
@@ -56,7 +62,7 @@ const Welcome = ({ userName = "Nguyễn Hoài An" }) => {
         <div className="action-button warning" onClick={handleReportIssue}>
           <div className="button-icon-container">
             <div className="button-icon">
-              <WarningOutlined style={{ fontSize: '16px', color: '#FAC227' }} />
+              <WarningOutlined style={{ fontSize: "16px", color: "#FAC227" }} />
             </div>
           </div>
           <div className="button-text warning-text">Báo cáo sự cố</div>
@@ -67,7 +73,11 @@ const Welcome = ({ userName = "Nguyễn Hoài An" }) => {
 };
 
 Welcome.propTypes = {
-  userName: PropTypes.string
+  user: PropTypes.shape({
+    name: PropTypes.string,
+    email: PropTypes.string,
+    phone: PropTypes.string,
+  }),
 };
 
 export default Welcome;

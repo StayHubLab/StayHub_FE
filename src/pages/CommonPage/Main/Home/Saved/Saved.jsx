@@ -1,10 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import './Saved.css';
-import { HeartFilled, StarFilled, LeftOutlined, RightOutlined, CheckOutlined, HeartOutlined } from '@ant-design/icons';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import "./Saved.css";
+import {
+  HeartFilled,
+  StarFilled,
+  LeftOutlined,
+  RightOutlined,
+  CheckOutlined,
+  HeartOutlined,
+} from "@ant-design/icons";
+import { useNavigate } from "react-router-dom";
 
 const Saved = () => {
-  
   const [currentIndex, setCurrentIndex] = useState(0);
   const [savedRooms, setSavedRooms] = useState([]);
   const roomsPerView = 3;
@@ -21,7 +27,7 @@ const Saved = () => {
       reviews: 28,
       image: "https://placehold.co/369x180",
       isVerified: true,
-      isAiRecommended: true
+      isAiRecommended: true,
     },
     {
       id: 2,
@@ -32,7 +38,7 @@ const Saved = () => {
       reviews: 16,
       image: "https://placehold.co/369x180",
       isVerified: true,
-      isAiRecommended: true
+      isAiRecommended: true,
     },
     {
       id: 3,
@@ -43,7 +49,7 @@ const Saved = () => {
       reviews: 34,
       image: "https://placehold.co/369x180",
       isVerified: true,
-      isAiRecommended: true
+      isAiRecommended: true,
     },
     {
       id: 4,
@@ -54,7 +60,7 @@ const Saved = () => {
       reviews: 22,
       image: "https://placehold.co/369x180",
       isVerified: true,
-      isAiRecommended: true
+      isAiRecommended: true,
     },
     {
       id: 5,
@@ -65,7 +71,7 @@ const Saved = () => {
       reviews: 42,
       image: "https://placehold.co/369x180",
       isVerified: true,
-      isAiRecommended: false
+      isAiRecommended: false,
     },
     {
       id: 6,
@@ -76,70 +82,72 @@ const Saved = () => {
       reviews: 23,
       image: "https://placehold.co/369x180",
       isVerified: true,
-      isAiRecommended: false
-    }
+      isAiRecommended: false,
+    },
   ];
 
   const maxIndex = Math.max(0, savedRooms.length - roomsPerView);
 
   // Load favorites from localStorage and filter saved rooms
   useEffect(() => {
-    const savedFavorites = localStorage.getItem('favoriteRooms');
+    const savedFavorites = localStorage.getItem("favoriteRooms");
     if (savedFavorites) {
       const favoriteIds = JSON.parse(savedFavorites);
-      
+
       // Filter rooms that are favorited
-      const favoritedRooms = allRooms.filter(room => favoriteIds.includes(room.id));
+      const favoritedRooms = allRooms.filter((room) =>
+        favoriteIds.includes(room.id)
+      );
       setSavedRooms(favoritedRooms);
     }
   }, []);
-  
+
   const formatPrice = (price) => {
-    return price.toLocaleString('vi-VN');
+    return price.toLocaleString("vi-VN");
   };
 
   const handleViewDetails = (roomId) => {
-    navigate('/main/room-detail/' + roomId);
-    console.log('View details clicked for room:', roomId);
+    navigate("/main/room-detail/" + roomId);
+    console.log("View details clicked for room:", roomId);
   };
 
   const handleHeartClick = (roomId) => {
     // Get current favorites from localStorage
-    const savedFavorites = localStorage.getItem('favoriteRooms');
+    const savedFavorites = localStorage.getItem("favoriteRooms");
     const currentFavorites = savedFavorites ? JSON.parse(savedFavorites) : [];
-    
+
     if (currentFavorites.includes(roomId)) {
       // Remove from favorites
-      const newFavorites = currentFavorites.filter(id => id !== roomId);
-      localStorage.setItem('favoriteRooms', JSON.stringify(newFavorites));
+      const newFavorites = currentFavorites.filter((id) => id !== roomId);
+      localStorage.setItem("favoriteRooms", JSON.stringify(newFavorites));
       // Remove from saved rooms display
-      setSavedRooms(current => current.filter(room => room.id !== roomId));
+      setSavedRooms((current) => current.filter((room) => room.id !== roomId));
     } else {
       // Add to favorites
       const newFavorites = [...currentFavorites, roomId];
-      localStorage.setItem('favoriteRooms', JSON.stringify(newFavorites));
+      localStorage.setItem("favoriteRooms", JSON.stringify(newFavorites));
       // Add to saved rooms display
-      const roomToAdd = allRooms.find(room => room.id === roomId);
+      const roomToAdd = allRooms.find((room) => room.id === roomId);
       if (roomToAdd) {
-        setSavedRooms(current => [...current, roomToAdd]);
+        setSavedRooms((current) => [...current, roomToAdd]);
       }
     }
   };
 
   const handlePrevious = () => {
-    setCurrentIndex(prev => Math.max(0, prev - 1));
+    setCurrentIndex((prev) => Math.max(0, prev - 1));
   };
 
   const handleNext = () => {
-    setCurrentIndex(prev => Math.min(maxIndex, prev + 1));
+    setCurrentIndex((prev) => Math.min(maxIndex, prev + 1));
   };
 
   const renderStars = () => {
     return Array.from({ length: 5 }, (_, index) => (
-      <StarFilled 
-        key={index} 
+      <StarFilled
+        key={index}
         className="saved-star"
-        style={{ color: '#FAC227' }}
+        style={{ color: "#FAC227" }}
       />
     ));
   };
@@ -148,15 +156,11 @@ const Saved = () => {
     <div key={room.id} className="saved-room-card">
       {/* Room Image */}
       <div className="saved-room-image-container">
-        <img 
-          src={room.image} 
-          alt={room.title}
-          className="saved-room-image"
-        />
-        
+        <img src={room.image} alt={room.title} className="saved-room-image" />
+
         {/* Heart Icon - Always filled since these are saved rooms */}
-        <div 
-          className="saved-heart-icon" 
+        <div
+          className="saved-heart-icon"
           onClick={(e) => {
             e.stopPropagation();
             handleHeartClick(room.id);
@@ -164,7 +168,7 @@ const Saved = () => {
         >
           <HeartFilled className="saved-heart-filled" />
         </div>
-        
+
         {/* Verified Badge */}
         {room.isVerified && (
           <div className="saved-verified-badge">
@@ -197,14 +201,15 @@ const Saved = () => {
 
         {/* Rating Section */}
         <div className="saved-rating-section">
-          <div className="saved-stars">
-            {renderStars()}
-          </div>
+          <div className="saved-stars">{renderStars()}</div>
           <div className="saved-reviews">({room.reviews} đánh giá)</div>
         </div>
 
         {/* View Details Button */}
-        <div className="saved-details-button" onClick={() => handleViewDetails(room.id)}>
+        <div
+          className="saved-details-button"
+          onClick={() => handleViewDetails(room.id)}
+        >
           <span className="saved-details-text">Xem chi tiết</span>
         </div>
       </div>
@@ -217,7 +222,9 @@ const Saved = () => {
       <div className="saved-header">
         <div className="saved-header-content">
           <div className="saved-title">Phòng bạn đã lưu</div>
-          <div className="saved-subtitle">Danh sách các phòng bạn đang quan tâm.</div>
+          <div className="saved-subtitle">
+            Danh sách các phòng bạn đang quan tâm.
+          </div>
         </div>
         {/* <div className="saved-view-all" onClick={handleViewAll}>
           Xem tất cả
@@ -230,15 +237,15 @@ const Saved = () => {
           {/* Navigation Buttons */}
           {savedRooms.length > roomsPerView && (
             <>
-              <button 
-                className={`saved-nav-button saved-nav-prev ${currentIndex === 0 ? 'disabled' : ''}`}
+              <button
+                className={`saved-nav-button saved-nav-prev ${currentIndex === 0 ? "disabled" : ""}`}
                 onClick={handlePrevious}
                 disabled={currentIndex === 0}
               >
                 <LeftOutlined />
               </button>
-              <button 
-                className={`saved-nav-button saved-nav-next ${currentIndex === maxIndex ? 'disabled' : ''}`}
+              <button
+                className={`saved-nav-button saved-nav-next ${currentIndex === maxIndex ? "disabled" : ""}`}
                 onClick={handleNext}
                 disabled={currentIndex === maxIndex}
               >
@@ -249,14 +256,14 @@ const Saved = () => {
 
           {/* Rooms Grid */}
           <div className="saved-rooms-grid">
-            <div 
+            <div
               className="saved-rooms-track"
               style={{
                 transform: `translateX(-${currentIndex * (369.33 + 24)}px)`,
-                transition: 'transform 0.3s ease-in-out'
+                transition: "transform 0.3s ease-in-out",
               }}
             >
-              {savedRooms.map(room => renderRoomCard(room))}
+              {savedRooms.map((room) => renderRoomCard(room))}
             </div>
           </div>
         </div>

@@ -3,11 +3,11 @@
   max-width: 768px;
   margin: 0 auto;
   background: white;
-  box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.10);
+  box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.1);
   border-radius: 16px;
   padding: 40px;
   position: relative;
-  margin-bottom: 20px
+  margin-bottom: 20px;
 }
 
 /* Header Section */
@@ -23,9 +23,9 @@
   height: 43px;
   margin: 0 auto;
   text-align: center;
-  color: #4F46E5;
+  color: #4f46e5;
   font-size: 30px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 700;
   line-height: 36px;
   word-wrap: break-word;
@@ -37,9 +37,9 @@
   height: 28px;
   margin: 0 auto;
   text-align: center;
-  color: #4B5563;
+  color: #4b5563;
   font-size: 18px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 400;
   line-height: 28px;
   word-wrap: break-word;
@@ -57,7 +57,7 @@
   height: 28px;
   color: #111827;
   font-size: 20px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 600;
   line-height: 28px;
   word-wrap: break-word;
@@ -68,7 +68,7 @@
 .room-info-card {
   width: 688px;
   height: 96px;
-  background: #F9FAFB;
+  background: #f9fafb;
   border-radius: 8px;
   margin-bottom: 16px;
 }
@@ -97,7 +97,7 @@
 .room-name {
   color: #111827;
   font-size: 16px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 600;
   line-height: 24px;
   word-wrap: break-word;
@@ -105,9 +105,9 @@
 }
 
 .room-address {
-  color: #4B5563;
+  color: #4b5563;
   font-size: 14px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 400;
   line-height: 20px;
   word-wrap: break-word;
@@ -117,7 +117,7 @@
 .landlord-info-card {
   width: 688px;
   height: 80px;
-  background: #F9FAFB;
+  background: #f9fafb;
   border-radius: 8px;
   margin-bottom: 16px;
 }
@@ -146,7 +146,7 @@
 .landlord-name {
   color: #111827;
   font-size: 16px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 600;
   line-height: 24px;
   word-wrap: break-word;
@@ -154,9 +154,9 @@
 }
 
 .landlord-role {
-  color: #4B5563;
+  color: #4b5563;
   font-size: 14px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 400;
   line-height: 20px;
   word-wrap: break-word;
@@ -200,17 +200,17 @@
 }
 
 .star-icon.filled {
-  color: #FAC227;
+  color: #fac227;
 }
 
 .star-icon.empty {
-  color: #D1D5DB;
+  color: #d1d5db;
 }
 
 .rating-label {
-  color: #6B7280;
+  color: #6b7280;
   font-size: 14px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 400;
   line-height: 20px;
   word-wrap: break-word;
@@ -222,7 +222,7 @@
   height: 128px;
   background: white;
   border-radius: 8px;
-  border: 1px solid #D1D5DB;
+  border: 1px solid #d1d5db;
   overflow: hidden;
 }
 
@@ -235,16 +235,16 @@
   background: transparent;
   color: #111827;
   font-size: 16px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 400;
   line-height: 24px;
   resize: none;
 }
 
 .review-textarea::placeholder {
-  color: #ADAEBC;
+  color: #adaebc;
   font-size: 16px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 400;
   line-height: 24px;
 }
@@ -275,7 +275,7 @@
 .checkbox-label {
   color: #374151;
   font-size: 16px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 400;
   line-height: 24px;
   word-wrap: break-word;
@@ -296,7 +296,7 @@
 .submit-button {
   width: 256px;
   height: 60px;
-  background: #4F46E5;
+  background: #4f46e5;
   border-radius: 8px;
   border: none;
   cursor: pointer;
@@ -307,7 +307,7 @@
 }
 
 .submit-button:hover {
-  background: #4338CA;
+  background: #4338ca;
   transform: translateY(-2px);
   box-shadow: 0px 4px 12px rgba(79, 70, 229, 0.3);
 }
@@ -320,16 +320,16 @@
 .submit-button {
   color: white;
   font-size: 18px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 700;
   text-align: center;
   word-wrap: break-word;
 }
 
 .later-link {
-  color: #6B7280;
+  color: #6b7280;
   font-size: 16px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 400;
   text-align: center;
   word-wrap: break-word;
@@ -338,7 +338,7 @@
 }
 
 .later-link:hover {
-  color: #4B5563;
+  color: #4b5563;
   text-decoration: underline;
 }
 
@@ -349,7 +349,7 @@
     margin: 20px;
     max-width: calc(100% - 40px);
   }
-  
+
   .review-header,
   .review-section,
   .rating-section,
@@ -361,28 +361,28 @@
   .stars-container {
     width: 100%;
   }
-  
+
   .review-title {
     width: 100%;
     font-size: 24px;
     line-height: 32px;
   }
-  
+
   .review-subtitle {
     width: 100%;
     font-size: 16px;
     line-height: 24px;
   }
-  
+
   .room-info-content,
   .landlord-info-content {
     width: calc(100% - 32px);
   }
-  
+
   .stars-container {
     justify-content: center;
   }
-  
+
   .submit-button {
     width: 100%;
     max-width: 300px;
@@ -395,46 +395,46 @@
     margin: 16px;
     max-width: calc(100% - 32px);
   }
-  
+
   .review-title {
     font-size: 20px;
     line-height: 28px;
   }
-  
+
   .review-subtitle {
     font-size: 14px;
     line-height: 20px;
   }
-  
+
   .section-title {
     font-size: 18px;
     line-height: 24px;
   }
-  
+
   .room-name,
   .landlord-name {
     font-size: 14px;
     line-height: 20px;
   }
-  
+
   .room-address,
   .landlord-role,
   .rating-label {
     font-size: 12px;
     line-height: 18px;
   }
-  
+
   .review-textarea,
   .checkbox-label {
     font-size: 14px;
     line-height: 20px;
   }
-  
+
   .submit-button {
     font-size: 16px;
     height: 48px;
   }
-  
+
   .later-link {
     font-size: 14px;
   }

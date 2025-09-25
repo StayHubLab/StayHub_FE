@@ -1,80 +1,79 @@
-import React, { useState } from 'react';
-import { 
-  HomeOutlined, 
-  SearchOutlined, 
-  HeartOutlined,           // Use HeartOutlined instead of FavoriteOutlined
-  FileTextOutlined,        // Use FileTextOutlined instead of DocumentOutlined
-  HistoryOutlined, 
+import React, { useState } from "react";
+import {
+  HomeOutlined,
+  SearchOutlined,
+  HeartOutlined, // Use HeartOutlined instead of FavoriteOutlined
+  FileTextOutlined, // Use FileTextOutlined instead of DocumentOutlined
+  HistoryOutlined,
   CustomerServiceOutlined, // Use CustomerServiceOutlined instead of SupportOutlined
-  SettingOutlined,         // Use SettingOutlined instead of SettingsOutlined
-  StarOutlined 
-} from '@ant-design/icons';
-import './Menu.css';
+  SettingOutlined, // Use SettingOutlined instead of SettingsOutlined
+  StarOutlined,
+} from "@ant-design/icons";
+import "./Menu.css";
 
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
 const Menu = () => {
-  const [activeItem, setActiveItem] = useState('home');
+  const [activeItem, setActiveItem] = useState("home");
   const navigate = useNavigate();
 
   const menuItems = [
     {
-      id: 'home',
-      label: 'Trang chủ',
+      id: "home",
+      label: "Trang chủ",
       icon: <HomeOutlined />,
       isActive: true,
-      route: '/main/home'
+      route: "/main/home",
     },
     {
-      id: 'find',
-      label: 'Tìm Phòng',
+      id: "find",
+      label: "Tìm Phòng",
       icon: <SearchOutlined />,
       isActive: false,
-      route: '/main/find'
+      route: "/main/find",
     },
     {
-      id: 'saved',
-      label: 'Phòng đã lưu',
-      icon: <HeartOutlined />,        // Changed from FavoriteOutlined
+      id: "saved",
+      label: "Phòng đã lưu",
+      icon: <HeartOutlined />, // Changed from FavoriteOutlined
       isActive: false,
-      route: '/main/saved'
+      route: "/main/saved",
     },
     {
-      id: 'contract',
-      label: 'Hợp đồng thuê',
+      id: "contract",
+      label: "Hợp đồng thuê",
       icon: <FileTextOutlined />,
       isActive: false,
-      route: '/main/contract'
+      route: "/main/contract",
     },
     {
-      id: 'history',
-      label: 'Lịch sử thuê',
+      id: "history",
+      label: "Lịch sử thuê",
       icon: <HistoryOutlined />,
       isActive: false,
-      route: '/main/history'
+      route: "/main/history",
     },
     {
-      id: 'support',
-      label: 'Hỗ trợ',
+      id: "support",
+      label: "Hỗ trợ",
       icon: <CustomerServiceOutlined />, // Changed from SupportOutlined
       isActive: false,
-      route: '/main/support'
+      route: "/main/support",
     },
     {
-      id: 'settings',
-      label: 'Cài đặt',
-      icon: <SettingOutlined />,      // Changed from SettingsOutlined
+      id: "settings",
+      label: "Cài đặt",
+      icon: <SettingOutlined />, // Changed from SettingsOutlined
       isActive: false,
-      route: '/main/settings'
+      route: "/main/settings",
     },
     {
-      id: 'review',
-      label: 'Đánh giá',
+      id: "review",
+      label: "Đánh giá",
       icon: <StarOutlined />,
       isActive: false,
-      route: '/main/review'
-    }
-
+      route: "/main/review",
+    },
   ];
 
   const handleItemClick = (itemId, route) => {
@@ -83,8 +82,8 @@ const Menu = () => {
   };
 
   const handleRatingClick = () => {
-    setActiveItem('review');
-    navigate('/main/review');
+    setActiveItem("review");
+    navigate("/main/review");
   };
 
   return (
@@ -93,18 +92,20 @@ const Menu = () => {
         {menuItems.map((item, index) => (
           <div
             key={item.id}
-            className={`menu-item ${activeItem === item.id ? 'active' : ''}`}
+            className={`menu-item ${activeItem === item.id ? "active" : ""}`}
             onClick={() => handleItemClick(item.id, item.route)}
             style={{ top: `${index * 56}px` }}
           >
-            <div className={`menu-item-background ${activeItem === item.id ? 'active-bg' : ''}`}>
+            <div
+              className={`menu-item-background ${activeItem === item.id ? "active-bg" : ""}`}
+            >
               <div className="menu-icon-container">
-                <div className="menu-icon">
-                  {item.icon}
-                </div>
+                <div className="menu-icon">{item.icon}</div>
               </div>
               <div className="menu-text-container">
-                <div className={`menu-text ${activeItem === item.id ? 'active-text' : ''}`}>
+                <div
+                  className={`menu-text ${activeItem === item.id ? "active-text" : ""}`}
+                >
                   {item.label}
                 </div>
               </div>

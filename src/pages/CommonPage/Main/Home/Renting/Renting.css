@@ -1,20 +1,65 @@
 .renting-container {
-  padding: 20px;
+  padding: 16px 20px;
   width: 100%;
   position: relative;
   background: transparent;
+  margin-bottom: 24px;
 }
 
 /* Section Title */
 .renting-title {
   width: 272px;
   height: 32px;
-  color: #4739F0;
+  color: #4739f0;
   font-size: 24px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 600;
   line-height: 32px;
   word-wrap: break-word;
+  margin-bottom: 16px;
+}
+
+/* Empty State */
+.renting-empty {
+  width: 100%;
+  max-width: 1156px;
+  min-height: 200px;
+  background: white;
+  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.05);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+.renting-empty-text {
+  text-align: center;
+}
+
+.renting-empty-text p {
+  margin: 8px 0;
+  color: #8c8c8c;
+  font-size: 14px;
+}
+
+.renting-empty-text p:first-child {
+  font-size: 16px;
+  font-weight: 500;
+  color: #595959;
+}
+
+/* Loading State */
+.renting-loading {
+  width: 100%;
+  max-width: 1156px;
+  min-height: 200px;
+  background: white;
+  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.05);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* Room Card */
@@ -72,7 +117,7 @@
 .renting-room-title {
   color: black;
   font-size: 24px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 700;
   line-height: 32px;
   word-wrap: break-word;
@@ -80,9 +125,9 @@
 }
 
 .renting-room-address {
-  color: #4B5563;
+  color: #4b5563;
   font-size: 16px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 400;
   line-height: 24px;
   word-wrap: break-word;
@@ -98,18 +143,18 @@
 }
 
 .renting-price {
-  color: #4739F0;
+  color: #4739f0;
   font-size: 24px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 700;
   line-height: 32px;
   word-wrap: break-word;
 }
 
 .renting-price-unit {
-  color: #6B7280;
+  color: #6b7280;
   font-size: 16px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 400;
   line-height: 24px;
   word-wrap: break-word;
@@ -119,7 +164,7 @@
 .renting-payment-alert {
   width: 100%;
   height: 52px;
-  background: #FFF3E0;
+  background: #fff3e0;
   border-radius: 8px;
   display: flex;
   align-items: center;
@@ -129,9 +174,9 @@
 }
 
 .renting-payment-text {
-  color: #FAC227;
+  color: #fac227;
   font-size: 18px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 700;
   word-wrap: break-word;
 }
@@ -154,9 +199,9 @@
 
 /* Contract Link */
 .renting-contract-link {
-  color: #4739F0;
+  color: #4739f0;
   font-size: 16px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 500;
   line-height: 24px;
   word-wrap: break-word;
@@ -169,14 +214,14 @@
 }
 
 .renting-contract-link:hover {
-  color: #3626D3;
+  color: #3626d3;
 }
 
 /* Pay Button */
 .renting-pay-button {
   width: 169.33px;
   height: 40px;
-  background: #EBE9FE;
+  background: #ebe9fe;
   border-radius: 8px;
   display: flex;
   align-items: center;
@@ -186,14 +231,14 @@
 }
 
 .renting-pay-button:hover {
-  background: #D6D1FD;
+  background: #d6d1fd;
   transform: translateY(-1px);
 }
 
 .renting-pay-text {
-  color: #4739F0;
+  color: #4739f0;
   font-size: 16px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 500;
   text-align: center;
   word-wrap: break-word;
@@ -203,7 +248,7 @@
 .renting-report-button {
   width: 143.89px;
   height: 40px;
-  background: #FFF3E0;
+  background: #fff3e0;
   border-radius: 8px;
   display: flex;
   align-items: center;
@@ -213,14 +258,14 @@
 }
 
 .renting-report-button:hover {
-  background: #FFE7B3;
+  background: #ffe7b3;
   transform: translateY(-1px);
 }
 
 .renting-report-text {
-  color: #FAC227;
+  color: #fac227;
   font-size: 16px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 500;
   text-align: center;
   word-wrap: break-word;
@@ -239,7 +284,7 @@
 }
 
 .renting-chat-section:hover {
-  background: #F3F4F6;
+  background: #f3f4f6;
 }
 
 .renting-chat-icon {
@@ -248,14 +293,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #4739F0;
+  color: #4739f0;
   font-size: 16px;
 }
 
 .renting-chat-text {
-  color: #4739F0;
+  color: #4739f0;
   font-size: 16px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 500;
   word-wrap: break-word;
 }
@@ -265,7 +310,7 @@
   .renting-card {
     max-width: 100%;
   }
-  
+
   .renting-image-container {
     width: 350px;
   }
@@ -277,30 +322,30 @@
     height: auto;
     gap: 20px;
   }
-  
+
   .renting-image-container {
     width: 100%;
     height: 200px;
   }
-  
+
   .renting-image-wrapper {
     height: 200px;
   }
-  
+
   .renting-details {
     height: auto;
   }
-  
+
   .renting-card {
     height: auto;
     padding-bottom: 24px;
   }
-  
+
   .renting-actions > div:nth-child(2) {
     flex-direction: column;
     gap: 8px;
   }
-  
+
   .renting-pay-button,
   .renting-report-button {
     width: 100%;
@@ -312,18 +357,32 @@
     font-size: 20px;
     width: 100%;
   }
-  
+
   .renting-room-title {
     font-size: 20px;
     line-height: 28px;
   }
-  
+
   .renting-price {
     font-size: 20px;
     line-height: 28px;
   }
-  
+
   .renting-payment-text {
     font-size: 16px;
   }
+}
+
+/* Multiple Indicator */
+.renting-multiple-indicator {
+  margin-top: 12px;
+  padding: 8px 16px;
+  background: #f0f2ff;
+  border: 1px solid #d6e4ff;
+  border-radius: 6px;
+  color: #4739f0;
+  font-size: 12px;
+  font-weight: 500;
+  text-align: center;
+  max-width: 1156px;
 }
