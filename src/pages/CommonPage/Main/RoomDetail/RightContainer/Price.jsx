@@ -37,7 +37,6 @@ const Price = ({
   onContactLandlord,
   onViewContract,
 }) => {
-
   const handleScheduleViewing = () => {
     if (onScheduleViewing) {
       onScheduleViewing();

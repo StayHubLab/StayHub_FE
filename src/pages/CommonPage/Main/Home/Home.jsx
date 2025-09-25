@@ -52,7 +52,9 @@ const Home = () => {
 
       if (response.success && response.data) {
         // Handle the correct API response structure: {rooms: [...], pagination: {...}}
-        const roomsData = Array.isArray(response.data.rooms) ? response.data.rooms : [];
+        const roomsData = Array.isArray(response.data.rooms)
+          ? response.data.rooms
+          : [];
         setSuggestedRooms(roomsData);
       }
     } catch (error) {

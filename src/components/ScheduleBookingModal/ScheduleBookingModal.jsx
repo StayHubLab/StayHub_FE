@@ -229,19 +229,26 @@ const ScheduleBookingModal = ({
 
           <div className="summary-item">
             <div className="summary-label">Tên phòng:</div>
-            <div className="summary-value">{currentRoomData?.name || "N/A"}</div>
+            <div className="summary-value">
+              {currentRoomData?.name || "N/A"}
+            </div>
           </div>
 
           <div className="summary-item">
             <div className="summary-label">Giá phòng:</div>
             <div className="summary-value">
-              {currentRoomData?.price ? formatPrice(currentRoomData.price) : "N/A"} VNĐ/tháng
+              {currentRoomData?.price
+                ? formatPrice(currentRoomData.price)
+                : "N/A"}{" "}
+              VNĐ/tháng
             </div>
           </div>
 
           <div className="summary-item">
             <div className="summary-label">Địa chỉ:</div>
-            <div className="summary-value">{currentRoomData?.address || "N/A"}</div>
+            <div className="summary-value">
+              {currentRoomData?.address || "N/A"}
+            </div>
           </div>
         </div>
       </div>
@@ -262,12 +269,16 @@ const ScheduleBookingModal = ({
 
             <div className="info-item">
               <div className="info-label">Số điện thoại:</div>
-              <div className="info-value">{currentUserData?.phone || "N/A"}</div>
+              <div className="info-value">
+                {currentUserData?.phone || "N/A"}
+              </div>
             </div>
 
             <div className="info-item">
               <div className="info-label">Email:</div>
-              <div className="info-value">{currentUserData?.email || "N/A"}</div>
+              <div className="info-value">
+                {currentUserData?.email || "N/A"}
+              </div>
             </div>
           </div>
         </div>
@@ -281,22 +292,30 @@ const ScheduleBookingModal = ({
           <div className="info-details">
             <div className="info-item">
               <div className="info-label">Họ tên:</div>
-              <div className="info-value">{currentLandlordData?.name || "N/A"}</div>
+              <div className="info-value">
+                {currentLandlordData?.name || "N/A"}
+              </div>
             </div>
 
             <div className="info-item">
               <div className="info-label">Số điện thoại:</div>
-              <div className="info-value">{currentLandlordData?.phone || "N/A"}</div>
+              <div className="info-value">
+                {currentLandlordData?.phone || "N/A"}
+              </div>
             </div>
 
             <div className="info-item">
               <div className="info-label">Email:</div>
-              <div className="info-value">{currentLandlordData?.email || "N/A"}</div>
+              <div className="info-value">
+                {currentLandlordData?.email || "N/A"}
+              </div>
             </div>
 
             <div className="info-item">
               <div className="info-label">Kinh nghiệm:</div>
-              <div className="info-value">{currentLandlordData?.since || "N/A"}</div>
+              <div className="info-value">
+                {currentLandlordData?.since || "N/A"}
+              </div>
             </div>
           </div>
         </div>

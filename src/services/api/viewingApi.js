@@ -5,22 +5,23 @@
  * @description Service for making viewing appointment API requests to the backend
  */
 
-import axios from 'axios';
+import axios from "axios";
 
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+const API_BASE_URL =
+  process.env.REACT_APP_API_URL || "http://localhost:5000/api";
 
 // Create axios instance with default config
 const apiClient = axios.create({
   baseURL: API_BASE_URL,
   headers: {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   },
 });
 
 // Add request interceptor for auth token
 apiClient.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('authToken');
+    const token = localStorage.getItem("authToken");
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -37,7 +38,7 @@ apiClient.interceptors.response.use(
     return response.data;
   },
   (error) => {
-    console.error('API Error:', error.response?.data || error.message);
+    console.error("API Error:", error.response?.data || error.message);
     return Promise.reject(error.response?.data || error);
   }
 );
@@ -53,10 +54,10 @@ class ViewingApi {
    */
   static async createViewing(viewingData) {
     try {
-      const response = await apiClient.post('/viewings', viewingData);
+      const response = await apiClient.post("/viewings", viewingData);
       return response;
     } catch (error) {
-      console.error('Error creating viewing appointment:', error);
+      console.error("Error creating viewing appointment:", error);
       throw error;
     }
   }
@@ -68,10 +69,10 @@ class ViewingApi {
    */
   static async getViewings(params = {}) {
     try {
-      const response = await apiClient.get('/viewings', { params });
+      const response = await apiClient.get("/viewings", { params });
       return response;
     } catch (error) {
-      console.error('Error getting viewing appointments:', error);
+      console.error("Error getting viewing appointments:", error);
       throw error;
     }
   }
@@ -86,7 +87,7 @@ class ViewingApi {
       const response = await apiClient.get(`/viewings/${viewingId}`);
       return response;
     } catch (error) {
-      console.error('Error getting viewing appointment:', error);
+      console.error("Error getting viewing appointment:", error);
       throw error;
     }
   }
@@ -106,7 +107,7 @@ class ViewingApi {
       });
       return response;
     } catch (error) {
-      console.error('Error updating viewing appointment status:', error);
+      console.error("Error updating viewing appointment status:", error);
       throw error;
     }
   }
@@ -119,10 +120,12 @@ class ViewingApi {
    */
   static async getViewingsByUser(userId, params = {}) {
     try {
-      const response = await apiClient.get(`/viewings/user/${userId}`, { params });
+      const response = await apiClient.get(`/viewings/user/${userId}`, {
+        params,
+      });
       return response;
     } catch (error) {
-      console.error('Error getting user viewing appointments:', error);
+      console.error("Error getting user viewing appointments:", error);
       throw error;
     }
   }
@@ -135,10 +138,12 @@ class ViewingApi {
    */
   static async getViewingsByLandlord(landlordId, params = {}) {
     try {
-      const response = await apiClient.get(`/viewings/landlord/${landlordId}`, { params });
+      const response = await apiClient.get(`/viewings/landlord/${landlordId}`, {
+        params,
+      });
       return response;
     } catch (error) {
-      console.error('Error getting landlord viewing appointments:', error);
+      console.error("Error getting landlord viewing appointments:", error);
       throw error;
     }
   }
@@ -150,10 +155,10 @@ class ViewingApi {
    */
   static async getMyViewings(params = {}) {
     try {
-      const response = await apiClient.get('/viewings/me', { params });
+      const response = await apiClient.get("/viewings/me", { params });
       return response;
     } catch (error) {
-      console.error('Error getting my viewing appointments:', error);
+      console.error("Error getting my viewing appointments:", error);
       throw error;
     }
   }
@@ -171,7 +176,7 @@ class ViewingApi {
       });
       return response;
     } catch (error) {
-      console.error('Error confirming viewing appointment:', error);
+      console.error("Error confirming viewing appointment:", error);
       throw error;
     }
   }
@@ -189,7 +194,7 @@ class ViewingApi {
       });
       return response;
     } catch (error) {
-      console.error('Error cancelling viewing appointment:', error);
+      console.error("Error cancelling viewing appointment:", error);
       throw error;
     }
   }
@@ -204,7 +209,7 @@ class ViewingApi {
       const response = await apiClient.post(`/viewings/${viewingId}/complete`);
       return response;
     } catch (error) {
-      console.error('Error completing viewing appointment:', error);
+      console.error("Error completing viewing appointment:", error);
       throw error;
     }
   }
@@ -219,7 +224,7 @@ class ViewingApi {
       const response = await apiClient.delete(`/viewings/${viewingId}`);
       return response;
     } catch (error) {
-      console.error('Error deleting viewing appointment:', error);
+      console.error("Error deleting viewing appointment:", error);
       throw error;
     }
   }
@@ -232,25 +237,39 @@ class ViewingApi {
    */
   static async getAvailableTimeSlots(roomId, date) {
     try {
-      const response = await apiClient.get('/viewings', {
+      const response = await apiClient.get("/viewings", {
         params: {
           roomId,
           viewingDate: date,
-          status: 'confirmed,pending',
+          status: "confirmed,pending",
         },
       });
 
       // Extract booked time slots
-      const bookedSlots = response.data?.map(viewing => viewing.viewingTime) || [];
+      const bookedSlots =
+        response.data?.map((viewing) => viewing.viewingTime) || [];
 
       // All available time slots
       const allTimeSlots = [
-        '9:00 AM', '9:30 AM', '10:00 AM', '10:30 AM', '11:00 AM', '11:30 AM',
-        '2:00 PM', '2:30 PM', '3:00 PM', '3:30 PM', '4:00 PM', '4:30 PM', '5:00 PM'
+        "9:00 AM",
+        "9:30 AM",
+        "10:00 AM",
+        "10:30 AM",
+        "11:00 AM",
+        "11:30 AM",
+        "2:00 PM",
+        "2:30 PM",
+        "3:00 PM",
+        "3:30 PM",
+        "4:00 PM",
+        "4:30 PM",
+        "5:00 PM",
       ];
 
       // Filter out booked slots
-      const availableSlots = allTimeSlots.filter(slot => !bookedSlots.includes(slot));
+      const availableSlots = allTimeSlots.filter(
+        (slot) => !bookedSlots.includes(slot)
+      );
 
       return {
         success: true,
@@ -258,7 +277,7 @@ class ViewingApi {
         booked: bookedSlots,
       };
     } catch (error) {
-      console.error('Error getting available time slots:', error);
+      console.error("Error getting available time slots:", error);
       throw error;
     }
   }

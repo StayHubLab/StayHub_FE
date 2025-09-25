@@ -112,15 +112,12 @@ const Detail = () => {
                 "Chủ trọ",
               since: room.buildingId?.hostId?.createdAt
                 ? new Date(room.buildingId.hostId.createdAt).getFullYear()
-                : room.landlord?.since || 
-                  room.buildingId?.createdAt 
-                    ? new Date(room.buildingId.createdAt).getFullYear()
-                    : "2020",
-              rating: 
-                room.buildingId?.hostId?.rating ||
-                room.landlord?.rating || 
-                4.9,
-              isVerified: 
+                : room.landlord?.since || room.buildingId?.createdAt
+                ? new Date(room.buildingId.createdAt).getFullYear()
+                : "2020",
+              rating:
+                room.buildingId?.hostId?.rating || room.landlord?.rating || 4.9,
+              isVerified:
                 room.buildingId?.hostId?.isVerified !== false &&
                 room.landlord?.isVerified !== false,
               description:
@@ -130,14 +127,12 @@ const Detail = () => {
               avatar:
                 room.buildingId?.hostId?.avatar ||
                 room.landlord?.avatar ||
-                "https://placehold.co/64x64/4F46E5/ffffff?text=" + 
-                (room.buildingId?.hostId?.name?.[0] || room.landlord?.name?.[0] || "CT"),
-              email: 
-                room.buildingId?.hostId?.email ||
-                room.landlord?.email,
-              phone: 
-                room.buildingId?.hostId?.phone ||
-                room.landlord?.phone,
+                "https://placehold.co/64x64/4F46E5/ffffff?text=" +
+                  (room.buildingId?.hostId?.name?.[0] ||
+                    room.landlord?.name?.[0] ||
+                    "CT"),
+              email: room.buildingId?.hostId?.email || room.landlord?.email,
+              phone: room.buildingId?.hostId?.phone || room.landlord?.phone,
               // Thêm ID để debug
               id: room.buildingId?.hostId?._id || room.landlord?.id,
             },
@@ -299,11 +294,13 @@ const Detail = () => {
   const handleConfirmBooking = async (bookingData) => {
     try {
       console.log("Booking confirmed:", bookingData);
-      
+
       // Prepare viewing data for API
       const viewingData = {
         roomId: roomId,
-        viewingDate: `${bookingData.month.split('/')[1]}-${bookingData.month.split('/')[0].padStart(2, '0')}-${bookingData.date.toString().padStart(2, '0')}`,
+        viewingDate: `${bookingData.month.split("/")[1]}-${bookingData.month
+          .split("/")[0]
+          .padStart(2, "0")}-${bookingData.date.toString().padStart(2, "0")}`,
         viewingTime: bookingData.time,
         contactInfo: {
           name: bookingData.userData.name,
@@ -315,9 +312,11 @@ const Detail = () => {
 
       // Call API to create viewing appointment
       const response = await viewingApi.createViewing(viewingData);
-      
+
       if (response.success) {
-        message.success("Đã đặt lịch xem phòng thành công! Chủ trọ sẽ liên hệ với bạn sớm.");
+        message.success(
+          "Đã đặt lịch xem phòng thành công! Chủ trọ sẽ liên hệ với bạn sớm."
+        );
         console.log("Viewing appointment created:", response.data);
       } else {
         message.error("Có lỗi xảy ra khi đặt lịch. Vui lòng thử lại.");
@@ -391,7 +390,9 @@ const Detail = () => {
                 roomData.landlord?.description ||
                 "Chủ trọ thân thiện, luôn hỗ trợ nhanh chóng và giải quyết mọi vấn đề trong vòng 24h.",
               isVerified: roomData.landlord?.isVerified !== false,
-              avatar: roomData.landlord?.avatar || "https://placehold.co/64x64/4F46E5/ffffff?text=CT",
+              avatar:
+                roomData.landlord?.avatar ||
+                "https://placehold.co/64x64/4F46E5/ffffff?text=CT",
               email: roomData.landlord?.email,
               phone: roomData.landlord?.phone,
             }}
@@ -422,8 +423,10 @@ const Detail = () => {
           landlordData={{
             name: roomData.landlord.name || "Chủ trọ",
             phone: roomData.landlord.phone || "N/A",
-            email: roomData.landlord.email || "N/A", 
-            since: roomData.landlord.since ? `Chủ trọ từ ${roomData.landlord.since}` : "Chủ trọ từ 2020",
+            email: roomData.landlord.email || "N/A",
+            since: roomData.landlord.since
+              ? `Chủ trọ từ ${roomData.landlord.since}`
+              : "Chủ trọ từ 2020",
           }}
         />
       )}

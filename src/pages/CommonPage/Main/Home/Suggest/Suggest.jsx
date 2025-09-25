@@ -96,29 +96,29 @@ const Suggest = ({
   // Function để map utilities với icon
   const getUtilityIcon = (utilityName) => {
     const iconMap = {
-      'wifi': <WifiOutlined />,
-      'internet': <WifiOutlined />,
-      'mạng': <WifiOutlined />,
-      'parking': <CarOutlined />,
-      'car': <CarOutlined />,
-      'xe': <CarOutlined />,
-      'electricity': <ThunderboltOutlined />,
-      'power': <ThunderboltOutlined />,
-      'điện': <ThunderboltOutlined />,
-      'gas': <FireOutlined />,
-      'kitchen': <HomeOutlined />,
-      'bếp': <HomeOutlined />,
-      'security': <SafetyCertificateOutlined />,
-      'an ninh': <SafetyCertificateOutlined />,
-      'camera': <CameraOutlined />,
-      'maintenance': <ToolOutlined />,
-      'repair': <ToolOutlined />,
-      'sửa chữa': <ToolOutlined />,
-      'air conditioner': <ThunderboltOutlined />,
-      'máy lạnh': <ThunderboltOutlined />,
-      'water heater': <FireOutlined />,
-      'nóng lạnh': <FireOutlined />,
-      'heater': <FireOutlined />
+      wifi: <WifiOutlined />,
+      internet: <WifiOutlined />,
+      mạng: <WifiOutlined />,
+      parking: <CarOutlined />,
+      car: <CarOutlined />,
+      xe: <CarOutlined />,
+      electricity: <ThunderboltOutlined />,
+      power: <ThunderboltOutlined />,
+      điện: <ThunderboltOutlined />,
+      gas: <FireOutlined />,
+      kitchen: <HomeOutlined />,
+      bếp: <HomeOutlined />,
+      security: <SafetyCertificateOutlined />,
+      "an ninh": <SafetyCertificateOutlined />,
+      camera: <CameraOutlined />,
+      maintenance: <ToolOutlined />,
+      repair: <ToolOutlined />,
+      "sửa chữa": <ToolOutlined />,
+      "air conditioner": <ThunderboltOutlined />,
+      "máy lạnh": <ThunderboltOutlined />,
+      "water heater": <FireOutlined />,
+      "nóng lạnh": <FireOutlined />,
+      heater: <FireOutlined />,
     };
 
     // Tìm icon dựa trên tên utility (case insensitive)
@@ -128,7 +128,7 @@ const Suggest = ({
         return icon;
       }
     }
-    
+
     // Default icon nếu không tìm thấy
     return <HomeOutlined />;
   };
@@ -140,12 +140,12 @@ const Suggest = ({
     }
 
     const displayUtilities = utilities.slice(0, 3);
-    
+
     return (
       <div className="suggest-utilities">
         {displayUtilities.map((utility, index) => (
           <div key={index} className="suggest-utility-item">
-            <span style={{ fontSize: '12px' }}>
+            <span style={{ fontSize: "12px" }}>
               {getUtilityIcon(utility.name || utility)}
             </span>
             <span>{utility.name || utility}</span>
