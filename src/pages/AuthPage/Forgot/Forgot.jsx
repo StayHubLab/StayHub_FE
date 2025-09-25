@@ -50,7 +50,7 @@ const Forgot = () => {
       const email = form.getFieldValue("email");
       // Call API thực sự
       const res = await axios.post(
-        "http://localhost:5000/api/auth/resend-verification-email",
+        "http://localhost:5000/api/auth/forgot-password",
         {
           email,
         }

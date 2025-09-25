@@ -1,41 +1,74 @@
-import { EyeInvisibleOutlined, EyeTwoTone, LockOutlined, UserOutlined } from '@ant-design/icons';
-import { Button, Checkbox, Form, Input, message } from 'antd';
-import axios from 'axios';
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import logoRemoveBG from '../../../assets/images/logo/logoRemoveBG.png';
-import './Login.css';
+import {
+  EyeInvisibleOutlined,
+  EyeTwoTone,
+  LockOutlined,
+  UserOutlined,
+} from "@ant-design/icons";
+import { Button, Checkbox, Form, Input, notification } from "antd";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../../../contexts/AuthContext";
+import logoRemoveBG from "../../../assets/images/logo/logoRemoveBG.png";
+import "./Login.css";
 const Login = () => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
+  const [api, contextHolder] = notification.useNotification();
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const handleLogin = async (values) => {
     setLoading(true);
     try {
-      console.log('Login values:', values);
-      const response = await axios.post('http://localhost:5000/api/auth/login', {
+      console.log("Login values:", values);
+
+      // Use AuthContext login method
+      const result = await login({
         email: values.email,
         password: values.password,
       });
-      // ✅ Lưu token (localStorage hoặc cookie)
-      localStorage.setItem('token', response.data.data.token);
-      message.success('Đăng nhập thành công!');
-      navigate('/start'); // hoặc /dashboard
+
+      if (result.success) {
+        const { user } = result.data;
+        api.success({
+          message: "Đăng nhập thành công!",
+          description: `Chào mừng ${user?.fullName || user?.email || "bạn"} đến với StayHub!`,
+          placement: "topRight",
+          duration: 4.5,
+        });
+
+        // Navigate to home or dashboard
+        navigate("/");
+      } else {
+        // Handle login failure
+        api.error({
+          message: "Đăng nhập thất bại!",
+          description:
+            result.error || "Vui lòng kiểm tra lại thông tin đăng nhập.",
+          placement: "topRight",
+          duration: 4.5,
+        });
+      }
     } catch (error) {
-      console.error('Login error:', error.response?.data || error.message);
-      message.error(error.response?.data?.error || 'Đăng nhập thất bại! Vui lòng thử lại.');
+      console.error("Login error:", error);
+      api.error({
+        message: "Lỗi không mong muốn!",
+        description: "Đã có lỗi xảy ra. Vui lòng thử lại sau.",
+        placement: "topRight",
+        duration: 4.5,
+      });
     } finally {
       setLoading(false);
     }
   };
 
   const handleForgotPassword = () => {
-    navigate('/forgot');
+    navigate("/forgot");
   };
 
   return (
     <div className="login-container">
+      {contextHolder}
       <div className="login-card">
         {/* Brand Title */}
         <div className="login-header">
@@ -53,20 +86,30 @@ const Login = () => {
         </div>
 
         {/* Login Form */}
-        <Form form={form} name="login" onFinish={handleLogin} className="login-form" size="large">
-          {/* Username/Email Field */}
+        <Form
+          form={form}
+          name="login"
+          onFinish={handleLogin}
+          className="login-form"
+          size="large"
+        >
+          {/* Email Field */}
           <Form.Item
-            name="username"
+            name="email"
             rules={[
               {
                 required: true,
-                message: 'Vui lòng nhập tài khoản hoặc email!',
+                message: "Vui lòng nhập email!",
+              },
+              {
+                type: "email",
+                message: "Vui lòng nhập đúng định dạng email!",
               },
             ]}
           >
             <Input
               prefix={<UserOutlined className="input-icon" />}
-              placeholder="Tài khoản hoặc email"
+              placeholder="Email"
               className="custom-input"
             />
           </Form.Item>
@@ -77,7 +120,7 @@ const Login = () => {
             rules={[
               {
                 required: true,
-                message: 'Vui lòng nhập mật khẩu!',
+                message: "Vui lòng nhập mật khẩu!",
               },
             ]}
           >
@@ -85,13 +128,19 @@ const Login = () => {
               prefix={<LockOutlined className="input-icon" />}
               placeholder="Mật khẩu"
               className="custom-input"
-              iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
+              iconRender={(visible) =>
+                visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
+              }
             />
           </Form.Item>
 
           {/* Forgot Password Link */}
           <div className="forgot-password-section">
-            <Button type="link" onClick={handleForgotPassword} className="login-link-btn">
+            <Button
+              type="link"
+              onClick={handleForgotPassword}
+              className="login-link-btn"
+            >
               Quên mật khẩu ?
             </Button>
           </div>
@@ -105,21 +154,23 @@ const Login = () => {
                 validator: (_, value) =>
                   value
                     ? Promise.resolve()
-                    : Promise.reject(new Error('Vui lòng đồng ý với các điều khoản!')),
+                    : Promise.reject(
+                        new Error("Vui lòng đồng ý với các điều khoản!")
+                      ),
               },
             ]}
             className="agreement-checkbox"
           >
             <Checkbox>
               <span className="agreement-text">
-                Tôi đồng ý với{' '}
+                Tôi đồng ý với{" "}
                 <Link to="/terms" className="terms-link">
                   Điều khoản sử dụng
-                </Link>{' '}
-                và{' '}
+                </Link>{" "}
+                và{" "}
                 <Link to="/privacy" className="privacy-link">
                   Chính sách bảo mật
-                </Link>{' '}
+                </Link>{" "}
                 của StayHub
               </span>
             </Checkbox>
@@ -127,7 +178,13 @@ const Login = () => {
 
           {/* Login Button */}
           <Form.Item>
-            <Button type="primary" htmlType="submit" className="login-btn" loading={loading} block>
+            <Button
+              type="primary"
+              htmlType="submit"
+              className="login-btn"
+              loading={loading}
+              block
+            >
               Đăng Nhập
             </Button>
           </Form.Item>
@@ -146,7 +203,7 @@ const Login = () => {
                 <img
                   src="https://developers.google.com/identity/images/g-logo.png"
                   alt="Google"
-                  style={{ width: '18px', height: '18px' }}
+                  style={{ width: "18px", height: "18px" }}
                 />
               }
             >
@@ -157,7 +214,7 @@ const Login = () => {
           {/* Register Link */}
           <div className="register-link-section">
             <span className="register-text">
-              Bạn chưa có tài khoản ?{' '}
+              Bạn chưa có tài khoản ?{" "}
               <Link to="/start" className="register-link">
                 Đăng Kí
               </Link>

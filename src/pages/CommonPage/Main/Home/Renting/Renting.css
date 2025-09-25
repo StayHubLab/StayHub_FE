@@ -1,8 +1,9 @@
 .renting-container {
-  padding: 20px;
+  padding: 16px 20px;
   width: 100%;
   position: relative;
   background: transparent;
+  margin-bottom: 24px;
 }
 
 /* Section Title */
@@ -15,6 +16,50 @@
   font-weight: 600;
   line-height: 32px;
   word-wrap: break-word;
+  margin-bottom: 16px;
+}
+
+/* Empty State */
+.renting-empty {
+  width: 100%;
+  max-width: 1156px;
+  min-height: 200px;
+  background: white;
+  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.05);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+.renting-empty-text {
+  text-align: center;
+}
+
+.renting-empty-text p {
+  margin: 8px 0;
+  color: #8c8c8c;
+  font-size: 14px;
+}
+
+.renting-empty-text p:first-child {
+  font-size: 16px;
+  font-weight: 500;
+  color: #595959;
+}
+
+/* Loading State */
+.renting-loading {
+  width: 100%;
+  max-width: 1156px;
+  min-height: 200px;
+  background: white;
+  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.05);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* Room Card */
@@ -326,4 +371,18 @@
   .renting-payment-text {
     font-size: 16px;
   }
+}
+
+/* Multiple Indicator */
+.renting-multiple-indicator {
+  margin-top: 12px;
+  padding: 8px 16px;
+  background: #f0f2ff;
+  border: 1px solid #d6e4ff;
+  border-radius: 6px;
+  color: #4739f0;
+  font-size: 12px;
+  font-weight: 500;
+  text-align: center;
+  max-width: 1156px;
 }
