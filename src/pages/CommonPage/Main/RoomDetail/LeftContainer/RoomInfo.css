@@ -233,7 +233,7 @@
 /* Description Section */
 .description-section {
   width: 810.67px;
-  height: 224px;
+  height: fit-content;
   position: relative;
   background: rgba(0, 0, 0, 0);
   margin-bottom: 32px;
@@ -241,7 +241,7 @@
 
 .description-content {
   width: 810.67px;
-  height: 176px;
+  height: fit-content;
   background: rgba(0, 0, 0, 0);
 }
 
@@ -309,7 +309,7 @@
 /* Rules Section */
 .rules-section {
   width: 810.67px;
-  height: 296px;
+  height: fit-content;
   position: relative;
   background: rgba(0, 0, 0, 0);
   margin-bottom: 32px;
@@ -317,7 +317,7 @@
 
 .rules-list {
   width: 810.67px;
-  height: 248px;
+  height: fit-content;
   background: rgba(0, 0, 0, 0);
 }
 

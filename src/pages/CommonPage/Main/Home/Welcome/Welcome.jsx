@@ -7,7 +7,8 @@ import {
   WarningOutlined,
 } from "@ant-design/icons";
 
-const Welcome = ({ userName = "Nguyễn Hoài An" }) => {
+const Welcome = ({ user }) => {
+  const userName = user?.name || "Người dùng";
   const handleFindNewRoom = () => {
     // Navigate to search page or trigger search functionality
     console.log("Navigate to find new room");
@@ -72,7 +73,11 @@ const Welcome = ({ userName = "Nguyễn Hoài An" }) => {
 };
 
 Welcome.propTypes = {
-  userName: PropTypes.string,
+  user: PropTypes.shape({
+    name: PropTypes.string,
+    email: PropTypes.string,
+    phone: PropTypes.string,
+  }),
 };
 
 export default Welcome;

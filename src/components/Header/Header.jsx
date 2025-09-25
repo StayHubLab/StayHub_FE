@@ -13,11 +13,14 @@ import PropTypes from "prop-types";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import logoRemoveBG from "../../assets/images/logo/logoRemoveBG.png";
+import { useAuth } from "../../contexts/AuthContext";
 import "./Header.css";
-const Header = ({ isAuthenticated = true, user = null }) => {
+
+const Header = () => {
   const [searchValue, setSearchValue] = useState("");
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const navigate = useNavigate();
+  const { user, isAuthenticated, logout } = useAuth();
 
   const handleSearch = () => {
     if (searchValue.trim()) {
@@ -25,9 +28,14 @@ const Header = ({ isAuthenticated = true, user = null }) => {
     }
   };
 
-  const handleLogout = () => {
-    console.log("Logging out...");
-    navigate("/");
+  const handleLogout = async () => {
+    try {
+      await logout();
+      navigate("/login");
+    } catch (error) {
+      console.error("Logout error:", error);
+      navigate("/login");
+    }
   };
 
   // User dropdown menu items
@@ -50,7 +58,10 @@ const Header = ({ isAuthenticated = true, user = null }) => {
     <header className="header-container">
       <div className="header-content">
         {/* Logo */}
-        <div className="logo-section" onClick={() => navigate("/")}>
+        <div
+          className="logo-section"
+          onClick={() => navigate(isAuthenticated ? "/main" : "/")}
+        >
           <img src={logoRemoveBG} alt="StayHub Logo" className="header-logo" />
         </div>
 
@@ -64,7 +75,7 @@ const Header = ({ isAuthenticated = true, user = null }) => {
               onChange={(e) => setSearchValue(e.target.value)}
               onPressEnter={handleSearch}
               className="search-input"
-              bordered={false}
+              variant="borderless"
             />
             <Button
               type="primary"

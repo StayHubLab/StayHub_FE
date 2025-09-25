@@ -20,6 +20,7 @@ const ScheduleBookingModal = ({
   onConfirm,
   roomData,
   userData,
+  landlordData: propLandlordData,
 }) => {
   const today = dayjs(); // Current date for comparison
   const [selectedDate, setSelectedDate] = useState(today.date()); // Default to today's date
@@ -27,31 +28,18 @@ const ScheduleBookingModal = ({
   const [currentMonth, setCurrentMonth] = useState(dayjs()); // Make it stateful for month switching
   const [currentStep, setCurrentStep] = useState(1); // Step 1: Date/Time, Step 2: Confirm Info, Step 3: Complete
 
-  // Sample room data (can be passed as props)
-  const defaultRoomData = {
-    name: "Phòng Trọ Hiện Đại Tầng 3 - K20/28 Nguyễn Hữu Thọ",
-    price: 4500000,
-    address:
-      "K20/28 Nguyễn Hữu Thọ, Phường Hòa Cường Nam, Quận Hải Châu, Đà Nẵng",
-  };
+  // Use only real data from props - no fallback to sample data
+  const currentRoomData = roomData;
+  const currentUserData = userData;
+  const currentLandlordData = propLandlordData;
 
-  // Sample user data (can be passed as props)
-  const defaultUserData = {
-    name: "Nguyễn Văn An",
-    phone: "0123 456 789",
-    email: "nguyen.van.an@email.com",
-  };
-
-  // Sample landlord data
-  const landlordData = {
-    name: "Chị Lan Anh",
-    phone: "0987 654 321",
-    email: "lananh@email.com",
-    since: "Chủ trọ từ 2020",
-  };
-
-  const currentRoomData = roomData || defaultRoomData;
-  const currentUserData = userData || defaultUserData;
+  // Debug landlord data
+  console.log("=== MODAL LANDLORD DEBUG ===");
+  console.log("propLandlordData:", propLandlordData);
+  console.log("Final currentLandlordData:", currentLandlordData);
+  console.log("roomData:", roomData);
+  console.log("userData:", userData);
+  console.log("============================");
 
   // Days of week in Vietnamese
   const weekDays = ["CN", "T2", "T3", "T4", "T5", "T6", "T7"];
@@ -241,19 +229,19 @@ const ScheduleBookingModal = ({
 
           <div className="summary-item">
             <div className="summary-label">Tên phòng:</div>
-            <div className="summary-value">{currentRoomData.name}</div>
+            <div className="summary-value">{currentRoomData?.name || "N/A"}</div>
           </div>
 
           <div className="summary-item">
             <div className="summary-label">Giá phòng:</div>
             <div className="summary-value">
-              {formatPrice(currentRoomData.price)} VNĐ/tháng
+              {currentRoomData?.price ? formatPrice(currentRoomData.price) : "N/A"} VNĐ/tháng
             </div>
           </div>
 
           <div className="summary-item">
             <div className="summary-label">Địa chỉ:</div>
-            <div className="summary-value">{currentRoomData.address}</div>
+            <div className="summary-value">{currentRoomData?.address || "N/A"}</div>
           </div>
         </div>
       </div>
@@ -269,17 +257,17 @@ const ScheduleBookingModal = ({
           <div className="info-details">
             <div className="info-item">
               <div className="info-label">Họ tên:</div>
-              <div className="info-value">{currentUserData.name}</div>
+              <div className="info-value">{currentUserData?.name || "N/A"}</div>
             </div>
 
             <div className="info-item">
               <div className="info-label">Số điện thoại:</div>
-              <div className="info-value">{currentUserData.phone}</div>
+              <div className="info-value">{currentUserData?.phone || "N/A"}</div>
             </div>
 
             <div className="info-item">
               <div className="info-label">Email:</div>
-              <div className="info-value">{currentUserData.email}</div>
+              <div className="info-value">{currentUserData?.email || "N/A"}</div>
             </div>
           </div>
         </div>
@@ -293,22 +281,22 @@ const ScheduleBookingModal = ({
           <div className="info-details">
             <div className="info-item">
               <div className="info-label">Họ tên:</div>
-              <div className="info-value">{landlordData.name}</div>
+              <div className="info-value">{currentLandlordData?.name || "N/A"}</div>
             </div>
 
             <div className="info-item">
               <div className="info-label">Số điện thoại:</div>
-              <div className="info-value">{landlordData.phone}</div>
+              <div className="info-value">{currentLandlordData?.phone || "N/A"}</div>
             </div>
 
             <div className="info-item">
               <div className="info-label">Email:</div>
-              <div className="info-value">{landlordData.email}</div>
+              <div className="info-value">{currentLandlordData?.email || "N/A"}</div>
             </div>
 
             <div className="info-item">
               <div className="info-label">Kinh nghiệm:</div>
-              <div className="info-value">{landlordData.since}</div>
+              <div className="info-value">{currentLandlordData?.since || "N/A"}</div>
             </div>
           </div>
         </div>
@@ -335,7 +323,7 @@ const ScheduleBookingModal = ({
             <strong>Thời gian:</strong> {selectedTime}
           </div>
           <div className="detail-item-complete">
-            <strong>Phòng:</strong> {currentRoomData.name}
+            <strong>Phòng:</strong> {currentRoomData?.name || "N/A"}
           </div>
         </div>
       </div>
@@ -526,6 +514,12 @@ ScheduleBookingModal.propTypes = {
     name: PropTypes.string,
     phone: PropTypes.string,
     email: PropTypes.string,
+  }),
+  landlordData: PropTypes.shape({
+    name: PropTypes.string,
+    phone: PropTypes.string,
+    email: PropTypes.string,
+    since: PropTypes.string,
   }),
 };
 

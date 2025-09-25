@@ -8,62 +8,62 @@ import {
   RightOutlined,
   HeartOutlined,
   HeartFilled,
+  WifiOutlined,
+  CarOutlined,
+  ThunderboltOutlined,
+  FireOutlined,
+  HomeOutlined,
+  SafetyCertificateOutlined,
+  CameraOutlined,
+  ToolOutlined,
 } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
+import roomApi from "../../../../../services/api/roomApi";
 
 const Suggest = ({
-  suggestedRooms = [
-    {
-      id: 1,
-      title: "Phòng Trọ Cao Cấp 305",
-      price: 3200000,
-      location: "Quận Thanh Khê, Đà Nẵng",
-      rating: 5,
-      reviews: 28,
-      image: "https://placehold.co/369x180",
-      isVerified: true,
-      isAiRecommended: true,
-    },
-    {
-      id: 2,
-      title: "Phòng Ban Công View Đẹp",
-      price: 2900000,
-      location: "Quận Sơn Trà, Đà Nẵng",
-      rating: 5,
-      reviews: 16,
-      image: "https://placehold.co/369x180",
-      isVerified: true,
-      isAiRecommended: true,
-    },
-    {
-      id: 3,
-      title: "Phòng Trọ Sinh Viên",
-      price: 2500000,
-      location: "Quận Liên Chiểu, Đà Nẵng",
-      rating: 5,
-      reviews: 34,
-      image: "https://placehold.co/369x180",
-      isVerified: true,
-      isAiRecommended: true,
-    },
-    {
-      id: 4,
-      title: "Căn Hộ Mini Tiện Nghi",
-      price: 3300000,
-      location: "Quận Cẩm Lệ, Đà Nẵng",
-      rating: 5,
-      reviews: 22,
-      image: "https://placehold.co/369x180",
-      isVerified: true,
-      isAiRecommended: true,
-    },
-  ],
+  loading: propLoading = false,
+  onRoomLike,
+  savedRoomIds = [],
 }) => {
+  // State để quản lý dữ liệu rooms
+  const [suggestedRooms, setSuggestedRooms] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
   const [currentIndex, setCurrentIndex] = useState(0);
   const [favorites, setFavorites] = useState(new Set()); // Track favorited room IDs
   const roomsPerView = 3;
-  const maxIndex = Math.max(0, suggestedRooms.length - roomsPerView);
+  const safeRooms = Array.isArray(suggestedRooms) ? suggestedRooms : [];
+  const maxIndex = Math.max(0, safeRooms.length - roomsPerView);
   const navigate = useNavigate();
+
+  // Fetch suggested rooms từ API
+  const fetchSuggestedRooms = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      const response = await roomApi.getAllRooms({
+        limit: 10,
+        sort: "rating",
+        order: "desc",
+      });
+
+      if (response.success && response.data) {
+        // Handle the correct API response structure: {rooms: [...], pagination: {...}}
+        const roomsData = Array.isArray(response.data.rooms)
+          ? response.data.rooms
+          : [];
+        setSuggestedRooms(roomsData);
+      }
+    } catch (error) {
+      console.error("Error fetching suggested rooms:", error);
+      setError("Không thể tải danh sách phòng gợi ý");
+      setSuggestedRooms([]);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // Load favorites from localStorage on component mount
   useEffect(() => {
@@ -72,10 +72,87 @@ const Suggest = ({
       const favoriteIds = JSON.parse(savedFavorites);
       setFavorites(new Set(favoriteIds));
     }
+
+    // Fetch rooms từ API
+    fetchSuggestedRooms();
   }, []);
 
   const formatPrice = (price) => {
-    return price.toLocaleString("vi-VN");
+    if (!price) return "0";
+
+    // Nếu price là object (từ API), lấy giá rent
+    if (typeof price === "object" && price.rent !== undefined) {
+      return price.rent.toLocaleString();
+    }
+
+    // Nếu price là số (fallback)
+    if (typeof price === "number") {
+      return price.toLocaleString();
+    }
+
+    return "0";
+  };
+
+  // Function để map utilities với icon
+  const getUtilityIcon = (utilityName) => {
+    const iconMap = {
+      'wifi': <WifiOutlined />,
+      'internet': <WifiOutlined />,
+      'mạng': <WifiOutlined />,
+      'parking': <CarOutlined />,
+      'car': <CarOutlined />,
+      'xe': <CarOutlined />,
+      'electricity': <ThunderboltOutlined />,
+      'power': <ThunderboltOutlined />,
+      'điện': <ThunderboltOutlined />,
+      'gas': <FireOutlined />,
+      'kitchen': <HomeOutlined />,
+      'bếp': <HomeOutlined />,
+      'security': <SafetyCertificateOutlined />,
+      'an ninh': <SafetyCertificateOutlined />,
+      'camera': <CameraOutlined />,
+      'maintenance': <ToolOutlined />,
+      'repair': <ToolOutlined />,
+      'sửa chữa': <ToolOutlined />,
+      'air conditioner': <ThunderboltOutlined />,
+      'máy lạnh': <ThunderboltOutlined />,
+      'water heater': <FireOutlined />,
+      'nóng lạnh': <FireOutlined />,
+      'heater': <FireOutlined />
+    };
+
+    // Tìm icon dựa trên tên utility (case insensitive)
+    const lowerName = utilityName.toLowerCase();
+    for (const [key, icon] of Object.entries(iconMap)) {
+      if (lowerName.includes(key)) {
+        return icon;
+      }
+    }
+    
+    // Default icon nếu không tìm thấy
+    return <HomeOutlined />;
+  };
+
+  // Function để render utilities (tối đa 3 cái)
+  const renderUtilities = (utilities) => {
+    if (!utilities || !Array.isArray(utilities) || utilities.length === 0) {
+      return null;
+    }
+
+    const displayUtilities = utilities.slice(0, 3);
+    
+    return (
+      <div className="suggest-utilities">
+        {displayUtilities.map((utility, index) => (
+          <div key={index} className="suggest-utility-item">
+            <span style={{ fontSize: '12px' }}>
+              {getUtilityIcon(utility.name || utility)}
+            </span>
+            <span>{utility.name || utility}</span>
+          </div>
+        ))}
+      </div>
+    );
   };
 
   const handleViewAll = () => {
@@ -83,8 +160,7 @@ const Suggest = ({
   };
 
   const handleViewDetails = (roomId) => {
-    navigate("/main/room-detail/" + roomId);
-
+    navigate(`/main/room-detail/${roomId}`);
     console.log("View details clicked for room:", roomId);
   };
 
@@ -121,46 +197,54 @@ const Suggest = ({
   };
 
   const renderRoomCard = (room) => (
-    <div key={room.id} className="suggest-room-card">
+    <div key={room._id || room.id} className="suggest-room-card">
       {/* Room Image */}
       <div className="suggest-room-image-container">
-        <img src={room.image} alt={room.title} className="suggest-room-image" />
+        <img
+          src={
+            room.images && room.images.length > 0
+              ? room.images[0]
+              : "https://placehold.co/369x180"
+          }
+          alt={room.name || room.title}
+          className="suggest-room-image"
+        />
 
         {/* Heart Icon */}
         <div
           className="suggest-heart-icon"
           onClick={(e) => {
             e.stopPropagation();
-            handleHeartClick(room.id);
+            handleHeartClick(room._id || room.id);
           }}
         >
-          {favorites.has(room.id) ? (
+          {favorites.has(room._id || room.id) ? (
             <HeartFilled className="suggest-heart-filled" />
           ) : (
             <HeartOutlined className="suggest-heart-outlined" />
           )}
         </div>
 
-        {/* Verified Badge */}
-        {room.isVerified && (
+        {/* Verified Badge - hiển thị nếu room có status available */}
+        {room.status === "available" && (
           <div className="suggest-verified-badge">
             <CheckOutlined className="suggest-verified-icon" />
-            <span className="suggest-verified-text">Đã xác thực</span>
+            <span className="suggest-verified-text">Có sẵn</span>
           </div>
         )}
       </div>
 
       {/* Room Details */}
       <div className="suggest-room-details">
-        {/* AI Recommendation Badge */}
-        {room.isAiRecommended && (
-          <div className="suggest-ai-badge">
-            <span className="suggest-ai-text">AI đề xuất</span>
-          </div>
-        )}
+        {/* AI Recommendation Badge - luôn hiển thị cho suggested rooms */}
+        <div className="suggest-ai-badge">
+          <span className="suggest-ai-text">AI đề xuất</span>
+        </div>
 
         {/* Room Title */}
-        <div className="suggest-room-title">{room.title}</div>
+        <div className="suggest-room-title">
+          {room.name || room.title || "Phòng trọ"}
+        </div>
 
         {/* Price Section */}
         <div className="suggest-price-section">
@@ -168,19 +252,49 @@ const Suggest = ({
           <div className="suggest-price-unit">/tháng</div>
         </div>
 
-        {/* Location */}
-        <div className="suggest-location">{room.location}</div>
+        {/* Location - hiển thị tên building và địa chỉ, kèm diện tích */}
+        <div className="suggest-location">
+          {room.buildingId && typeof room.buildingId === "object" ? (
+            <>
+              <div>
+                {room.buildingId.name} -{" "}
+                {room.buildingId.address?.street ||
+                  room.buildingId.address?.ward ||
+                  "Địa chỉ không xác định"}
+              </div>
+              <div style={{ marginTop: "5px" }}>
+                {room.area}m² • {room.capacity} người
+              </div>
+            </>
+          ) : room.address ? (
+            <>
+              <div>{room.address}</div>
+              <div style={{ marginTop: "5px" }}>
+                {room.area}m² • {room.capacity} người
+              </div>
+            </>
+          ) : (
+            <div>
+              {room.area}m² • {room.capacity} người
+            </div>
+          )}
+        </div>
+
+        {/* Utilities Section */}
+        {renderUtilities(room.utilities)}
 
         {/* Rating Section */}
         <div className="suggest-rating-section">
           <div className="suggest-stars">{renderStars()}</div>
-          <div className="suggest-reviews">({room.reviews} đánh giá)</div>
+          <div className="suggest-reviews">
+            ({room.rating || 5} ⭐ - {room.viewCount || 0} lượt xem)
+          </div>
         </div>
 
         {/* View Details Button */}
         <div
           className="suggest-details-button"
-          onClick={() => handleViewDetails(room.id)}
+          onClick={() => handleViewDetails(room._id || room.id)}
         >
           <span className="suggest-details-text">Xem chi tiết</span>
         </div>
@@ -203,58 +317,109 @@ const Suggest = ({
         </div> */}
       </div>
 
-      {/* Carousel Container */}
-      <div className="suggest-carousel-container">
-        {/* Navigation Buttons */}
-        {suggestedRooms.length > roomsPerView && (
-          <>
-            <button
-              className={`suggest-nav-button suggest-nav-prev ${currentIndex === 0 ? "disabled" : ""}`}
-              onClick={handlePrevious}
-              disabled={currentIndex === 0}
-            >
-              <LeftOutlined />
-            </button>
-            <button
-              className={`suggest-nav-button suggest-nav-next ${currentIndex === maxIndex ? "disabled" : ""}`}
-              onClick={handleNext}
-              disabled={currentIndex === maxIndex}
-            >
-              <RightOutlined />
-            </button>
-          </>
-        )}
+      {/* Loading State */}
+      {loading && (
+        <div
+          className="suggest-loading"
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "200px",
+            fontSize: "16px",
+            color: "#666",
+          }}
+        >
+          Đang tải phòng gợi ý...
+        </div>
+      )}
 
-        {/* Rooms Grid */}
-        <div className="suggest-rooms-grid">
-          <div
-            className="suggest-rooms-track"
-            style={{
-              transform: `translateX(-${currentIndex * (369.33 + 24)}px)`,
-              transition: "transform 0.3s ease-in-out",
-            }}
-          >
-            {suggestedRooms.map((room) => renderRoomCard(room))}
+      {/* Error State */}
+      {error && !loading && (
+        <div
+          className="suggest-error"
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "200px",
+            fontSize: "16px",
+            color: "#ff4d4f",
+          }}
+        >
+          {error}
+        </div>
+      )}
+
+      {/* Content - chỉ hiển thị khi không loading và không có error */}
+      {!loading && !error && safeRooms.length > 0 && (
+        <div className="suggest-carousel-container">
+          {/* Navigation Buttons */}
+          {safeRooms.length > roomsPerView && (
+            <>
+              <button
+                className={`suggest-nav-button suggest-nav-prev ${
+                  currentIndex === 0 ? "disabled" : ""
+                }`}
+                onClick={handlePrevious}
+                disabled={currentIndex === 0}
+              >
+                <LeftOutlined />
+              </button>
+              <button
+                className={`suggest-nav-button suggest-nav-next ${
+                  currentIndex === maxIndex ? "disabled" : ""
+                }`}
+                onClick={handleNext}
+                disabled={currentIndex === maxIndex}
+              >
+                <RightOutlined />
+              </button>
+            </>
+          )}
+
+          {/* Rooms Grid */}
+          <div className="suggest-rooms-grid">
+            <div
+              className="suggest-rooms-track"
+              style={{
+                transform: `translateX(-${currentIndex * (369.33 + 24)}px)`,
+                transition: "transform 0.3s ease-in-out",
+              }}
+            >
+              {safeRooms.length > 0
+                ? safeRooms.map((room) => renderRoomCard(room))
+                : null}
+            </div>
           </div>
         </div>
-      </div>
+      )}
+
+      {/* Empty State */}
+      {!loading && !error && safeRooms.length === 0 && (
+        <div
+          className="suggest-empty"
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "200px",
+            fontSize: "16px",
+            color: "#999",
+          }}
+        >
+          Không có phòng gợi ý nào
+        </div>
+      )}
     </div>
   );
 };
 
 Suggest.propTypes = {
-  suggestedRooms: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      title: PropTypes.string.isRequired,
-      price: PropTypes.number.isRequired,
-      location: PropTypes.string.isRequired,
-      rating: PropTypes.number.isRequired,
-      reviews: PropTypes.number.isRequired,
-      image: PropTypes.string.isRequired,
-      isVerified: PropTypes.bool,
-      isAiRecommended: PropTypes.bool,
-    })
+  loading: PropTypes.bool,
+  onRoomLike: PropTypes.func,
+  savedRoomIds: PropTypes.arrayOf(
+    PropTypes.oneOfType([PropTypes.string, PropTypes.number])
   ),
 };
 

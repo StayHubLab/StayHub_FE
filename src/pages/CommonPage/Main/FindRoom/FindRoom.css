@@ -6,6 +6,27 @@
   padding-bottom: 80px; /* Extra space for footer and pagination */
 }
 
+/* Loading and Error States */
+.search-room-loading,
+.search-room-error,
+.search-room-empty {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+  grid-column: 1 / -1;
+  width: 100%;
+}
+
+.search-room-loading .ant-spin {
+  font-size: 24px;
+}
+
+.search-room-error .ant-empty,
+.search-room-empty .ant-empty {
+  margin: 0;
+}
+
 .search-room-container {
   width: 1136px;
   height: 194px;
@@ -769,7 +790,28 @@
   font-weight: 400;
   line-height: 20px;
   word-wrap: break-word;
-  margin-bottom: 16px;
+  margin-bottom: 8px;
+}
+
+/* Utilities */
+.search-room-utilities {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 8px 0;
+}
+
+.search-room-utility-item {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 11px;
+  color: #555;
+  background-color: #f0f0f0;
+  padding: 3px 8px;
+  border-radius: 10px;
+  border: 1px solid #e0e0e0;
+  font-family: "Montserrat";
 }
 
 /* Rating Section */
@@ -779,6 +821,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
+  margin-top: 8px;
 }
 
 .search-room-stars {

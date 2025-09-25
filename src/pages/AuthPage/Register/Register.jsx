@@ -5,7 +5,7 @@ import {
   Input,
   Checkbox,
   Typography,
-  message,
+  notification,
   Row,
   Col,
   Select,
@@ -20,7 +20,7 @@ import {
   EyeTwoTone,
   HomeOutlined,
 } from "@ant-design/icons";
-import axios from "axios";
+import authApi from "../../../services/api/authApi.js";
 import { useNavigate } from "react-router-dom";
 import logoRemoveBG from "../../../assets/images/logo/logoRemoveBG.png";
 import "./Register.css";
@@ -61,9 +61,11 @@ const Register = () => {
       setProvinces(data || []);
     } catch (error) {
       console.error("Error loading provinces:", error);
-      message.error(
-        error?.message || "Không tải được danh sách tỉnh/thành phố"
-      );
+      notification.error({
+        message: "Lỗi",
+        description:
+          error?.message || "Không tải được danh sách tỉnh/thành phố",
+      });
     } finally {
       setLoadingProvinces(false);
     }
@@ -78,7 +80,10 @@ const Register = () => {
       form.setFieldsValue({ ward: undefined });
     } catch (error) {
       console.error("Error loading wards:", error);
-      message.error(error?.message || "Không tải được danh sách phường/xã");
+      notification.error({
+        message: "Lỗi",
+        description: error?.message || "Không tải được danh sách phường/xã",
+      });
     } finally {
       setLoadingWards(false);
     }
@@ -109,7 +114,10 @@ const Register = () => {
       setInfoCompleted(true);
       setActiveTab("2");
     } catch (_) {
-      message.error("Vui lòng hoàn thành tất cả thông tin cá nhân!");
+      notification.error({
+        message: "Lỗi",
+        description: "Vui lòng hoàn thành tất cả thông tin cá nhân!",
+      });
     }
   };
 
@@ -134,9 +142,10 @@ const Register = () => {
         wardCode: values.ward || null,
         wardName: wardObj ? formatWardName(wardObj) : null,
         street: values.detailedAddress || "",
-        // Back-compat fields (if your backend still expects these):
-        city: provinceObj ? formatProvinceName(provinceObj) : null,
-        district: null,
+        // Required fields for backend
+        ward: wardObj ? formatWardName(wardObj) : "",
+        district: provinceObj ? formatProvinceName(provinceObj) : "",
+        city: provinceObj ? formatProvinceName(provinceObj) : "",
       };
 
       const payload = {
@@ -152,23 +161,28 @@ const Register = () => {
       // Debug
       // console.log('Registration payload:', payload);
 
-      const response = await axios.post(
-        "http://localhost:5000/api/auth/register",
-        payload
-      );
+      const response = await authApi.register(payload);
 
       if (response?.data) {
-        message.success("Đăng ký thành công!");
+        notification.success({
+          message: "Thành công",
+          description: "Đăng ký thành công!",
+        });
         handleVerifyRedirect();
       } else {
-        message.success("Đăng ký thành công!");
+        notification.success({
+          message: "Thành công",
+          description: "Đăng ký thành công!",
+        });
         handleVerifyRedirect();
       }
     } catch (error) {
       console.error("Register error:", error?.response?.data || error?.message);
-      message.error(
-        error?.response?.data?.error || "Đăng ký thất bại. Vui lòng thử lại!"
-      );
+      notification.error({
+        message: "Lỗi",
+        description:
+          error?.response?.data?.error || "Đăng ký thất bại. Vui lòng thử lại!",
+      });
     } finally {
       setLoading(false);
     }
@@ -179,24 +193,27 @@ const Register = () => {
     try {
       const email = form.getFieldValue("email");
       if (!email) {
-        message.error("Vui lòng nhập email!");
+        notification.error({
+          message: "Lỗi",
+          description: "Vui lòng nhập email!",
+        });
         return;
       }
-      await axios.post(
-        "http://localhost:5000/api/auth/send-verification-code",
-        {
-          email,
-        }
-      );
-      message.success("Mã xác nhận đã được gửi tới email của bạn!");
+      await authApi.sendVerificationCode(email);
+      notification.success({
+        message: "Thành công",
+        description: "Mã xác nhận đã được gửi tới email của bạn!",
+      });
     } catch (error) {
       console.error(
         "Send code error:",
         error?.response?.data || error?.message
       );
-      message.error(
-        error?.response?.data?.error || "Không thể gửi mã xác nhận!"
-      );
+      notification.error({
+        message: "Lỗi",
+        description:
+          error?.response?.data?.error || "Không thể gửi mã xác nhận!",
+      });
     } finally {
       setSendingCode(false);
     }

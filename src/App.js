@@ -1,6 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, useLocation } from "react-router-dom";
-import { ConfigProvider } from "antd";
+import { ConfigProvider, App as AntApp } from "antd";
+import { AuthProvider } from "./contexts/AuthContext";
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
 import AppRoutes from "./routes/AppRoutes";
@@ -40,9 +41,13 @@ function App() {
   return (
     <>
       <ConfigProvider theme={theme}>
-        <Router>
-          <AppLayout />
-        </Router>
+        <AntApp>
+          <AuthProvider>
+            <Router>
+              <AppLayout />
+            </Router>
+          </AuthProvider>
+        </AntApp>
       </ConfigProvider>
     </>
   );

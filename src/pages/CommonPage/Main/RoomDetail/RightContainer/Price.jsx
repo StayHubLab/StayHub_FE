@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import PropTypes from "prop-types";
-import { Button, Avatar, message } from "antd";
+import { Button, Avatar } from "antd";
 import {
   InfoCircleOutlined,
   StarFilled,
@@ -9,7 +9,6 @@ import {
   CheckCircleOutlined,
 } from "@ant-design/icons";
 import "./Price.css";
-import ScheduleBookingModal from "../../../../../components/ScheduleBookingModal/ScheduleBookingModal";
 
 const Price = ({
   priceData = {
@@ -38,25 +37,10 @@ const Price = ({
   onContactLandlord,
   onViewContract,
 }) => {
-  const [isModalVisible, setIsModalVisible] = useState(false);
 
   const handleScheduleViewing = () => {
-    setIsModalVisible(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsModalVisible(false);
-  };
-
-  const handleConfirmBooking = (bookingData) => {
-    console.log("Booking confirmed:", bookingData);
-    message.success(
-      `Đã đặt lịch xem phòng ngày ${bookingData.date} lúc ${bookingData.time}`
-    );
-
-    // Call the original onScheduleViewing if provided
     if (onScheduleViewing) {
-      onScheduleViewing(bookingData);
+      onScheduleViewing();
     }
   };
 
@@ -179,13 +163,6 @@ const Price = ({
           Xem Hợp đồng Mẫu
         </Button>
       </div>
-
-      {/* Schedule Booking Modal */}
-      <ScheduleBookingModal
-        visible={isModalVisible}
-        onClose={handleCloseModal}
-        onConfirm={handleConfirmBooking}
-      />
     </div>
   );
 };

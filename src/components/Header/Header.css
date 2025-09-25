@@ -100,10 +100,12 @@
   font-weight: 500 !important;
   padding: 0 16px !important;
   min-width: 102px;
+  transition: all 0.2s ease;
 }
 
 .search-button:hover {
   background: #3627d4 !important;
+  transform: translateY(-50%);
 }
 
 /* Auth Section - Unauthenticated */
