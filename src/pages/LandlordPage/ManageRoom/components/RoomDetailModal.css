@@ -1,0 +1,254 @@
+.landlord-room-detail-modal .ant-modal-header {
+  border-bottom: 1px solid #f0f0f0;
+  padding: 16px 24px;
+}
+
+.landlord-room-detail-modal .ant-modal-title {
+  color: #1f1f1f;
+  font-weight: 600;
+  font-size: 18px;
+}
+
+.landlord-detail-tabs .ant-tabs-nav {
+  margin-bottom: 24px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.landlord-tab-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.landlord-detail-card {
+  border: none;
+  box-shadow: none;
+  padding: 0;
+}
+
+.landlord-detail-card .ant-card-body {
+  padding: 20px;
+}
+
+.landlord-detail-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.landlord-detail-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.landlord-detail-label {
+  color: #666;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px !important;
+}
+
+.landlord-detail-value {
+  color: #1f1f1f;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.landlord-price-highlight {
+  color: #4739F0 !important;
+  font-weight: 700 !important;
+  font-size: 16px !important;
+}
+
+.landlord-amenities {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+.landlord-amenity-tag {
+  margin: 0;
+  border-radius: 12px;
+  font-size: 12px;
+  padding: 2px 8px;
+}
+
+.landlord-divider {
+  margin: 20px 0;
+  border-color: #f0f0f0;
+}
+
+.landlord-description {
+  line-height: 1.6;
+  color: #555;
+  background: #f8f9fa;
+  padding: 12px;
+  border-radius: 6px;
+  border-left: 3px solid #4739F0;
+}
+
+/* Tenant Information Styles */
+.landlord-tenant-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.landlord-tenant-avatar {
+  background-color: #4739F0 !important;
+  flex-shrink: 0;
+}
+
+.landlord-tenant-name-section {
+  flex: 1;
+}
+
+.landlord-tenant-name {
+  margin: 0 0 4px 0 !important;
+  color: #1f1f1f;
+  font-size: 20px;
+}
+
+.landlord-tenant-occupation {
+  font-size: 14px;
+  color: #666;
+}
+
+.landlord-empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: #999;
+}
+
+.landlord-empty-icon {
+  font-size: 48px;
+  color: #d9d9d9;
+  margin-bottom: 16px;
+}
+
+.landlord-empty-text {
+  font-size: 16px;
+  color: #999;
+}
+
+/* Payment Information Styles */
+.landlord-payment-info {
+  margin-top: 20px;
+}
+
+.landlord-payment-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 20px;
+  border: 1px solid #f0f0f0;
+  border-radius: 8px;
+  background: #fafafa;
+  transition: all 0.3s ease;
+}
+
+.landlord-payment-card:hover {
+  border-color: #4739F0;
+  background: #f8f7ff;
+}
+
+.landlord-payment-icon {
+  font-size: 24px;
+  padding: 12px;
+  border-radius: 8px;
+  background: white;
+  flex-shrink: 0;
+}
+
+.landlord-payment-icon-primary {
+  color: #4739F0;
+  border: 2px solid #4739F0;
+}
+
+.landlord-payment-icon-secondary {
+  color: #52c41a;
+  border: 2px solid #52c41a;
+}
+
+.landlord-payment-details {
+  flex: 1;
+}
+
+.landlord-payment-title {
+  margin: 0 0 8px 0 !important;
+  font-size: 16px;
+  color: #1f1f1f;
+}
+
+.landlord-payment-date {
+  display: block;
+  font-size: 18px;
+  font-weight: 700;
+  color: #4739F0;
+  margin-bottom: 4px;
+}
+
+.landlord-payment-amount {
+  display: block;
+  font-size: 18px;
+  font-weight: 700;
+  color: #52c41a;
+  margin-bottom: 4px;
+}
+
+.landlord-payment-status {
+  font-size: 13px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: inline-block;
+}
+
+.landlord-payment-status.landlord-overdue {
+  background: #fff2f0;
+  color: #cf1322;
+}
+
+.landlord-payment-status.landlord-on-time {
+  background: #f6ffed;
+  color: #389e0d;
+}
+
+.landlord-payment-type {
+  font-size: 12px;
+  color: #999;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .landlord-room-detail-modal .ant-modal {
+    width: 95% !important;
+    margin: 10px;
+  }
+  
+  .landlord-tenant-header {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .landlord-payment-card {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .landlord-payment-icon {
+    align-self: center;
+  }
+}

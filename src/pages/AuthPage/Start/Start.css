@@ -251,7 +251,7 @@
 }
 
 /* Ant Design overrides */
-.ant-card-body {
+/* .ant-card-body {
   padding: 24px !important;
   height: 100%;
   display: flex;
@@ -260,4 +260,4 @@
 
 .ant-space-item {
   width: 100%;
-}
+} */

@@ -1,0 +1,221 @@
+/* Revenue Chart Component Styles */
+.revenue-chart-container {
+  width: 100%;
+  margin-top: 24px;
+}
+
+.revenue-card {
+  border-radius: 12px;
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.08);
+  border: none;
+  display: flex;
+  flex-direction: column;
+}
+
+.revenue-card .ant-card-body {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+}
+
+.revenue-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #f0f0f0;
+  order: 1;
+}
+
+.revenue-title {
+  color: #4739F0;
+  font-size: 24px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  margin: 0;
+}
+
+.period-select {
+  min-width: 120px;
+}
+
+.period-select .ant-select-selector {
+  border-radius: 8px;
+  border-color: #4739F0;
+}
+
+.revenue-stats {
+  margin-bottom: 24px;
+  order: 2;
+}
+
+.stat-card {
+  background: #f8f9fa;
+  padding: 20px;
+  border-radius: 12px;
+  text-align: center;
+  height: 100%;
+}
+
+.stat-title {
+  color: #666666;
+  font-size: 14px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.stat-value {
+  font-size: 20px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  margin: 0;
+}
+
+.stat-value.primary {
+  color: #4739F0;
+}
+
+.stat-value.success {
+  color: #34D399;
+}
+
+.stat-value.warning {
+  color: #FAC227;
+}
+
+.revenue-tabs {
+  margin-top: 0;
+  order: 3;
+  flex: 1;
+}
+
+.revenue-tabs .ant-tabs-tab {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+}
+
+.revenue-tabs .ant-tabs-tab-active {
+  color: #4739F0 !important;
+}
+
+.revenue-tabs .ant-tabs-ink-bar {
+  background: #4739F0;
+}
+
+.chart-container {
+  margin-top: 24px;
+  padding: 16px;
+  background: #ffffff;
+  border-radius: 8px;
+}
+
+.custom-tooltip {
+  background: white;
+  padding: 12px;
+  border: 1px solid #e1e1e1;
+  border-radius: 8px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.tooltip-label {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  color: #333333;
+  margin-bottom: 8px;
+}
+
+.tooltip-value {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 500;
+  font-size: 13px;
+  margin: 4px 0;
+}
+
+.legend-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 16px;
+  padding: 20px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.legend-color {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+}
+
+.legend-label {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  color: #333333;
+  flex: 1;
+}
+
+.legend-value {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  color: #4739F0;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .revenue-stats .ant-col {
+    margin-bottom: 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .revenue-header {
+    flex-direction: column;
+    gap: 16px;
+    align-items: flex-start;
+  }
+  
+  .revenue-title {
+    font-size: 20px;
+  }
+  
+  .period-select {
+    align-self: stretch;
+  }
+  
+  .chart-container {
+    padding: 8px;
+  }
+  
+  .legend-container {
+    padding: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .revenue-title {
+    font-size: 18px;
+  }
+  
+  .stat-value {
+    font-size: 16px;
+  }
+  
+  .stat-title {
+    font-size: 12px;
+  }
+  
+  .revenue-tabs .ant-tabs-tab {
+    font-size: 14px;
+    padding: 8px 12px;
+  }
+}

@@ -1,0 +1,144 @@
+.landlords-tenant-overview {
+  margin-bottom: 24px;
+}
+
+.landlords-overview-card {
+  background: white;
+  border-radius: 12px;
+  border: 1px solid #f0f0f0;
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.landlords-overview-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+.landlords-overview-content {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 8px 0;
+}
+
+.landlords-overview-icon-wrapper {
+  flex-shrink: 0;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+}
+
+.landlords-overview-icon {
+  font-size: 24px;
+}
+
+.landlords-icon-primary {
+  color: #4739F0;
+}
+
+.landlords-icon-secondary {
+  color: #4739F0;
+}
+
+.landlords-icon-success {
+  color: #52c41a;
+}
+
+.landlords-icon-warning {
+  color: #FAC227;
+}
+
+.landlords-overview-stats {
+  flex: 1;
+}
+
+.landlords-overview-title {
+  color: #666;
+  font-size: 13px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+
+.landlords-overview-statistic .ant-statistic-content {
+  margin-bottom: 0;
+}
+
+/* Card specific styling */
+.landlords-stat-primary {
+  border-left: 4px solid #4739F0;
+}
+
+.landlords-stat-primary .landlords-overview-icon-wrapper {
+  background: rgba(71, 57, 240, 0.1);
+}
+
+.landlords-stat-secondary {
+  border-left: 4px solid #4739F0;
+}
+
+.landlords-stat-secondary .landlords-overview-icon-wrapper {
+  background: rgba(71, 57, 240, 0.1);
+}
+
+.landlords-stat-success {
+  border-left: 4px solid #52c41a;
+}
+
+.landlords-stat-success .landlords-overview-icon-wrapper {
+  background: rgba(82, 196, 26, 0.1);
+}
+
+.landlords-stat-warning {
+  border-left: 4px solid #FAC227;
+}
+
+.landlords-stat-warning .landlords-overview-icon-wrapper {
+  background: rgba(250, 194, 39, 0.1);
+}
+
+/* Responsive Design */
+@media (max-width: 992px) {
+  .landlords-overview-content {
+    flex-direction: column;
+    text-align: center;
+    gap: 12px;
+  }
+  
+  .landlords-overview-icon-wrapper {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .landlords-overview-icon {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 576px) {
+  .landlords-overview-content {
+    padding: 4px 0;
+  }
+  
+  .landlords-overview-icon-wrapper {
+    width: 45px;
+    height: 45px;
+  }
+  
+  .landlords-overview-icon {
+    font-size: 18px;
+  }
+  
+  .landlords-overview-statistic .ant-statistic-content .ant-statistic-content-value {
+    font-size: 18px !important;
+  }
+  
+  .landlords-overview-title {
+    font-size: 12px;
+  }
+}

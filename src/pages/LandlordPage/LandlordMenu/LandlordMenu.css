@@ -39,7 +39,7 @@
 }
 
 .landlord-menu-item-background.active-bg {
-  background: #fff7e6; /* Orange theme for landlord */
+  background: #EBE9FE; /* Orange theme for landlord */
 }
 
 .landlord-menu-icon-container {
@@ -66,7 +66,7 @@
 }
 
 .landlord-menu-item.active .landlord-menu-icon {
-  color: #ff7a00; /* Orange theme for active state */
+  color: #4739F0; /* Orange theme for active state */
 }
 
 .landlord-menu-icon > div {
@@ -88,7 +88,7 @@
 }
 
 .icon-background.active-icon {
-  background: #ff7a00; /* Orange theme */
+  background: #4739F0; /* Orange theme */
 }
 
 .landlord-menu-text-container {
@@ -113,18 +113,10 @@
 }
 
 .landlord-menu-text.active-text {
-  color: #ff7a00; /* Orange theme */
+  color: #4739F0; /* Orange theme */
   font-weight: 600;
 }
 
-/* Special styling for subscription item with crown icon */
-.landlord-menu-item:nth-child(5) .landlord-menu-icon {
-  color: #ffd700; /* Gold color for crown */
-}
-
-.landlord-menu-item:nth-child(5).active .landlord-menu-icon {
-  color: #ff7a00; /* Orange when active */
-}
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
@@ -147,11 +139,11 @@
 
 /* Hover effects */
 .landlord-menu-item:hover .landlord-menu-icon {
-  color: #ff7a00;
+  color: #4739F0;
 }
 
 .landlord-menu-item:hover .landlord-menu-text {
-  color: #ff7a00;
+  color: #4739F0;
 }
 
 .landlord-menu-item:hover .landlord-menu-item-background {
@@ -160,5 +152,5 @@
 
 /* Active state overrides hover */
 .landlord-menu-item.active:hover .landlord-menu-item-background {
-  background: #fff7e6;
+  background: #EBE9FE;
 }
