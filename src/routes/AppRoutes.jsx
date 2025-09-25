@@ -8,6 +8,7 @@ import Review from "../pages/CommonPage/Main/Review/Review";
 import Find from "../pages/CommonPage/Main/FindRoom/FindRoom";
 import RoomDetail from "../pages/CommonPage/Main/RoomDetail/Detail";
 import Saved from "../pages/CommonPage/Main/Saved/SavedRoom";
+import ViewingAppointments from "../pages/CommonPage/Main/ViewingAppointments/ViewingAppointments";
 import Profile from "../pages/CommonPage/Profile/Profile";
 import Start from "../pages/AuthPage/Start/Start";
 import Register from "../pages/AuthPage/Register/Register";
@@ -35,6 +36,7 @@ const AppRoutes = () => {
         <Route path="room-detail/:id" element={<RoomDetail />} />
         <Route path="find" element={<Find />} />
         <Route path="saved" element={<Saved />} />
+        <Route path="viewing-appointments" element={<ViewingAppointments />} />
         <Route path="review" element={<Review />} />
         <Route index element={<Home />} />
       </Route>

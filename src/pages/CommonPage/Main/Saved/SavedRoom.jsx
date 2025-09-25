@@ -1,96 +1,149 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { SearchOutlined, StarFilled, HeartFilled } from "@ant-design/icons";
-import { Pagination } from "antd";
+import { Pagination, message, Spin } from "antd";
+import { useAuth } from "../../../../contexts/AuthContext";
+import savedRoomApi from "../../../../services/api/savedRoomApi";
 import "./SavedRoom.css";
 
 const SavedRoom = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(6);
   const [savedRooms, setSavedRooms] = useState([]);
-
-  // Mock room data (same as SearchRoom for consistency)
-  const allRooms = [
-    {
-      id: 1,
-      image: "https://placehold.co/369x180",
-      title: "Phòng Trọ Cao Cấp 305",
-      price: "3.200.000 VNĐ",
-      location: "Quận Thanh Khê, Đà Nẵng",
-      rating: 5,
-      reviews: 28,
-      isAIRecommended: true,
-      isVerified: true,
-    },
-    {
-      id: 2,
-      image: "https://placehold.co/369x180",
-      title: "Phòng Ban Công View Đẹp",
-      price: "2.900.000 VNĐ",
-      location: "Quận Sơn Trà, Đà Nẵng",
-      rating: 5,
-      reviews: 16,
-      isAIRecommended: true,
-      isVerified: true,
-    },
-    {
-      id: 3,
-      image: "https://placehold.co/369x180",
-      title: "Phòng Ban Công View Đẹp",
-      price: "2.900.000 VNĐ",
-      location: "Quận Sơn Trà, Đà Nẵng",
-      rating: 5,
-      reviews: 16,
-      isAIRecommended: true,
-      isVerified: true,
-    },
-    {
-      id: 4,
-      image: "https://placehold.co/369x180",
-      title: "Phòng Trọ Cao Cấp 305",
-      price: "3.200.000 VNĐ",
-      location: "Quận Thanh Khê, Đà Nẵng",
-      rating: 5,
-      reviews: 28,
-      isAIRecommended: true,
-      isVerified: true,
-    },
-    {
-      id: 5,
-      image: "https://placehold.co/369x180",
-      title: "Phòng Ban Công View Đẹp",
-      price: "2.900.000 VNĐ",
-      location: "Quận Sơn Trà, Đà Nẵng",
-      rating: 5,
-      reviews: 16,
-      isAIRecommended: true,
-      isVerified: true,
-    },
-    {
-      id: 6,
-      image: "https://placehold.co/369x180",
-      title: "Phòng Ban Công View Đẹp",
-      price: "2.900.000 VNĐ",
-      location: "Quận Sơn Trà, Đà Nẵng",
-      rating: 5,
-      reviews: 16,
-      isAIRecommended: true,
-      isVerified: true,
-    },
-  ];
+  const [loading, setLoading] = useState(true);
+  const { user } = useAuth();
 
   useEffect(() => {
-    // Load favorites from localStorage
-    const savedFavorites = localStorage.getItem("favoriteRooms");
-    if (savedFavorites) {
-      const favoriteIds = JSON.parse(savedFavorites);
+    // Mock room data (same as SearchRoom for consistency)
+    const allRooms = [
+      {
+        id: 1,
+        image: "https://placehold.co/369x180",
+        title: "Phòng Trọ Cao Cấp 305",
+        price: "3.200.000 VNĐ",
+        location: "Quận Thanh Khê, Đà Nẵng",
+        isAIRecommended: true,
+        isVerified: true,
+      },
+      {
+        id: 2,
+        image: "https://placehold.co/369x180",
+        title: "Phòng Ban Công View Đẹp",
+        price: "2.900.000 VNĐ",
+        location: "Quận Sơn Trà, Đà Nẵng",
+        isAIRecommended: true,
+        isVerified: true,
+      },
+      {
+        id: 3,
+        image: "https://placehold.co/369x180",
+        title: "Phòng Ban Công View Đẹp",
+        price: "2.900.000 VNĐ",
+        location: "Quận Sơn Trà, Đà Nẵng",
+        isAIRecommended: true,
+        isVerified: true,
+      },
+      {
+        id: 4,
+        image: "https://placehold.co/369x180",
+        title: "Phòng Trọ Cao Cấp 305",
+        price: "3.200.000 VNĐ",
+        location: "Quận Thanh Khê, Đà Nẵng",
+        isAIRecommended: true,
+        isVerified: true,
+      },
+      {
+        id: 5,
+        image: "https://placehold.co/369x180",
+        title: "Phòng Ban Công View Đẹp",
+        price: "2.900.000 VNĐ",
+        location: "Quận Sơn Trà, Đà Nẵng",
+        isAIRecommended: true,
+        isVerified: true,
+      },
+      {
+        id: 6,
+        image: "https://placehold.co/369x180",
+        title: "Phòng Ban Công View Đẹp",
+        price: "2.900.000 VNĐ",
+        location: "Quận Sơn Trà, Đà Nẵng",
+        isAIRecommended: true,
+        isVerified: true,
+      },
+    ];
+    const initializeSavedRooms = async () => {
+      if (user) {
+        try {
+          setLoading(true);
+          const response = await savedRoomApi.getSavedRooms();
 
-      // Filter rooms that are favorited
-      const favoritedRooms = allRooms.filter((room) =>
-        favoriteIds.includes(room.id)
-      );
-      setSavedRooms(favoritedRooms);
-    }
-  }, []);
+          if (response.success && response.data?.savedRooms) {
+            // Transform API data to match component structure
+            const transformedRooms = response.data.savedRooms.map(
+              (savedRoom) => ({
+                id: savedRoom.room._id,
+                image:
+                  savedRoom.room.images?.[0] || "https://placehold.co/369x180",
+                title: savedRoom.room.title || savedRoom.room.name,
+                price: `${
+                  savedRoom.room.price?.rent?.toLocaleString() || 0
+                } VNĐ`,
+                location:
+                  savedRoom.room.address ||
+                  formatAddress(savedRoom.room.buildingId?.address),
+                isAIRecommended: savedRoom.room.isAiRecommended || false,
+                isVerified: savedRoom.room.isVerified || true,
+                savedAt: savedRoom.savedAt,
+              })
+            );
+            setSavedRooms(transformedRooms);
+          } else {
+            message.error("Không thể tải danh sách phòng đã lưu");
+          }
+        } catch (error) {
+          console.error("Error fetching saved rooms:", error);
+          message.error("Có lỗi xảy ra khi tải danh sách phòng đã lưu");
+          // Fallback to localStorage
+          loadFromLocalStorage();
+        } finally {
+          setLoading(false);
+        }
+      } else {
+        // If no user, try localStorage for backward compatibility
+        loadFromLocalStorage();
+      }
+    };
+
+    const loadFromLocalStorage = () => {
+      // Load favorites from localStorage (fallback for guest users)
+      const savedFavorites = localStorage.getItem("favoriteRooms");
+      if (savedFavorites) {
+        const favoriteIds = JSON.parse(savedFavorites);
+        // Filter rooms that are favorited
+        const favoritedRooms = allRooms.filter((room) =>
+          favoriteIds.includes(room.id)
+        );
+        setSavedRooms(favoritedRooms);
+      }
+      setLoading(false);
+    };
+
+    initializeSavedRooms();
+  }, [user]);
+
+  // Helper function to format address
+  const formatAddress = (address) => {
+    if (!address || typeof address !== "object")
+      return "Địa chỉ không xác định";
+
+    const parts = [
+      address.street,
+      address.ward,
+      address.district,
+      address.city,
+    ].filter((part) => part && part.trim());
+
+    return parts.length > 0 ? parts.join(", ") : "Địa chỉ không xác định";
+  };
 
   const handlePageChange = (page, size) => {
     setCurrentPage(page);
@@ -98,25 +151,45 @@ const SavedRoom = () => {
     console.log("Page changed:", page, "Size:", size);
   };
 
-  const handleHeartClick = (roomId) => {
-    // Get current favorites from localStorage
-    const savedFavorites = localStorage.getItem("favoriteRooms");
-    const currentFavorites = savedFavorites ? JSON.parse(savedFavorites) : [];
+  const handleHeartClick = async (roomId) => {
+    if (user) {
+      // Use API for authenticated users
+      try {
+        // Check current status
+        const statusResponse = await savedRoomApi.checkSavedStatus(roomId);
 
-    if (currentFavorites.includes(roomId)) {
-      // Remove from favorites
-      const newFavorites = currentFavorites.filter((id) => id !== roomId);
-      localStorage.setItem("favoriteRooms", JSON.stringify(newFavorites));
-      // Remove from saved rooms
-      setSavedRooms((current) => current.filter((room) => room.id !== roomId));
+        if (statusResponse.success && statusResponse.data.isSaved) {
+          // Remove from saved
+          await savedRoomApi.unsaveRoom(roomId);
+          setSavedRooms((current) =>
+            current.filter((room) => room.id !== roomId)
+          );
+          message.success("Đã bỏ lưu phòng");
+        } else {
+          // Add to saved - this shouldn't happen in saved rooms page, but handle anyway
+          await savedRoomApi.saveRoom(roomId);
+          message.success("Đã lưu phòng");
+        }
+
+        // Refresh the list by calling API again
+        window.location.reload(); // Simple refresh for now
+      } catch (error) {
+        console.error("Error updating saved room:", error);
+        message.error("Có lỗi xảy ra khi cập nhật");
+      }
     } else {
-      // Add to favorites
-      const newFavorites = [...currentFavorites, roomId];
-      localStorage.setItem("favoriteRooms", JSON.stringify(newFavorites));
-      // Add to saved rooms
-      const roomToAdd = allRooms.find((room) => room.id === roomId);
-      if (roomToAdd) {
-        setSavedRooms((current) => [...current, roomToAdd]);
+      // Fallback to localStorage for guest users
+      const savedFavorites = localStorage.getItem("favoriteRooms");
+      const currentFavorites = savedFavorites ? JSON.parse(savedFavorites) : [];
+
+      if (currentFavorites.includes(roomId)) {
+        // Remove from favorites
+        const newFavorites = currentFavorites.filter((id) => id !== roomId);
+        localStorage.setItem("favoriteRooms", JSON.stringify(newFavorites));
+        setSavedRooms((current) =>
+          current.filter((room) => room.id !== roomId)
+        );
+        message.success("Đã bỏ lưu phòng");
       }
     }
   };
@@ -134,8 +207,16 @@ const SavedRoom = () => {
           </div>
         </div>
 
-        {/* Room Cards Grid or Empty State */}
-        {savedRooms.length > 0 ? (
+        {/* Loading State */}
+        {loading ? (
+          <div style={{ textAlign: "center", padding: "50px 0" }}>
+            <Spin size="large" />
+            <div style={{ marginTop: 16 }}>
+              Đang tải danh sách phòng đã lưu...
+            </div>
+          </div>
+        ) : /* Room Cards Grid or Empty State */
+        savedRooms.length > 0 ? (
           <>
             <div className="saved-room-cards-grid">
               {savedRooms.map((room, index) => (
@@ -193,20 +274,7 @@ const SavedRoom = () => {
                       {room.location}
                     </div>
 
-                    <div className="saved-room-rating-section">
-                      <div className="saved-room-stars">
-                        {[...Array(5)].map((_, starIndex) => (
-                          <div key={starIndex} className="saved-room-star">
-                            <StarFilled />
-                          </div>
-                        ))}
-                      </div>
-                      <div className="saved-room-review-count">
-                        ({room.reviews} đánh giá)
-                      </div>
-                    </div>
-
-                    <div className="saved-room-view-details">
+                    <div className="saved-details-button">
                       <div className="saved-room-view-details-text">
                         Xem chi tiết
                       </div>

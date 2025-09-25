@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import PropTypes from "prop-types";
 import "./Suggest.css";
 import {
@@ -16,9 +16,13 @@ import {
   SafetyCertificateOutlined,
   CameraOutlined,
   ToolOutlined,
+  LoadingOutlined,
 } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../../../../contexts/AuthContext";
+import { message } from "antd";
 import roomApi from "../../../../../services/api/roomApi";
+import savedRoomApi from "../../../../../services/api/savedRoomApi";
 
 const Suggest = ({
   loading: propLoading = false,
@@ -29,6 +33,7 @@ const Suggest = ({
   const [suggestedRooms, setSuggestedRooms] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [savingRooms, setSavingRooms] = useState(new Set()); // Track rooms being saved/unsaved
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [favorites, setFavorites] = useState(new Set()); // Track favorited room IDs
@@ -36,6 +41,68 @@ const Suggest = ({
   const safeRooms = Array.isArray(suggestedRooms) ? suggestedRooms : [];
   const maxIndex = Math.max(0, safeRooms.length - roomsPerView);
   const navigate = useNavigate();
+
+  // Get auth context
+  const { user, isAuthenticated } = useAuth();
+
+  // Load saved rooms from backend for authenticated users
+  const loadSavedRooms = useCallback(async () => {
+    // Check if user is actually authenticated and has necessary data
+    if (!isAuthenticated || !user || !(user._id || user.id)) {
+      // For guests or incomplete auth, load from localStorage
+      const savedFavorites = localStorage.getItem("favoriteRooms");
+      if (savedFavorites) {
+        const favoriteIds = JSON.parse(savedFavorites);
+        setFavorites(new Set(favoriteIds));
+      }
+      return;
+    }
+
+    // Additional check for token
+    const token = localStorage.getItem("token");
+    if (!token) {
+      // No token available, use localStorage
+      const savedFavorites = localStorage.getItem("favoriteRooms");
+      if (savedFavorites) {
+        const favoriteIds = JSON.parse(savedFavorites);
+        setFavorites(new Set(favoriteIds));
+      }
+      return;
+    }
+
+    try {
+      const response = await savedRoomApi.getSavedRooms();
+      if (response.success && response.data?.savedRooms) {
+        const savedRoomIds = response.data.savedRooms.map(
+          (savedRoom) => savedRoom.roomId?._id || savedRoom.roomId
+        );
+        setFavorites(new Set(savedRoomIds));
+      }
+    } catch (error) {
+      console.error("Error loading saved rooms:", error);
+
+      // If it's a 401 error, user is not authenticated, just use localStorage
+      if (
+        error.response?.status === 401 ||
+        error.status === 401 ||
+        error.message?.includes("Authentication required")
+      ) {
+        const savedFavorites = localStorage.getItem("favoriteRooms");
+        if (savedFavorites) {
+          const favoriteIds = JSON.parse(savedFavorites);
+          setFavorites(new Set(favoriteIds));
+        }
+        return;
+      }
+
+      // For other errors, fallback to localStorage
+      const savedFavorites = localStorage.getItem("favoriteRooms");
+      if (savedFavorites) {
+        const favoriteIds = JSON.parse(savedFavorites);
+        setFavorites(new Set(favoriteIds));
+      }
+    }
+  }, [isAuthenticated, user]);
 
   // Fetch suggested rooms từ API
   const fetchSuggestedRooms = async () => {
@@ -65,17 +132,15 @@ const Suggest = ({
     }
   };
 
-  // Load favorites from localStorage on component mount
+  // Load favorites from localStorage/backend on component mount
   useEffect(() => {
-    const savedFavorites = localStorage.getItem("favoriteRooms");
-    if (savedFavorites) {
-      const favoriteIds = JSON.parse(savedFavorites);
-      setFavorites(new Set(favoriteIds));
-    }
+    const loadData = async () => {
+      await loadSavedRooms();
+      await fetchSuggestedRooms();
+    };
 
-    // Fetch rooms từ API
-    fetchSuggestedRooms();
-  }, []);
+    loadData();
+  }, [loadSavedRooms]); // Re-run when loadSavedRooms changes (when auth status changes)
 
   const formatPrice = (price) => {
     if (!price) return "0";
@@ -155,10 +220,6 @@ const Suggest = ({
     );
   };
 
-  const handleViewAll = () => {
-    console.log("View all suggested rooms clicked");
-  };
-
   const handleViewDetails = (roomId) => {
     navigate(`/main/room-detail/${roomId}`);
     console.log("View details clicked for room:", roomId);
@@ -172,18 +233,119 @@ const Suggest = ({
     setCurrentIndex((prev) => Math.min(maxIndex, prev + 1));
   };
 
-  const handleHeartClick = (roomId) => {
-    setFavorites((prev) => {
-      const newFavorites = new Set(prev);
-      if (newFavorites.has(roomId)) {
-        newFavorites.delete(roomId);
+  const handleHeartClick = async (roomId) => {
+    // Prevent multiple clicks on same room
+    if (savingRooms.has(roomId)) {
+      return;
+    }
+
+    const isFavorited = favorites.has(roomId);
+
+    try {
+      // Add room to saving state
+      setSavingRooms((prev) => new Set([...prev, roomId]));
+
+      // Check if user is properly authenticated before using API
+      const token = localStorage.getItem("token");
+      if (isAuthenticated && user && (user._id || user.id) && token) {
+        console.log("Using backend API for room:", roomId);
+        // For authenticated users with valid token, use backend API
+        if (isFavorited) {
+          // Remove from saved rooms
+          await savedRoomApi.unsaveRoom(roomId);
+          message.success("Đã bỏ lưu phòng");
+        } else {
+          // Add to saved rooms
+          await savedRoomApi.saveRoom(roomId);
+          message.success("Đã lưu phòng vào danh sách yêu thích");
+        }
       } else {
-        newFavorites.add(roomId);
+        // For guests or incomplete auth, use localStorage
+        const savedFavorites = localStorage.getItem("favoriteRooms");
+        const currentFavorites = savedFavorites
+          ? JSON.parse(savedFavorites)
+          : [];
+
+        let newFavorites;
+        if (isFavorited) {
+          newFavorites = currentFavorites.filter((id) => id !== roomId);
+          message.success("Đã bỏ lưu phòng");
+        } else {
+          newFavorites = [...currentFavorites, roomId];
+          message.success("Đã lưu phòng vào danh sách yêu thích");
+        }
+
+        localStorage.setItem("favoriteRooms", JSON.stringify(newFavorites));
       }
-      // Store in localStorage for persistence
-      localStorage.setItem("favoriteRooms", JSON.stringify([...newFavorites]));
-      return newFavorites;
-    });
+
+      // Update local state
+      setFavorites((prev) => {
+        const newFavorites = new Set(prev);
+        if (isFavorited) {
+          newFavorites.delete(roomId);
+        } else {
+          newFavorites.add(roomId);
+        }
+        return newFavorites;
+      });
+
+      // Call parent callback if provided
+      if (onRoomLike) {
+        onRoomLike(roomId, !isFavorited);
+      }
+    } catch (error) {
+      console.error("Error saving room:", error);
+
+      // If authentication error (401) or authentication required message
+      if (
+        error.response?.status === 401 ||
+        error.status === 401 ||
+        error.message?.includes("Authentication required") ||
+        !isAuthenticated
+      ) {
+        // Fallback to localStorage
+        const savedFavorites = localStorage.getItem("favoriteRooms");
+        const currentFavorites = savedFavorites
+          ? JSON.parse(savedFavorites)
+          : [];
+
+        let newFavorites;
+        if (isFavorited) {
+          newFavorites = currentFavorites.filter((id) => id !== roomId);
+          message.success("Đã bỏ lưu phòng");
+        } else {
+          newFavorites = [...currentFavorites, roomId];
+          message.success("Đã lưu phòng vào danh sách yêu thích");
+        }
+
+        localStorage.setItem("favoriteRooms", JSON.stringify(newFavorites));
+
+        // Update local state
+        setFavorites((prev) => {
+          const newFavorites = new Set(prev);
+          if (isFavorited) {
+            newFavorites.delete(roomId);
+          } else {
+            newFavorites.add(roomId);
+          }
+          return newFavorites;
+        });
+
+        // Call parent callback if provided
+        if (onRoomLike) {
+          onRoomLike(roomId, !isFavorited);
+        }
+      } else {
+        message.error("Không thể thực hiện thao tác. Vui lòng thử lại!");
+      }
+    } finally {
+      // Remove room from saving state
+      setSavingRooms((prev) => {
+        const newSaving = new Set(prev);
+        newSaving.delete(roomId);
+        return newSaving;
+      });
+    }
   };
 
   const renderStars = () => {
@@ -218,7 +380,9 @@ const Suggest = ({
             handleHeartClick(room._id || room.id);
           }}
         >
-          {favorites.has(room._id || room.id) ? (
+          {savingRooms.has(room._id || room.id) ? (
+            <LoadingOutlined className="suggest-heart-loading" />
+          ) : favorites.has(room._id || room.id) ? (
             <HeartFilled className="suggest-heart-filled" />
           ) : (
             <HeartOutlined className="suggest-heart-outlined" />
