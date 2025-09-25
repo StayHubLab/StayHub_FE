@@ -1,0 +1,215 @@
+.landlords-filters-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  border: 1px solid #f0f0f0;
+  margin-bottom: 16px;
+  transition: all 0.3s ease;
+}
+
+.landlords-filters-card:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.landlords-filters-header {
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.landlords-filters-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1f1f1f;
+}
+
+.landlords-filters-icon {
+  color: #4739F0;
+  font-size: 18px;
+}
+
+.landlords-filters-row {
+  width: 100%;
+}
+
+/* Search Input */
+.landlords-search .ant-input-affix-wrapper {
+  border-radius: 8px;
+  border: 2px solid #f0f0f0;
+  transition: all 0.3s ease;
+  background: #fafafa;
+}
+
+.landlords-search .ant-input-affix-wrapper:hover {
+  border-color: #4739F0;
+  background: white;
+}
+
+.landlords-search .ant-input-affix-wrapper-focused {
+  border-color: #4739F0 !important;
+  box-shadow: 0 0 0 3px rgba(71, 57, 240, 0.1) !important;
+  background: white;
+}
+
+.landlords-search .ant-input {
+  background: transparent;
+  font-size: 14px;
+}
+
+.landlords-search .ant-input::placeholder {
+  color: #999;
+}
+
+/* Filter Selects */
+.landlords-filter-select {
+  width: 100%;
+}
+
+.landlords-filter-select .ant-select-selector {
+  border-radius: 8px !important;
+  border: 2px solid #f0f0f0 !important;
+  background: #fafafa !important;
+  transition: all 0.3s ease !important;
+  height: 40px !important;
+}
+
+.landlords-filter-select:hover .ant-select-selector {
+  border-color: #4739F0 !important;
+  background: white !important;
+}
+
+.landlords-filter-select.ant-select-focused .ant-select-selector {
+  border-color: #4739F0 !important;
+  box-shadow: 0 0 0 3px rgba(71, 57, 240, 0.1) !important;
+  background: white !important;
+}
+
+.landlords-filter-select .ant-select-selection-placeholder {
+  color: #999;
+  font-size: 14px;
+}
+
+.landlords-filter-select .ant-select-selection-item {
+  color: #333;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* Filter Actions */
+.landlords-filter-actions {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.landlords-reset-btn {
+  border: 2px solid #f0f0f0;
+  color: #666;
+  border-radius: 8px;
+  height: 40px;
+  padding: 0 20px;
+  font-weight: 500;
+  background: #fafafa;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.landlords-reset-btn:hover {
+  border-color: #4739F0;
+  color: #4739F0;
+  background: white;
+  transform: translateY(-1px);
+}
+
+.landlords-reset-btn:active {
+  transform: translateY(0);
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .landlords-filters-row .ant-col {
+    margin-bottom: 8px;
+  }
+}
+
+@media (max-width: 992px) {
+  .landlords-filters-header {
+    text-align: center;
+  }
+  
+  .landlords-filters-row {
+    justify-content: center;
+  }
+  
+  .landlords-filters-row .ant-col {
+    margin-bottom: 12px;
+  }
+  
+  .landlords-filter-actions {
+    justify-content: stretch;
+  }
+  
+  .landlords-reset-btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .landlords-filters-card {
+    margin: 0 -16px 16px -16px;
+    border-radius: 0;
+  }
+  
+  .landlords-filters-card .ant-card-body {
+    padding: 12px 16px;
+  }
+  
+  .landlords-filters-header {
+    margin-bottom: 12px;
+  }
+  
+  .landlords-filters-title {
+    font-size: 14px;
+    justify-content: center;
+  }
+  
+  .landlords-search .ant-input-affix-wrapper,
+  .landlords-filter-select .ant-select-selector,
+  .landlords-reset-btn {
+    height: 36px !important;
+    font-size: 13px;
+  }
+  
+  .landlords-reset-btn {
+    padding: 0 16px;
+  }
+}
+
+/* Animation for filter changes */
+.landlords-filters-card {
+  animation: landlords-fadeInUp 0.6s ease-out;
+}
+
+@keyframes landlords-fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Focus styles for accessibility */
+.landlords-search .ant-input-affix-wrapper:focus-within,
+.landlords-filter-select.ant-select-focused .ant-select-selector,
+.landlords-reset-btn:focus {
+  outline: 2px solid #4739F0;
+  outline-offset: 2px;
+}

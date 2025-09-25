@@ -102,10 +102,10 @@
 }
 
 /* Contact Section */
-.contact-info {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+.stayhub-contact-info {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
 }
 
 .contact-item {
@@ -189,9 +189,9 @@
     gap: 16px;
   }
 
-  .contact-info {
-    gap: 12px;
-  }
+    .stayhub-contact-info {
+        gap: 12px;
+    }
 
   .footer-links {
     gap: 12px;
