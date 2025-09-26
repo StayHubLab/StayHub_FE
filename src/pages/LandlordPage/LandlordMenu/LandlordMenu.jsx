@@ -4,9 +4,10 @@ import {
   HomeOutlined,
   TeamOutlined,
   TransactionOutlined,
-  CrownOutlined,
+  FileTextOutlined,
   SettingOutlined,
   CustomerServiceOutlined,
+  BankOutlined,
 } from "@ant-design/icons";
 import "./LandlordMenu.css";
 
@@ -24,6 +25,13 @@ const LandlordMenu = () => {
       isActive: true,
       route: "/landlord/dashboard",
     },
+    // {
+    //   id: "buildings",
+    //   label: "Tòa nhà",
+    //   icon: <BankOutlined />,
+    //   isActive: false,
+    //   route: "/landlord/buildings",
+    // },
     {
       id: "manage-room",
       label: "Quản lý phòng",
@@ -39,6 +47,13 @@ const LandlordMenu = () => {
       route: "/landlord/manage-tenants",
     },
     {
+      id: "contracts",
+      label: "Hợp đồng",
+      icon: <FileTextOutlined />,
+      isActive: false,
+      route: "/landlord/contracts",
+    },
+    {
       id: "transaction",
       label: "Giao dịch",
       icon: <TransactionOutlined />,
@@ -46,12 +61,19 @@ const LandlordMenu = () => {
       route: "/landlord/transaction",
     },
     {
-      id: "subscription",
-      label: "Gói đăng ký",
-      icon: <CrownOutlined />,
+      id: "payments-by-room",
+      label: "GD theo phòng",
+      icon: <FileTextOutlined />,
       isActive: false,
-      route: "/landlord/subscription",
+      route: "/landlord/payments-by-room",
     },
+    // {
+    //   id: "subscription",
+    //   label: "Gói đăng ký",
+    //   icon: <CrownOutlined />,
+    //   isActive: false,
+    //   route: "/landlord/subscription",
+    // },
     {
       id: "settings",
       label: "Cài đặt",
@@ -79,19 +101,25 @@ const LandlordMenu = () => {
         {menuItems.map((item, index) => (
           <div
             key={item.id}
-            className={`landlord-menu-item ${activeItem === item.id ? "active" : ""}`}
+            className={`landlord-menu-item ${
+              activeItem === item.id ? "active" : ""
+            }`}
             onClick={() => handleItemClick(item.id, item.route)}
             style={{ top: `${index * 56}px` }}
           >
             <div
-              className={`landlord-menu-item-background ${activeItem === item.id ? "active-bg" : ""}`}
+              className={`landlord-menu-item-background ${
+                activeItem === item.id ? "active-bg" : ""
+              }`}
             >
               <div className="landlord-menu-icon-container">
                 <div className="landlord-menu-icon">{item.icon}</div>
               </div>
               <div className="landlord-menu-text-container">
                 <div
-                  className={`landlord-menu-text ${activeItem === item.id ? "active-text" : ""}`}
+                  className={`landlord-menu-text ${
+                    activeItem === item.id ? "active-text" : ""
+                  }`}
                 >
                   {item.label}
                 </div>

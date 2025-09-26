@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
-import { Card, Tabs, Select, Row, Col } from 'antd';
+import React, { useEffect, useMemo, useState } from "react";
+import PropTypes from "prop-types";
+import { Card, Tabs, Select, Row, Col } from "antd";
 import {
   LineChart,
   Line,
@@ -13,9 +13,11 @@ import {
   Bar,
   PieChart,
   Pie,
-  Cell
-} from 'recharts';
-import './RevenueChart.css';
+  Cell,
+} from "recharts";
+import "./RevenueChart.css";
+import { useAuth } from "../../../contexts/AuthContext";
+import billApi from "../../../services/api/billApi";
 
 const { TabPane } = Tabs;
 const { Option } = Select;
@@ -23,9 +25,9 @@ const { Option } = Select;
 // Custom Tooltip Component
 const CustomTooltip = ({ active, payload, label }) => {
   const formatCurrency = (value) => {
-    return new Intl.NumberFormat('vi-VN', {
-      style: 'currency',
-      currency: 'VND'
+    return new Intl.NumberFormat("vi-VN", {
+      style: "currency",
+      currency: "VND",
     }).format(value);
   };
 
@@ -34,7 +36,11 @@ const CustomTooltip = ({ active, payload, label }) => {
       <div className="custom-tooltip">
         <p className="tooltip-label">{`${label}`}</p>
         {payload.map((entry, index) => (
-          <p key={index} className="tooltip-value" style={{ color: entry.color }}>
+          <p
+            key={index}
+            className="tooltip-value"
+            style={{ color: entry.color }}
+          >
             {`${entry.name}: ${formatCurrency(entry.value)}`}
           </p>
         ))}
@@ -50,56 +56,154 @@ CustomTooltip.propTypes = {
     PropTypes.shape({
       name: PropTypes.string,
       value: PropTypes.number,
-      color: PropTypes.string
+      color: PropTypes.string,
     })
   ),
-  label: PropTypes.string
+  label: PropTypes.string,
 };
 
 const RevenueChart = () => {
-  const [selectedPeriod, setSelectedPeriod] = useState('month');
-  const [activeTab, setActiveTab] = useState('overview');
+  const [selectedPeriod, setSelectedPeriod] = useState("month");
+  const [activeTab, setActiveTab] = useState("overview");
+  const { user } = useAuth();
+  const [bills, setBills] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-  // Mock revenue data
-  const monthlyRevenueData = [
-    { name: 'T1', revenue: 45000000, expenses: 25000000, profit: 20000000 },
-    { name: 'T2', revenue: 52000000, expenses: 28000000, profit: 24000000 },
-    { name: 'T3', revenue: 48000000, expenses: 26000000, profit: 22000000 },
-    { name: 'T4', revenue: 58000000, expenses: 32000000, profit: 26000000 },
-    { name: 'T5', revenue: 62000000, expenses: 35000000, profit: 27000000 },
-    { name: 'T6', revenue: 55000000, expenses: 30000000, profit: 25000000 },
-    { name: 'T7', revenue: 68000000, expenses: 38000000, profit: 30000000 },
-    { name: 'T8', revenue: 72000000, expenses: 40000000, profit: 32000000 },
-    { name: 'T9', revenue: 65000000, expenses: 36000000, profit: 29000000 },
-    { name: 'T10', revenue: 70000000, expenses: 39000000, profit: 31000000 },
-    { name: 'T11', revenue: 75000000, expenses: 42000000, profit: 33000000 },
-    { name: 'T12', revenue: 78000000, expenses: 45000000, profit: 33000000 }
-  ];
+  useEffect(() => {
+    const load = async () => {
+      if (!user?._id) return;
+      try {
+        setLoading(true);
+        const res = await billApi.listByHost(user._id);
+        const list = Array.isArray(res?.data)
+          ? res.data
+          : res?.data?.items || [];
+        setBills(list || []);
+      } finally {
+        setLoading(false);
+      }
+    };
+    load();
+  }, [user?._id]);
 
-  const weeklyRevenueData = [
-    { name: 'Tuần 1', revenue: 15000000, expenses: 8000000, profit: 7000000 },
-    { name: 'Tuần 2', revenue: 18000000, expenses: 10000000, profit: 8000000 },
-    { name: 'Tuần 3', revenue: 16000000, expenses: 9000000, profit: 7000000 },
-    { name: 'Tuần 4', revenue: 22000000, expenses: 12000000, profit: 10000000 }
-  ];
+  const calcAmount = (b) => {
+    if (typeof b?.totalAmount === "number") return b.totalAmount;
+    const a = b?.amount || {};
+    return (
+      (a.rent || 0) + (a.electricity || 0) + (a.water || 0) + (a.service || 0)
+    );
+  };
 
-  const yearlyRevenueData = [
-    { name: '2022', revenue: 580000000, expenses: 320000000, profit: 260000000 },
-    { name: '2023', revenue: 720000000, expenses: 400000000, profit: 320000000 },
-    { name: '2024', revenue: 850000000, expenses: 480000000, profit: 370000000 }
-  ];
+  const monthlyRevenueData = useMemo(() => {
+    const nowYear = new Date().getFullYear();
+    const arr = Array.from({ length: 12 }, (_, i) => ({
+      name: `T${i + 1}`,
+      revenue: 0,
+      expenses: 0,
+      profit: 0,
+    }));
+    (bills || []).forEach((b) => {
+      const dt = new Date(b.paidAt || b.updatedAt || b.createdAt);
+      if (b.status !== "paid" || dt.getFullYear() !== nowYear) return;
+      const m = dt.getMonth();
+      const amt = calcAmount(b);
+      if (b.type === "refund") arr[m].expenses += amt;
+      else arr[m].revenue += amt;
+    });
+    arr.forEach((x) => (x.profit = x.revenue - x.expenses));
+    return arr;
+  }, [bills]);
 
-  const roomTypeRevenueData = [
-    { name: 'Phòng đơn', value: 35, color: '#4739F0' },
-    { name: 'Phòng đôi', value: 45, color: '#34D399' },
-    { name: 'Phòng VIP', value: 20, color: '#FAC227' }
-  ];
+  const weeklyRevenueData = useMemo(() => {
+    // Simple 4-week split of current month
+    const now = new Date();
+    const start = new Date(now.getFullYear(), now.getMonth(), 1);
+    const weeks = Array.from({ length: 4 }, (_, i) => ({
+      name: `Tuần ${i + 1}`,
+      revenue: 0,
+      expenses: 0,
+      profit: 0,
+    }));
+    (bills || []).forEach((b) => {
+      if (b.status !== "paid") return;
+      const dt = new Date(b.paidAt || b.updatedAt || b.createdAt);
+      if (
+        dt.getMonth() !== now.getMonth() ||
+        dt.getFullYear() !== now.getFullYear()
+      )
+        return;
+      const day = Math.floor((dt - start) / (1000 * 60 * 60 * 24));
+      const idx = Math.min(3, Math.floor(day / 7));
+      const amt = calcAmount(b);
+      if (b.type === "refund") weeks[idx].expenses += amt;
+      else weeks[idx].revenue += amt;
+    });
+    weeks.forEach((w) => (w.profit = w.revenue - w.expenses));
+    return weeks;
+  }, [bills]);
+
+  const yearlyRevenueData = useMemo(() => {
+    const map = new Map();
+    (bills || []).forEach((b) => {
+      if (b.status !== "paid") return;
+      const dt = new Date(b.paidAt || b.updatedAt || b.createdAt);
+      const y = dt.getFullYear();
+      if (!map.has(y))
+        map.set(y, { name: String(y), revenue: 0, expenses: 0, profit: 0 });
+      const row = map.get(y);
+      const amt = calcAmount(b);
+      if (b.type === "refund") row.expenses += amt;
+      else row.revenue += amt;
+      row.profit = row.revenue - row.expenses;
+    });
+    return Array.from(map.values()).sort(
+      (a, b) => Number(a.name) - Number(b.name)
+    );
+  }, [bills]);
+
+  const roomTypeRevenueData = useMemo(() => {
+    // Distribution by bill type for current year
+    const nowYear = new Date().getFullYear();
+    const counters = { monthly: 0, deposit: 0, refund: 0, other: 0 };
+    (bills || []).forEach((b) => {
+      const dt = new Date(b.paidAt || b.updatedAt || b.createdAt);
+      if (b.status !== "paid" || dt.getFullYear() !== nowYear) return;
+      const amt = calcAmount(b);
+      if (b.type === "monthly") counters.monthly += amt;
+      else if (b.type === "deposit") counters.deposit += amt;
+      else if (b.type === "refund") counters.refund += amt;
+      else counters.other += amt;
+    });
+    const total = Object.values(counters).reduce((s, v) => s + v, 0) || 1;
+    return [
+      {
+        name: "Hàng tháng",
+        value: Math.round((counters.monthly / total) * 100),
+        color: "#4739F0",
+      },
+      {
+        name: "Đặt cọc",
+        value: Math.round((counters.deposit / total) * 100),
+        color: "#34D399",
+      },
+      {
+        name: "Hoàn tiền",
+        value: Math.round((counters.refund / total) * 100),
+        color: "#FAC227",
+      },
+      {
+        name: "Khác",
+        value: Math.round((counters.other / total) * 100),
+        color: "#6366F1",
+      },
+    ];
+  }, [bills]);
 
   const getCurrentData = () => {
     switch (selectedPeriod) {
-      case 'week':
+      case "week":
         return weeklyRevenueData;
-      case 'year':
+      case "year":
         return yearlyRevenueData;
       default:
         return monthlyRevenueData;
@@ -107,14 +211,20 @@ const RevenueChart = () => {
   };
 
   const formatCurrency = (value) => {
-    return new Intl.NumberFormat('vi-VN', {
-      style: 'currency',
-      currency: 'VND'
+    return new Intl.NumberFormat("vi-VN", {
+      style: "currency",
+      currency: "VND",
     }).format(value);
   };
 
-  const totalRevenue = getCurrentData().reduce((sum, item) => sum + item.revenue, 0);
-  const totalProfit = getCurrentData().reduce((sum, item) => sum + item.profit, 0);
+  const totalRevenue = getCurrentData().reduce(
+    (sum, item) => sum + item.revenue,
+    0
+  );
+  const totalProfit = getCurrentData().reduce(
+    (sum, item) => sum + item.profit,
+    0
+  );
   const profitMargin = ((totalProfit / totalRevenue) * 100).toFixed(1);
 
   return (
@@ -137,13 +247,17 @@ const RevenueChart = () => {
           <Col span={8}>
             <div className="stat-card">
               <div className="stat-title">Tổng doanh thu</div>
-              <div className="stat-value primary">{formatCurrency(totalRevenue)}</div>
+              <div className="stat-value primary">
+                {formatCurrency(totalRevenue)}
+              </div>
             </div>
           </Col>
           <Col span={8}>
             <div className="stat-card">
               <div className="stat-title">Lợi nhuận</div>
-              <div className="stat-value success">{formatCurrency(totalProfit)}</div>
+              <div className="stat-value success">
+                {formatCurrency(totalProfit)}
+              </div>
             </div>
           </Col>
           <Col span={8}>
@@ -153,38 +267,41 @@ const RevenueChart = () => {
             </div>
           </Col>
         </Row>
-        <Tabs activeKey={activeTab} onChange={setActiveTab} className="revenue-tabs" style={{ width: '100%' }}>
+        <Tabs
+          activeKey={activeTab}
+          onChange={setActiveTab}
+          className="revenue-tabs"
+          style={{ width: "100%" }}
+        >
           <TabPane tab="Tổng quan" key="overview">
             <div className="chart-container">
               <ResponsiveContainer width="100%" height={400}>
                 <LineChart data={getCurrentData()}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                  <XAxis 
-                    dataKey="name" 
+                  <XAxis dataKey="name" stroke="#666666" fontSize={12} />
+                  <YAxis
                     stroke="#666666"
                     fontSize={12}
-                  />
-                  <YAxis 
-                    stroke="#666666"
-                    fontSize={12}
-                    tickFormatter={(value) => `${(value / 1000000).toFixed(0)}M`}
+                    tickFormatter={(value) =>
+                      `${(value / 1000000).toFixed(0)}M`
+                    }
                   />
                   <Tooltip content={<CustomTooltip />} />
-                  <Line 
-                    type="monotone" 
-                    dataKey="revenue" 
-                    stroke="#4739F0" 
+                  <Line
+                    type="monotone"
+                    dataKey="revenue"
+                    stroke="#4739F0"
                     strokeWidth={3}
                     name="Doanh thu"
-                    dot={{ r: 6, fill: '#4739F0' }}
+                    dot={{ r: 6, fill: "#4739F0" }}
                   />
-                  <Line 
-                    type="monotone" 
-                    dataKey="profit" 
-                    stroke="#34D399" 
+                  <Line
+                    type="monotone"
+                    dataKey="profit"
+                    stroke="#34D399"
                     strokeWidth={3}
                     name="Lợi nhuận"
-                    dot={{ r: 6, fill: '#34D399' }}
+                    dot={{ r: 6, fill: "#34D399" }}
                   />
                 </LineChart>
               </ResponsiveContainer>
@@ -196,15 +313,13 @@ const RevenueChart = () => {
               <ResponsiveContainer width="100%" height={400}>
                 <BarChart data={getCurrentData()}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                  <XAxis 
-                    dataKey="name" 
+                  <XAxis dataKey="name" stroke="#666666" fontSize={12} />
+                  <YAxis
                     stroke="#666666"
                     fontSize={12}
-                  />
-                  <YAxis 
-                    stroke="#666666"
-                    fontSize={12}
-                    tickFormatter={(value) => `${(value / 1000000).toFixed(0)}M`}
+                    tickFormatter={(value) =>
+                      `${(value / 1000000).toFixed(0)}M`
+                    }
                   />
                   <Tooltip content={<CustomTooltip />} />
                   <Bar dataKey="revenue" fill="#4739F0" name="Doanh thu" />
@@ -239,8 +354,8 @@ const RevenueChart = () => {
                   <div className="legend-container">
                     {roomTypeRevenueData.map((item, index) => (
                       <div key={index} className="legend-item">
-                        <div 
-                          className="legend-color" 
+                        <div
+                          className="legend-color"
                           style={{ backgroundColor: item.color }}
                         />
                         <span className="legend-label">{item.name}</span>

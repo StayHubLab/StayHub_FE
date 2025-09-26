@@ -7,7 +7,7 @@
 }
 
 .landlord-room-table {
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
 }
 
 .landlord-room-table .ant-table-thead > tr > th {
@@ -16,7 +16,7 @@
   font-weight: 600;
   border-bottom: 2px solid #e1e1e1;
   padding: 16px 12px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
 }
 
 .landlord-room-table .ant-table-tbody > tr > td {
@@ -34,7 +34,7 @@
 }
 
 .landlord-room-code {
-  color: #4739F0;
+  color: #4739f0;
   font-weight: 600;
 }
 
@@ -57,11 +57,11 @@
 
 .landlord-price {
   font-weight: 600;
-  color: #4739F0;
+  color: #4739f0;
 }
 
 .landlord-status-tag {
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 500;
   border-radius: 6px;
   padding: 4px 8px;
@@ -76,7 +76,7 @@
 .landlord-tenant-name {
   font-weight: 500;
   color: #333;
-  font-size: 14px;
+  font-size: 16px !important;
 }
 
 .landlord-tenant-phone {
@@ -106,12 +106,12 @@
 
 .landlord-view-btn:hover {
   background-color: rgba(71, 57, 240, 0.1);
-  color: #4739F0;
+  color: #4739f0;
 }
 
 .landlord-edit-btn:hover {
   background-color: rgba(52, 211, 153, 0.1);
-  color: #34D399;
+  color: #34d399;
 }
 
 .landlord-delete-btn:hover {
@@ -125,8 +125,8 @@
 }
 
 .landlord-pagination .ant-pagination-item-active {
-  border-color: #4739F0;
-  background-color: #4739F0;
+  border-color: #4739f0;
+  background-color: #4739f0;
 }
 
 .landlord-pagination .ant-pagination-item-active a {
@@ -134,11 +134,11 @@
 }
 
 .landlord-pagination .ant-pagination-item:hover {
-  border-color: #4739F0;
+  border-color: #4739f0;
 }
 
 .landlord-pagination .ant-pagination-item:hover a {
-  color: #4739F0;
+  color: #4739f0;
 }
 
 /* Responsive Design */

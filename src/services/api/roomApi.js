@@ -27,6 +27,17 @@ const roomApi = {
     return response.data;
   },
 
+  // Get rooms with query parameters (for landlord dashboard)
+  getRooms: async (params = {}) => {
+    // Add populate parameter to get building data
+    const queryParams = {
+      ...params,
+      populate: "buildingId", // This will populate the building information
+    };
+    const response = await apiClient.get("/rooms", { params: queryParams });
+    return response.data;
+  },
+
   // Protected endpoints (landlord only)
   createRoom: async (roomData) => {
     const response = await apiClient.post("/rooms", roomData);
@@ -40,6 +51,12 @@ const roomApi = {
 
   deleteRoom: async (id) => {
     const response = await apiClient.delete(`/rooms/${id}`);
+    return response.data;
+  },
+
+  // Get contract information for a room
+  getRoomContractInfo: async (id) => {
+    const response = await apiClient.get(`/rooms/${id}/contract`);
     return response.data;
   },
 };

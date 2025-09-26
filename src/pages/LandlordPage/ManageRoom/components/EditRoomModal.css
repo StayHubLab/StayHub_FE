@@ -1,0 +1,145 @@
+.landlord-edit-room-modal .ant-modal-header {
+  border-bottom: 1px solid #f0f0f0;
+  padding: 16px 24px;
+}
+
+.landlord-edit-room-modal .ant-modal-title {
+  color: #1f1f1f;
+  font-weight: 600;
+  font-size: 18px;
+}
+
+.landlord-room-form {
+  max-height: 70vh;
+  overflow-y: auto;
+  padding-right: 8px;
+}
+
+.landlord-room-form::-webkit-scrollbar {
+  width: 6px;
+}
+
+.landlord-room-form::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.landlord-room-form::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+.landlord-room-form::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+.landlord-room-form .ant-form-item {
+  margin-bottom: 16px;
+}
+
+.landlord-room-form .ant-form-item-label > label {
+  font-weight: 500;
+  color: #333;
+}
+
+.landlord-room-form .ant-divider-horizontal.ant-divider-with-text-left {
+  margin: 24px 0 16px 0;
+}
+
+.landlord-room-form .ant-divider-inner-text {
+  font-weight: 600;
+  color: #4739f0;
+}
+
+/* Upload styles */
+.landlord-room-form .ant-upload-select-picture-card {
+  width: 104px;
+  height: 104px;
+  border-radius: 8px;
+}
+
+.landlord-room-form .ant-upload-list-picture-card .ant-upload-list-item {
+  border-radius: 8px;
+}
+
+/* Feature checkboxes */
+.landlord-room-form .ant-checkbox-wrapper {
+  margin-bottom: 8px;
+}
+
+/* Amenity tags */
+.landlord-room-form .ant-tag {
+  margin-bottom: 8px;
+  border-radius: 12px;
+  padding: 4px 12px;
+}
+
+/* Switch styling */
+.landlord-room-form .ant-switch-checked {
+  background-color: #4739f0;
+}
+
+/* Button styling */
+.landlord-room-form .ant-btn-primary {
+  background-color: #4739f0;
+  border-color: #4739f0;
+}
+
+.landlord-room-form .ant-btn-primary:hover,
+.landlord-room-form .ant-btn-primary:focus {
+  background-color: #3629c7;
+  border-color: #3629c7;
+}
+
+/* Disabled button styling for amenities */
+.landlord-room-form .ant-btn:disabled {
+  background-color: #f5f5f5 !important;
+  border-color: #d9d9d9 !important;
+  color: #bfbfbf !important;
+  cursor: not-allowed !important;
+  opacity: 0.6 !important;
+}
+
+.landlord-room-form .ant-btn:disabled:hover {
+  background-color: #f5f5f5 !important;
+  border-color: #d9d9d9 !important;
+  color: #bfbfbf !important;
+}
+
+/* Input number styling */
+.landlord-room-form .ant-input-number {
+  width: 100%;
+}
+
+/* Select styling */
+.landlord-room-form
+  .ant-select:not(.ant-select-disabled):hover
+  .ant-select-selector,
+.landlord-room-form .ant-select-focused .ant-select-selector {
+  border-color: #4739f0 !important;
+}
+
+/* Input focus styling */
+.landlord-room-form .ant-input:focus,
+.landlord-room-form .ant-input-focused {
+  border-color: #4739f0;
+  box-shadow: 0 0 0 2px rgba(71, 57, 240, 0.2);
+}
+
+/* Textarea styling */
+.landlord-room-form .ant-input:focus,
+.landlord-room-form .ant-input-focused {
+  border-color: #4739f0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .landlord-edit-room-modal {
+    width: 95% !important;
+    max-width: none;
+  }
+
+  .landlord-room-form {
+    max-height: 60vh;
+  }
+}

@@ -1,274 +1,368 @@
-import React, { useState, useEffect } from 'react';
-import { Card, Button, Input, Select, Row, Col, message, Space } from 'antd';
-import { PlusOutlined, SearchOutlined, FilterOutlined } from '@ant-design/icons';
-import RoomTable from './components/RoomTable';
-import AddRoomModal from './components/AddRoomModal';
-import RoomDetailModal from './components/RoomDetailModal';
-import './ManageRoom.css';
+import React, { useState, useEffect, useCallback } from "react";
+import {
+  Card,
+  Button,
+  Input,
+  Select,
+  Row,
+  Col,
+  message,
+  Space,
+  Spin,
+} from "antd";
+import {
+  PlusOutlined,
+  SearchOutlined,
+  FilterOutlined,
+  LoadingOutlined,
+} from "@ant-design/icons";
+import RoomTable from "./components/RoomTable";
+import EditRoomModal from "./components/EditRoomModal";
+import RoomDetailModal from "./components/RoomDetailModal";
+import { useAuth } from "../../../contexts/AuthContext";
+import roomApi from "../../../services/api/roomApi";
+import "./ManageRoom.css";
 
 const { Option } = Select;
 const { Search } = Input;
 
 const ManageRoom = () => {
+  // Auth context
+  const { user, isAuthenticated } = useAuth();
+
   // State management
   const [rooms, setRooms] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [searchText, setSearchText] = useState('');
-  const [filterStatus, setFilterStatus] = useState('all');
-  const [filterType, setFilterType] = useState('all');
-  const [sortBy, setSortBy] = useState('name');
-  
+  const [loading, setLoading] = useState(true);
+  const [searchText, setSearchText] = useState("");
+  const [filterStatus, setFilterStatus] = useState("all");
+  const [filterType, setFilterType] = useState("all");
+  const [sortBy, setSortBy] = useState("name");
+  const [pagination, setPagination] = useState({
+    current: 1,
+    pageSize: 10,
+    total: 0,
+  });
+
   // Modal states
   const [addModalVisible, setAddModalVisible] = useState(false);
+  const [editModalVisible, setEditModalVisible] = useState(false);
   const [detailModalVisible, setDetailModalVisible] = useState(false);
   const [selectedRoom, setSelectedRoom] = useState(null);
-  const [detailActiveTab, setDetailActiveTab] = useState('1');
+  const [detailActiveTab, setDetailActiveTab] = useState("1");
 
-  // Mock data for demonstration
-  const mockRooms = [
-    {
-      key: '1',
-      roomCode: 'P101',
-      name: 'Phòng cao cấp view biển',
-      address: '123 Nguyễn Văn Linh, Quận 7, TP.HCM',
-      type: 'Phòng trọ',
-      area: 25,
-      price: 3500000,
-      status: 'available',
-      amenities: ['Wi-Fi miễn phí', 'Điều hòa', 'Tủ lạnh', 'Máy giặt'],
-      description: 'Phòng đẹp, thoáng mát, gần trường đại học',
-      tenant: null,
-      dueDate: null,
-      images: ['/api/placeholder/300/200']
-    },
-    {
-      key: '2',
-      roomCode: 'A201',
-      name: 'Studio hiện đại',
-      address: '456 Lê Văn Việt, Quận 9, TP.HCM',
-      type: 'Chung cư mini',
-      area: 35,
-      price: 4200000,
-      status: 'occupied',
-      amenities: ['Wi-Fi miễn phí', 'Điều hòa', 'Bếp', 'WC riêng', 'Ban công'],
-      description: 'Studio đầy đủ tiện nghi, an ninh tốt',
-      tenant: {
-        name: 'Nguyễn Văn An',
-        phone: '0901234567',
-        email: 'an.nguyen@email.com',
-        idCard: '123456789',
-        occupation: 'Kỹ sư phần mềm',
-        contractStart: '2024-01-15',
-        contractEnd: '2024-12-31'
-      },
-      dueDate: '2025-02-15',
-      images: ['/api/placeholder/300/200', '/api/placeholder/300/200']
-    },
-    {
-      key: '3',
-      roomCode: 'B102',
-      name: 'Phòng gia đình',
-      address: '789 Võ Văn Ngân, Thủ Đức, TP.HCM',
-      type: 'Căn hộ',
-      area: 45,
-      price: 5800000,
-      status: 'maintenance',
-      amenities: ['Wi-Fi miễn phí', 'Điều hòa', 'Tủ lạnh', 'Máy giặt', 'Thang máy', 'Chỗ để xe'],
-      description: 'Căn hộ 2 phòng ngủ, phù hợp gia đình nhỏ',
-      tenant: null,
-      dueDate: null,
-      images: ['/api/placeholder/300/200']
-    }
-  ];
-
-  // Initialize rooms data
+  // Load rooms from API
   useEffect(() => {
-    setLoading(true);
-    // Simulate API call
-    setTimeout(() => {
-      setRooms(mockRooms);
-      setLoading(false);
-    }, 1000);
-  }, []);
-
-  // Filter and search logic
-  const filteredRooms = rooms.filter(room => {
-    const matchesSearch = 
-      room.name.toLowerCase().includes(searchText.toLowerCase()) ||
-      room.roomCode.toLowerCase().includes(searchText.toLowerCase()) ||
-      room.address.toLowerCase().includes(searchText.toLowerCase());
-    
-    const matchesStatus = filterStatus === 'all' || room.status === filterStatus;
-    const matchesType = filterType === 'all' || room.type === filterType;
-    
-    return matchesSearch && matchesStatus && matchesType;
-  });
-
-  // Sort rooms
-  const sortedRooms = [...filteredRooms].sort((a, b) => {
-    switch (sortBy) {
-      case 'name':
-        return a.name.localeCompare(b.name);
-      case 'price':
-        return a.price - b.price;
-      case 'area':
-        return a.area - b.area;
-      case 'roomCode':
-        return a.roomCode.localeCompare(b.roomCode);
-      default:
-        return 0;
+    if (isAuthenticated && user) {
+      loadRooms();
     }
-  });
+  }, [
+    isAuthenticated,
+    user,
+    pagination.current,
+    pagination.pageSize,
+    searchText,
+    filterStatus,
+    filterType,
+    sortBy,
+  ]);
+
+  const loadRooms = async () => {
+    try {
+      setLoading(true);
+
+      // Prepare query parameters
+      const params = {
+        page: pagination.current,
+        limit: pagination.pageSize,
+        ...(searchText && { search: searchText }),
+        ...(filterStatus !== "all" && { status: filterStatus }),
+        ...(filterType !== "all" && { type: filterType }),
+        sortBy: sortBy,
+        landlordId: user._id, // Filter by current landlord
+      };
+      console.log("Frontend sending params:", params);
+      const response = await roomApi.getRooms(params);
+      console.log("Backend response:", {
+        success: response.success,
+        roomsCount: response.data?.rooms?.length || 0,
+        pagination: response.data?.pagination,
+      });
+
+      if (response.success && response.data) {
+        // Process the rooms data
+        let roomsArray = [];
+
+        // Try different possible data structures
+        if (response.data.rooms && Array.isArray(response.data.rooms)) {
+          roomsArray = response.data.rooms;
+          console.log("Found rooms in response.data.rooms:", roomsArray.length);
+        } else if (Array.isArray(response.data)) {
+          roomsArray = response.data;
+          console.log(
+            "Found rooms directly in response.data:",
+            roomsArray.length
+          );
+        } else if (response.data.data && Array.isArray(response.data.data)) {
+          roomsArray = response.data.data;
+          console.log("Found rooms in response.data.data:", roomsArray.length);
+        } else {
+          console.log(
+            "No rooms array found, available keys:",
+            Object.keys(response.data)
+          );
+          roomsArray = [];
+        }
+
+        // Transform API data to component format
+        const transformedRooms = roomsArray.map((room) => {
+          return {
+            key: room._id,
+            _id: room._id,
+            roomCode:
+              room.roomCode || room.code || room._id.slice(-6).toUpperCase(),
+            name: room.title || room.name,
+            address: formatAddress(room.address || room.buildingId?.address),
+            type: room.type || "Phòng trọ",
+            area: room.area,
+            capacity: room.capacity,
+            price: room.price?.rent || room.price || 0,
+            priceDetails: room.price, // Keep full price object
+            status: mapStatus(room.status),
+            isAvailable: room.isAvailable,
+            amenities: room.amenities || [],
+            utilities: room.utilities || [],
+            features: room.features || {},
+            description: room.description,
+            rating: room.rating || 0,
+            viewCount: room.viewCount || 0,
+            favoriteCount: room.favoriteCount || 0,
+            tenant: room.currentTenant
+              ? {
+                  name: room.currentTenant.name,
+                  phone: room.currentTenant.phone,
+                  email: room.currentTenant.email,
+                  idCard: room.currentTenant.idCard,
+                  occupation: room.currentTenant.occupation,
+                  contractStart: room.currentTenant.contractStart,
+                  contractEnd: room.currentTenant.contractEnd,
+                }
+              : null,
+            dueDate: room.nextPaymentDate,
+            images: room.images || [],
+            buildingId: room.buildingId, // Keep full building object if populated
+            building:
+              room.buildingId && typeof room.buildingId === "object"
+                ? room.buildingId
+                : null,
+            landlordId: room.landlordId,
+            createdAt: room.createdAt,
+            updatedAt: room.updatedAt,
+          };
+        });
+
+        // Since backend filtering is now working, use the returned data directly
+        setRooms(transformedRooms);
+        setPagination((prev) => ({
+          ...prev,
+          total: response.data.pagination?.total || transformedRooms.length,
+        }));
+      } else {
+        message.error("Không thể tải danh sách phòng");
+        setRooms([]);
+      }
+    } catch (error) {
+      message.error("Có lỗi xảy ra khi tải danh sách phòng");
+      setRooms([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Helper functions
+  const formatAddress = (address) => {
+    if (!address) return "Chưa có địa chỉ";
+    if (typeof address === "string") return address;
+
+    const { street, ward, district, city } = address;
+    const parts = [street, ward, district, city].filter(Boolean);
+    return parts.join(", ") || "Chưa có địa chỉ";
+  };
+
+  const mapStatus = (status) => {
+    switch (status) {
+      case "available":
+        return "available";
+      case "rented":
+      case "occupied":
+        return "occupied";
+      case "maintenance":
+        return "maintenance";
+      case "reserved":
+        return "reserved";
+      default:
+        return "available";
+    }
+  };
 
   // Event handlers
-  const handleAddRoom = async (roomData) => {
-    try {
-      // Generate unique key
-      const newKey = (rooms.length + 1).toString();
-      const newRoom = {
-        ...roomData,
-        key: newKey,
-        tenant: null,
-        dueDate: null
-      };
-      
-      // Add to rooms list
-      setRooms([...rooms, newRoom]);
-      message.success('Thêm phòng thành công!');
-    } catch (error) {
-      message.error('Có lỗi xảy ra khi thêm phòng!');
-      throw error;
-    }
+  const handlePaginationChange = (page, pageSize) => {
+    setPagination((prev) => ({
+      ...prev,
+      current: page,
+      pageSize: pageSize,
+    }));
+    // loadRooms will be called automatically via useEffect dependency
   };
 
   const handleViewRoom = (room) => {
     setSelectedRoom(room);
-    setDetailActiveTab('1');
+    setDetailActiveTab("1");
     setDetailModalVisible(true);
   };
 
   const handleEditRoom = (room) => {
-    // For now, just show detail modal in edit mode
+    // Open edit modal with room data
     setSelectedRoom(room);
-    setDetailActiveTab('1');
-    setDetailModalVisible(true);
-    message.info('Chức năng chỉnh sửa đang được phát triển...');
+    setEditModalVisible(true);
   };
 
-  const handleDeleteRoom = (roomKey) => {
-    setRooms(rooms.filter(room => room.key !== roomKey));
-    message.success('Xóa phòng thành công!');
+  const handleDeleteRoom = async (roomKey) => {
+    try {
+      const response = await roomApi.deleteRoom(roomKey);
+      if (response.success) {
+        message.success("Xóa phòng thành công!");
+        loadRooms(); // Reload rooms list
+      } else {
+        message.error(response.message || "Không thể xóa phòng");
+      }
+    } catch (error) {
+      console.error("Error deleting room:", error);
+      message.error("Có lỗi xảy ra khi xóa phòng");
+    }
   };
 
-  const handleResetFilters = () => {
-    setSearchText('');
-    setFilterStatus('all');
-    setFilterType('all');
-    setSortBy('name');
+  const handleAddRoom = async (roomData) => {
+    try {
+      console.log("Creating room with data:", roomData);
+
+      // Add landlordId to FormData
+      roomData.append("landlordId", user._id);
+
+      const response = await roomApi.createRoom(roomData);
+
+      if (response.success) {
+        message.success("Thêm phòng thành công!");
+        setAddModalVisible(false);
+
+        // If we're not on page 1, go to page 1 to see the new room
+        if (pagination.current !== 1) {
+          setPagination((prev) => ({ ...prev, current: 1 }));
+          // loadRooms will be called automatically via useEffect
+        } else {
+          // We're on page 1, just reload to get fresh data with new room
+          loadRooms();
+        }
+      } else {
+        message.error(response.message || "Không thể thêm phòng");
+      }
+    } catch (error) {
+      console.error("Error creating room:", error);
+      message.error("Có lỗi xảy ra khi thêm phòng");
+    }
   };
 
-  const roomTypes = ['Phòng trọ', 'Chung cư mini', 'Homestay', 'Căn hộ', 'Nhà nguyên căn', 'Phòng trong nhà'];
+  const handleUpdateRoom = async (roomData, roomId) => {
+    try {
+      console.log("Updating room:", roomId, roomData);
+      const response = await roomApi.updateRoom(roomId, roomData);
+      if (response.success) {
+        message.success("Cập nhật phòng thành công!");
+        setEditModalVisible(false);
+        setSelectedRoom(null);
+        loadRooms(); // Reload rooms list
+      } else {
+        message.error(response.message || "Không thể cập nhật phòng");
+      }
+    } catch (error) {
+      console.error("Error updating room:", error);
+      message.error("Có lỗi xảy ra khi cập nhật phòng");
+    }
+  };
+
+  // Use rooms directly since backend already handles filtering, sorting, and pagination
+  const sortedRooms = rooms;
 
   return (
     <div className="landlord-manage-room">
-      {/* Header Section */}
-      <Card className="landlord-room-header" bodyStyle={{ padding: '20px' }}>
-        <Row justify="space-between" align="middle" className="landlord-header-row">
+      <Card className="landlord-header-card">
+        <Row justify="space-between" align="middle">
           <Col>
-            <div className="landlord-header-title">
-              <h2>Quản lý phòng</h2>
-              <p className="landlord-header-subtitle">
-                Tổng cộng: <strong>{rooms.length}</strong> phòng |{' '}
-                Còn trống: <strong>{rooms.filter(r => r.status === 'available').length}</strong> |{' '}
-                Đã thuê: <strong>{rooms.filter(r => r.status === 'occupied').length}</strong>
-              </p>
-            </div>
+            <h2
+              style={{ color: "#4739f0", fontSize: "40px" }}
+              className="landlord-page-title"
+            >
+              Quản lý phòng
+            </h2>
+            <p className="landlord-page-subtitle">
+              Tổng số phòng: {pagination.total} | Đang hiển thị:{" "}
+              {sortedRooms.length}
+            </p>
           </Col>
           <Col>
             <Button
               type="primary"
               icon={<PlusOutlined />}
-              size="large"
               onClick={() => setAddModalVisible(true)}
-              className="landlord-add-room-btn"
+              className="landlord-add-button"
             >
-              Thêm phòng mới
+              Thêm phòng
             </Button>
           </Col>
         </Row>
       </Card>
 
-      {/* Filters Section */}
-      <Card className="landlord-filters-card" bodyStyle={{ padding: '16px 20px' }}>
+      <Card className="landlord-filter-card">
         <Row gutter={16} align="middle">
           <Col flex="auto">
             <Search
               placeholder="Tìm kiếm theo tên phòng, mã phòng, địa chỉ..."
+              allowClear
+              size="large"
               value={searchText}
               onChange={(e) => setSearchText(e.target.value)}
-              className="landlord-search"
-              size="large"
-              prefix={<SearchOutlined />}
+              className="landlord-search-input"
             />
           </Col>
           <Col>
             <Select
-              placeholder="Trạng thái"
               value={filterStatus}
-              onChange={setFilterStatus}
-              className="landlord-filter-select"
+              onChange={(value) => setFilterStatus(value)}
+              style={{ width: 140 }}
               size="large"
             >
-              <Option value="all">Tất cả trạng thái</Option>
+              <Option value="all">Tất cả</Option>
               <Option value="available">Còn trống</Option>
               <Option value="occupied">Đã thuê</Option>
               <Option value="maintenance">Bảo trì</Option>
+              <Option value="reserved">Đã đặt cọc</Option>
             </Select>
           </Col>
           <Col>
             <Select
-              placeholder="Loại phòng"
-              value={filterType}
-              onChange={setFilterType}
-              className="landlord-filter-select"
-              size="large"
-            >
-              <Option value="all">Tất cả loại</Option>
-              {roomTypes.map(type => (
-                <Option key={type} value={type}>{type}</Option>
-              ))}
-            </Select>
-          </Col>
-          <Col>
-            <Select
-              placeholder="Sắp xếp"
               value={sortBy}
-              onChange={setSortBy}
-              className="landlord-filter-select"
+              onChange={(value) => setSortBy(value)}
+              style={{ width: 140 }}
               size="large"
             >
-              <Option value="name">Theo tên</Option>
-              <Option value="roomCode">Theo mã phòng</Option>
-              <Option value="price">Theo giá</Option>
-              <Option value="area">Theo diện tích</Option>
+              <Option value="name">Tên phòng</Option>
+              <Option value="price">Giá thuê</Option>
+              <Option value="area">Diện tích</Option>
+              <Option value="created">Mới nhất</Option>
             </Select>
-          </Col>
-          <Col>
-            <Space>
-              <Button
-                icon={<FilterOutlined />}
-                onClick={handleResetFilters}
-                className="landlord-reset-btn"
-                size="large"
-              >
-                Đặt lại
-              </Button>
-            </Space>
           </Col>
         </Row>
       </Card>
 
-      {/* Room Table */}
       <Card className="landlord-table-card">
         <RoomTable
           rooms={sortedRooms}
@@ -276,14 +370,29 @@ const ManageRoom = () => {
           onView={handleViewRoom}
           onEdit={handleEditRoom}
           onDelete={handleDeleteRoom}
+          pagination={pagination}
+          onPaginationChange={handlePaginationChange}
         />
       </Card>
 
-      {/* Add Room Modal */}
-      <AddRoomModal
+      {/* Add Room Modal - using EditRoomModal for both add and edit */}
+      <EditRoomModal
         visible={addModalVisible}
         onClose={() => setAddModalVisible(false)}
-        onSubmit={handleAddRoom}
+        onSubmit={(roomData) => handleAddRoom(roomData)}
+        isEdit={false}
+      />
+
+      {/* Edit Room Modal - using EditRoomModal for both add and edit */}
+      <EditRoomModal
+        visible={editModalVisible}
+        onClose={() => {
+          setEditModalVisible(false);
+          setSelectedRoom(null);
+        }}
+        onSubmit={handleUpdateRoom}
+        initialData={selectedRoom}
+        isEdit={true}
       />
 
       {/* Room Detail Modal */}
@@ -302,4 +411,3 @@ const ManageRoom = () => {
 };
 
 export default ManageRoom;
-

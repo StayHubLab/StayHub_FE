@@ -2,6 +2,24 @@ import apiClient from "./apiClient";
 
 // User API endpoints for preferences and saved items
 const userApi = {
+  // Search user by email (for landlord contract request)
+  searchByEmail: async (email) => {
+    const response = await apiClient.get("/users/search", {
+      params: { email },
+    });
+    return response.data;
+  },
+
+  // Generic list/search users (realtime)
+  list: async (params = {}) => {
+    // Backend does not expose /users list; use /users/search instead
+    // Map q -> email for compatibility
+    const { q, ...rest } = params || {};
+    const response = await apiClient.get("/users/search", {
+      params: { email: q, q, ...rest },
+    });
+    return response.data;
+  },
   // Get user profile and preferences
   getProfile: async () => {
     const response = await apiClient.get("/user/profile");

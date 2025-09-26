@@ -14,6 +14,7 @@ import {
   Divider,
   Switch,
   Space,
+  Select,
 } from "antd";
 import {
   UserOutlined,
@@ -25,23 +26,34 @@ import {
   SaveOutlined,
   MailOutlined,
   PhoneOutlined,
-  EnvironmentOutlined,
 } from "@ant-design/icons";
 import { useAuth } from "../../../contexts/AuthContext";
 import authApi from "../../../services/api/authApi";
+import {
+  fetchProvinces,
+  fetchWards,
+  formatProvinceName,
+  formatWardName,
+} from "../../../services/api/vietnamProvinceApi";
 import "./Profile.css";
 
 const { Title, Text } = Typography;
 const { TextArea } = Input;
 
 const Profile = () => {
-  const { user, login } = useAuth();
+  const { user } = useAuth();
   const [form] = Form.useForm();
   const [passwordForm] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [activeTab, setActiveTab] = useState("1");
   const [avatarUrl, setAvatarUrl] = useState("");
+  // Address states (use same approach as Register)
+  const [provinces, setProvinces] = useState([]);
+  const [wards, setWards] = useState([]);
+  const [loadingProvinces, setLoadingProvinces] = useState(false);
+  const [loadingWards, setLoadingWards] = useState(false);
+  const [selectedProvinceId, setSelectedProvinceId] = useState(null);
 
   useEffect(() => {
     if (user) {
@@ -50,21 +62,136 @@ const Profile = () => {
         email: user.email,
         phone: user.phone,
         bio: user.bio || "",
-        address: {
-          street: user.address?.street || "",
-          ward: user.address?.ward || "",
-          city: user.address?.city || "",
-          district: user.address?.district || "",
-        },
+        detailedAddress: user.address?.street || "",
       });
       setAvatarUrl(user.avatar || "");
     }
   }, [user, form]);
 
+  // Load provinces on mount
+  useEffect(() => {
+    const loadProvinces = async () => {
+      setLoadingProvinces(true);
+      try {
+        const data = await fetchProvinces();
+        setProvinces(data || []);
+      } catch (error) {
+        notification.error({
+          message: "Lỗi",
+          description:
+            error?.message || "Không tải được danh sách tỉnh/thành phố",
+        });
+      } finally {
+        setLoadingProvinces(false);
+      }
+    };
+
+    loadProvinces();
+  }, []);
+
+  const handleProvinceChange = async (provinceCode) => {
+    setSelectedProvinceId(provinceCode);
+    setWards([]);
+    form.setFieldsValue({ ward: undefined });
+    setLoadingWards(true);
+    try {
+      const data = await fetchWards(provinceCode);
+      setWards(data || []);
+    } catch (error) {
+      notification.error({
+        message: "Lỗi",
+        description: error?.message || "Không tải được danh sách phường/xã",
+      });
+    } finally {
+      setLoadingWards(false);
+    }
+  };
+
+  // Helper: normalize Vietnamese names for matching
+  const normalizeName = (str) =>
+    (str || "")
+      .toString()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase()
+      .trim();
+
+  // Prefill province & ward from existing user.address after provinces load
+  useEffect(() => {
+    const prefillAddress = async () => {
+      if (!user || !provinces || provinces.length === 0) return;
+
+      const cityName = user.address?.city || user.address?.provinceName;
+      const wardName = user.address?.ward || user.address?.wardName;
+
+      if (cityName) {
+        const provinceMatch = provinces.find(
+          (p) => normalizeName(p.name) === normalizeName(cityName)
+        );
+
+        if (provinceMatch) {
+          form.setFieldsValue({ province: provinceMatch.code });
+          setSelectedProvinceId(provinceMatch.code);
+
+          // Load wards and set ward if found
+          setLoadingWards(true);
+          try {
+            const data = await fetchWards(provinceMatch.code);
+            setWards(data || []);
+            if (wardName) {
+              const wardMatch = (data || []).find(
+                (w) => normalizeName(w.name) === normalizeName(wardName)
+              );
+              if (wardMatch) {
+                form.setFieldsValue({ ward: wardMatch.code });
+              }
+            }
+          } catch (_) {
+            // ignore, already handled elsewhere
+          } finally {
+            setLoadingWards(false);
+          }
+        }
+      }
+
+      // Ensure street is shown
+      if (user.address?.street) {
+        form.setFieldsValue({ detailedAddress: user.address.street });
+      }
+    };
+
+    prefillAddress();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user, provinces]);
+
   const handleUpdateProfile = async (values) => {
     setLoading(true);
     try {
-      await authApi.updateProfile(values);
+      // Build address payload similar to Register
+      const provinceObj = provinces.find((p) => p.code === values.province);
+      const wardObj = wards.find((w) => w.code === values.ward);
+
+      const address = {
+        provinceCode: values.province || null,
+        provinceName: provinceObj ? formatProvinceName(provinceObj) : null,
+        wardCode: values.ward || null,
+        wardName: wardObj ? formatWardName(wardObj) : null,
+        street: values.detailedAddress || "",
+        // Fields commonly expected by backend
+        ward: wardObj ? formatWardName(wardObj) : "",
+        district: provinceObj ? formatProvinceName(provinceObj) : "",
+        city: provinceObj ? formatProvinceName(provinceObj) : "",
+      };
+
+      const payload = {
+        name: values.name,
+        email: values.email,
+        phone: values.phone,
+        bio: values.bio,
+        address,
+      };
+
+      await authApi.updateProfile(payload);
 
       // Refresh user data
       const profileData = await authApi.getProfile();
@@ -205,34 +332,77 @@ const Profile = () => {
 
             <Row gutter={[16, 16]}>
               <Col xs={24} md={12}>
-                <Form.Item name={["address", "street"]} label="Địa chỉ cụ thể">
+                <Form.Item
+                  name="province"
+                  label="Tỉnh/Thành phố"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Vui lòng chọn tỉnh/thành phố!",
+                    },
+                  ]}
+                >
+                  <Select
+                    placeholder="Chọn tỉnh/thành phố"
+                    loading={loadingProvinces}
+                    onChange={handleProvinceChange}
+                    showSearch
+                    optionFilterProp="children"
+                    filterOption={(input, option) =>
+                      option?.children
+                        ?.toLowerCase()
+                        ?.includes(input.toLowerCase())
+                    }
+                  >
+                    {provinces.map((province) => (
+                      <Select.Option key={province.code} value={province.code}>
+                        {formatProvinceName(province)}
+                      </Select.Option>
+                    ))}
+                  </Select>
+                </Form.Item>
+              </Col>
+              <Col xs={24} md={12}>
+                <Form.Item
+                  name="ward"
+                  label="Phường/Xã"
+                  rules={[
+                    { required: true, message: "Vui lòng chọn phường/xã!" },
+                  ]}
+                >
+                  <Select
+                    placeholder={
+                      !selectedProvinceId
+                        ? "Vui lòng chọn tỉnh/thành phố trước"
+                        : loadingWards
+                        ? "Đang tải phường/xã..."
+                        : wards.length === 0
+                        ? "Không có dữ liệu phường/xã"
+                        : "Chọn phường/xã"
+                    }
+                    loading={loadingWards}
+                    disabled={!selectedProvinceId || loadingWards}
+                    showSearch
+                    optionFilterProp="children"
+                    filterOption={(input, option) =>
+                      option?.children
+                        ?.toLowerCase()
+                        ?.includes(input.toLowerCase())
+                    }
+                  >
+                    {wards.map((ward) => (
+                      <Select.Option key={ward.code} value={ward.code}>
+                        {formatWardName(ward)}
+                      </Select.Option>
+                    ))}
+                  </Select>
+                </Form.Item>
+              </Col>
+              <Col xs={24} md={12}>
+                <Form.Item name="detailedAddress" label="Địa chỉ cụ thể">
                   <Input
                     prefix={<HomeOutlined />}
                     placeholder="Số nhà, tên đường..."
-                  />
-                </Form.Item>
-              </Col>
-              <Col xs={24} md={12}>
-                <Form.Item name={["address", "ward"]} label="Phường/Xã">
-                  <Input
-                    prefix={<EnvironmentOutlined />}
-                    placeholder="Phường/Xã"
-                  />
-                </Form.Item>
-              </Col>
-              <Col xs={24} md={12}>
-                <Form.Item name={["address", "district"]} label="Quận/Huyện">
-                  <Input
-                    prefix={<EnvironmentOutlined />}
-                    placeholder="Quận/Huyện"
-                  />
-                </Form.Item>
-              </Col>
-              <Col xs={24} md={12}>
-                <Form.Item name={["address", "city"]} label="Tỉnh/Thành phố">
-                  <Input
-                    prefix={<EnvironmentOutlined />}
-                    placeholder="Tỉnh/Thành phố"
                   />
                 </Form.Item>
               </Col>
@@ -408,9 +578,15 @@ const Profile = () => {
                     <Upload
                       name="avatar"
                       showUploadList={false}
-                      action="/api/upload/avatar"
+                      action="/api/users/profile"
+                      method="PUT"
                       onChange={handleAvatarUpload}
                       className="avatar-upload"
+                      headers={{
+                        Authorization: `Bearer ${localStorage.getItem(
+                          "token"
+                        )}`,
+                      }}
                     >
                       {uploadButton}
                     </Upload>

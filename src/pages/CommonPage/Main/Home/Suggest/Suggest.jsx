@@ -110,19 +110,45 @@ const Suggest = ({
       setLoading(true);
       setError(null);
 
-      const response = await roomApi.getAllRooms({
-        limit: 10,
-        sort: "rating",
-        order: "desc",
-      });
+      const tryParams = [
+        { limit: 10, sort: "rating", order: "desc", status: "available" },
+        { limit: 10, sort: "createdAt", order: "desc", status: "available" },
+        { limit: 10, status: "available" },
+      ];
 
-      if (response.success && response.data) {
-        // Handle the correct API response structure: {rooms: [...], pagination: {...}}
-        const roomsData = Array.isArray(response.data.rooms)
-          ? response.data.rooms
-          : [];
-        setSuggestedRooms(roomsData);
+      let roomsArray = [];
+      for (const qp of tryParams) {
+        const response = await roomApi.getAllRooms({ ...qp });
+        const payload = response?.data ?? response;
+        const dataNode = payload?.data ?? payload;
+        const candidate =
+          (Array.isArray(payload?.rooms) && payload.rooms) ||
+          (Array.isArray(dataNode?.rooms) && dataNode.rooms) ||
+          (Array.isArray(dataNode) && dataNode) ||
+          [];
+        if (candidate.length > 0) {
+          roomsArray = candidate;
+          break;
+        }
       }
+
+      // As a final fallback, try the alternate helper which auto-populates building
+      if (roomsArray.length === 0) {
+        const resp2 = await roomApi.getRooms({
+          limit: 10,
+          status: "available",
+        });
+        const payload2 = resp2?.data ?? resp2;
+        const dataNode2 = payload2?.data ?? payload2;
+        const candidate2 =
+          (Array.isArray(payload2?.rooms) && payload2.rooms) ||
+          (Array.isArray(dataNode2?.rooms) && dataNode2.rooms) ||
+          (Array.isArray(dataNode2) && dataNode2) ||
+          [];
+        roomsArray = candidate2;
+      }
+
+      setSuggestedRooms(roomsArray);
     } catch (error) {
       console.error("Error fetching suggested rooms:", error);
       setError("Không thể tải danh sách phòng gợi ý");
@@ -218,6 +244,17 @@ const Suggest = ({
         ))}
       </div>
     );
+  };
+
+  // Helper: pick a random image from room.images (supports object or string)
+  const getRandomRoomImageUrl = (room) => {
+    const images = room?.images;
+    if (Array.isArray(images) && images.length > 0) {
+      const index = Math.floor(Math.random() * images.length);
+      const chosen = images[index];
+      return chosen?.url || chosen;
+    }
+    return "https://placehold.co/369x180";
   };
 
   const handleViewDetails = (roomId) => {
@@ -363,11 +400,7 @@ const Suggest = ({
       {/* Room Image */}
       <div className="suggest-room-image-container">
         <img
-          src={
-            room.images && room.images.length > 0
-              ? room.images[0]
-              : "https://placehold.co/369x180"
-          }
+          src={getRandomRoomImageUrl(room)}
           alt={room.name || room.title}
           className="suggest-room-image"
         />

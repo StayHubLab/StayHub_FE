@@ -1,11 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import { message, Spin } from 'antd';
-import TenantOverview from './components/TenantOverview';
-import TenantFilters from './components/TenantFilters';
-import TenantTable from './components/TenantTable';
-import './ManageTenants.css';
+import React, { useState, useEffect } from "react";
+import { message, Spin } from "antd";
+import TenantOverview from "./components/TenantOverview";
+import TenantFilters from "./components/TenantFilters";
+import TenantTable from "./components/TenantTable";
+import { useAuth } from "../../../contexts/AuthContext";
+import tenantApi from "../../../services/api/tenantApi";
+import "./ManageTenants.css";
 
 const ManageTenants = () => {
+  const { user, isAuthenticated } = useAuth();
+
   // State management
   const [loading, setLoading] = useState(true);
   const [tenants, setTenants] = useState([]);
@@ -14,211 +18,171 @@ const ManageTenants = () => {
     totalTenants: 0,
     expectedRent: 0,
     collectedRent: 0,
-    remainingRent: 0
+    remainingRent: 0,
   });
 
   // Filter states
-  const [searchText, setSearchText] = useState('');
-  const [statusFilter, setStatusFilter] = useState('');
-  const [roomFilter, setRoomFilter] = useState('');
-  const [sortBy, setSortBy] = useState('name');
+  const [searchText, setSearchText] = useState("");
+  const [statusFilter, setStatusFilter] = useState("");
+  const [roomFilter, setRoomFilter] = useState("");
+  const [sortBy, setSortBy] = useState("name");
 
-  // Mock data
-  const mockTenants = [
-    {
-      id: '1',
-      tenant: {
-        name: 'Nguyễn Văn An',
-        phone: '0901234567',
-        avatar: null
-      },
-      roomNumber: 'P101',
-      rentAmount: 3500000,
-      term: 12,
-      paymentStatus: 'paid',
-      contract: {
-        startDate: '2024-01-15',
-        endDate: '2024-12-31'
-      }
-    },
-    {
-      id: '2',
-      tenant: {
-        name: 'Trần Thị Bình',
-        phone: '0912345678',
-        avatar: null
-      },
-      roomNumber: 'A201',
-      rentAmount: 4200000,
-      term: 6,
-      paymentStatus: 'pending',
-      contract: {
-        startDate: '2024-02-01',
-        endDate: '2024-08-01'
-      }
-    },
-    {
-      id: '3',
-      tenant: {
-        name: 'Lê Minh Cường',
-        phone: '0923456789',
-        avatar: null
-      },
-      roomNumber: 'B102',
-      rentAmount: 5800000,
-      term: 12,
-      paymentStatus: 'overdue',
-      contract: {
-        startDate: '2023-12-01',
-        endDate: '2024-12-01'
-      }
-    },
-    {
-      id: '4',
-      tenant: {
-        name: 'Phạm Thị Diễm',
-        phone: '0934567890',
-        avatar: null
-      },
-      roomNumber: 'C301',
-      rentAmount: 2800000,
-      term: 3,
-      paymentStatus: 'partial',
-      contract: {
-        startDate: '2024-03-15',
-        endDate: '2024-06-15'
-      }
-    },
-    {
-      id: '5',
-      tenant: {
-        name: 'Hoàng Văn Em',
-        phone: '0945678901',
-        avatar: null
-      },
-      roomNumber: 'D401',
-      rentAmount: 3200000,
-      term: 9,
-      paymentStatus: 'paid',
-      contract: {
-        startDate: '2024-01-01',
-        endDate: '2024-10-01'
-      }
-    }
-  ];
-
-  // Initialize data
+  // Load tenants from API whenever filters change
   useEffect(() => {
-    const initializeData = () => {
+    if (isAuthenticated && user) {
+      loadTenants();
+    }
+  }, [isAuthenticated, user, searchText, statusFilter, roomFilter, sortBy]);
+
+  const loadTenants = async () => {
+    try {
       setLoading(true);
-      
-      // Simulate API call
-      setTimeout(() => {
-        setTenants(mockTenants);
-        setFilteredTenants(mockTenants);
-        
-        // Calculate overview data
-        const totalTenants = mockTenants.length;
-        const expectedRent = mockTenants.reduce((sum, tenant) => sum + tenant.rentAmount, 0);
-        const collectedRent = mockTenants
-          .filter(tenant => tenant.paymentStatus === 'paid')
-          .reduce((sum, tenant) => sum + tenant.rentAmount, 0);
-        const partialRent = mockTenants
-          .filter(tenant => tenant.paymentStatus === 'partial')
-          .reduce((sum, tenant) => sum + (tenant.rentAmount * 0.5), 0); // Assume 50% paid for partial
-        const remainingRent = expectedRent - collectedRent - partialRent;
 
-        setOverviewData({
-          totalTenants,
-          expectedRent,
-          collectedRent: collectedRent + partialRent,
-          remainingRent
-        });
-        
-        setLoading(false);
-      }, 1000);
-    };
+      const response = await tenantApi.getTenants({
+        page: 1,
+        limit: 100,
+        search: searchText,
+        status: statusFilter,
+        roomId: roomFilter,
+        sortBy: sortBy,
+        landlordId: user?._id,
+      });
 
-    initializeData();
-  }, []);
+      if (response.success && response.data) {
+        const transformedTenants = response.data.tenants.map((tenant) => ({
+          id: tenant._id,
+          tenant: {
+            name: tenant.tenant?.name || "Không xác định",
+            phone: tenant.tenant?.phone || "Chưa có",
+            email: tenant.tenant?.email,
+            avatar: tenant.tenant?.avatar,
+            idCard: tenant.tenant?.idCard,
+            occupation: tenant.tenant?.occupation,
+          },
+          roomNumber: tenant.roomNumber || "N/A",
+          roomId: tenant.roomId,
+          rentAmount: tenant.rentAmount || 0,
+          term: tenant.term || 12,
+          paymentStatus: mapPaymentStatus(tenant.paymentStatus),
+          contract: {
+            startDate: tenant.contract?.startDate,
+            endDate: tenant.contract?.endDate,
+            contractId: tenant.contract?.contractId,
+          },
+          lastPaymentDate: tenant.lastPaymentDate,
+          nextPaymentDate: tenant.nextPaymentDate,
+          totalUnpaid: tenant.totalUnpaid || 0,
+          createdAt: tenant.createdAt,
+          updatedAt: tenant.updatedAt,
+        }));
 
-  // Filter and search logic
-  useEffect(() => {
-    let filtered = [...tenants];
-
-    // Search filter
-    if (searchText) {
-      filtered = filtered.filter(tenant =>
-        tenant.tenant.name.toLowerCase().includes(searchText.toLowerCase()) ||
-        tenant.tenant.phone.includes(searchText) ||
-        tenant.roomNumber.toLowerCase().includes(searchText.toLowerCase())
-      );
-    }
-
-    // Status filter
-    if (statusFilter) {
-      filtered = filtered.filter(tenant => tenant.paymentStatus === statusFilter);
-    }
-
-    // Room filter
-    if (roomFilter) {
-      filtered = filtered.filter(tenant => tenant.roomNumber === roomFilter);
-    }
-
-    // Sort
-    filtered.sort((a, b) => {
-      switch (sortBy) {
-        case 'name':
-          return a.tenant.name.localeCompare(b.tenant.name);
-        case 'room':
-          return a.roomNumber.localeCompare(b.roomNumber);
-        case 'rent':
-          return b.rentAmount - a.rentAmount;
-        case 'status':
-          return a.paymentStatus.localeCompare(b.paymentStatus);
-        case 'contractEnd':
-          return new Date(a.contract.endDate) - new Date(b.contract.endDate);
-        default:
-          return 0;
+        setTenants(transformedTenants);
+        setFilteredTenants(transformedTenants);
+        calculateOverviewData(transformedTenants);
+      } else {
+        message.error("Không thể tải danh sách người thuê");
+        setTenants([]);
+        setFilteredTenants([]);
       }
+    } catch (error) {
+      console.error("Error loading tenants:", error);
+      message.error("Có lỗi xảy ra khi tải danh sách người thuê");
+      setTenants([]);
+      setFilteredTenants([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const mapPaymentStatus = (status) => {
+    const statusMap = {
+      paid: "paid",
+      pending: "pending",
+      overdue: "overdue",
+      partial: "partial",
+    };
+    return statusMap[status] || "pending";
+  };
+
+  const calculateOverviewData = (tenantData) => {
+    const totalTenants = tenantData.length;
+    const expectedRent = tenantData.reduce(
+      (sum, tenant) => sum + tenant.rentAmount,
+      0
+    );
+    const collectedRent = tenantData
+      .filter((tenant) => tenant.paymentStatus === "paid")
+      .reduce((sum, tenant) => sum + tenant.rentAmount, 0);
+    const partialRent = tenantData
+      .filter((tenant) => tenant.paymentStatus === "partial")
+      .reduce(
+        (sum, tenant) => sum + (tenant.rentAmount - tenant.totalUnpaid),
+        0
+      );
+    const remainingRent = expectedRent - collectedRent - partialRent;
+
+    setOverviewData({
+      totalTenants,
+      expectedRent,
+      collectedRent: collectedRent + partialRent,
+      remainingRent,
     });
+  };
 
-    setFilteredTenants(filtered);
-  }, [tenants, searchText, statusFilter, roomFilter, sortBy]);
+  // Optional client-side refinement (keep simple: rely on server filters primarily)
+  useEffect(() => {
+    // If needed, apply lightweight client-side search refining on already filtered list
+    if (!searchText) {
+      setFilteredTenants(tenants);
+      return;
+    }
+    const refined = tenants.filter(
+      (tenant) =>
+        tenant.tenant.name.toLowerCase().includes(searchText.toLowerCase()) ||
+        (tenant.tenant.phone || "").includes(searchText) ||
+        (tenant.roomNumber || "")
+          .toLowerCase()
+          .includes(searchText.toLowerCase())
+    );
+    setFilteredTenants(refined);
+  }, [tenants, searchText]);
 
-  // Get available rooms for filter
-  const availableRooms = [...new Set(tenants.map(tenant => tenant.roomNumber))].sort();
+  // Remove heavy client-side filtering; server handles most filters.
 
-  // Event handlers
+  const availableRooms = [
+    ...new Set(tenants.map((tenant) => tenant.roomNumber)),
+  ].sort();
+
   const handleRemindPayment = (tenant) => {
-    message.success(`Đã gửi thông báo nhắc nhở thanh toán đến ${tenant.tenant.name} (${tenant.roomNumber})`);
-    // Here you would typically make an API call to send the reminder
+    message.success(
+      `Đã gửi thông báo nhắc nhở thanh toán đến ${tenant.tenant.name} (${tenant.roomNumber})`
+    );
   };
 
   const handleResetFilters = () => {
-    setSearchText('');
-    setStatusFilter('');
-    setRoomFilter('');
-    setSortBy('name');
+    setSearchText("");
+    setStatusFilter("");
+    setRoomFilter("");
+    setSortBy("name");
   };
 
   if (loading) {
     return (
       <div className="landlords-loading-container">
         <Spin size="large" />
-        <div className="landlords-loading-text">Đang tải dữ liệu khách thuê...</div>
+        <div className="landlords-loading-text">
+          Đang tải dữ liệu khách thuê...
+        </div>
       </div>
     );
   }
 
   return (
     <div className="landlords-manage-tenants">
-      {/* Overview Section */}
       <div className="landlords-overview-section">
         <TenantOverview overviewData={overviewData} />
       </div>
 
-      {/* Filters Section */}
       <div className="landlords-filters-section">
         <TenantFilters
           searchText={searchText}
@@ -234,7 +198,6 @@ const ManageTenants = () => {
         />
       </div>
 
-      {/* Table Section */}
       <div className="landlords-table-section">
         <TenantTable
           tenants={filteredTenants}
@@ -247,4 +210,3 @@ const ManageTenants = () => {
 };
 
 export default ManageTenants;
-

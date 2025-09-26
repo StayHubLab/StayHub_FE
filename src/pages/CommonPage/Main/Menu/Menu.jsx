@@ -55,6 +55,13 @@ const Menu = () => {
       route: "/main/contract",
     },
     {
+      id: "bills",
+      label: "Hóa đơn",
+      icon: <FileTextOutlined />,
+      isActive: false,
+      route: "/main/bills",
+    },
+    {
       id: "history",
       label: "Lịch sử thuê",
       icon: <HistoryOutlined />,

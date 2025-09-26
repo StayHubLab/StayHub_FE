@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect, useCallback } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import {
   SearchOutlined,
   TableOutlined,
@@ -19,11 +19,15 @@ import {
 } from "@ant-design/icons";
 import { Pagination, Spin, Empty, App } from "antd";
 import roomApi from "../../../../services/api/roomApi";
+import savedRoomApi from "../../../../services/api/savedRoomApi";
+import { useAuth } from "../../../../contexts/AuthContext";
 import "./FindRoom.css";
 
 const FindRoom = () => {
   const { message } = App.useApp();
   const navigate = useNavigate();
+  const location = useLocation();
+  const { user, isAuthenticated } = useAuth();
   const [searchParams, setSearchParams] = useState({
     location: "",
     priceFrom: "",
@@ -39,6 +43,7 @@ const FindRoom = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(6);
   const [favorites, setFavorites] = useState(new Set()); // Track favorited room IDs
+  const [savingRooms, setSavingRooms] = useState(new Set()); // Track rooms being saved/unsaved
 
   // API related states
   const [rooms, setRooms] = useState([]);
@@ -46,82 +51,243 @@ const FindRoom = () => {
   const [totalRooms, setTotalRooms] = useState(0);
   const [error, setError] = useState(null);
 
-  // Load favorites from localStorage on component mount
-  useEffect(() => {
-    const savedFavorites = localStorage.getItem("favoriteRooms");
-    if (savedFavorites) {
-      const favoriteIds = JSON.parse(savedFavorites);
-      setFavorites(new Set(favoriteIds));
-    }
-    // Load initial rooms data
-    fetchRooms();
-  }, []);
-
-  // Fetch rooms from API
-  const fetchRooms = async (searchFilters = {}) => {
-    try {
-      setLoading(true);
-      setError(null);
-
-      const params = {
-        page: currentPage,
-        limit: pageSize,
-        sortBy: searchParams.sortBy,
-        ...searchFilters,
-      };
-
-      // Remove empty parameters
-      Object.keys(params).forEach((key) => {
-        if (params[key] === "" || params[key] === undefined) {
-          delete params[key];
-        }
-      });
-
-      const hasSearchKeyword = searchFilters.location || searchParams.location;
-      let response;
-
-      if (hasSearchKeyword) {
-        const searchParams = {
-          ...params,
-          keyword: searchFilters.location || searchParams.location,
-        };
-        response = await roomApi.searchRooms(searchParams);
-      } else {
-        response = await roomApi.getAllRooms(params);
+  // Load saved rooms (backend when authenticated, else localStorage)
+  const loadSavedRooms = useCallback(async () => {
+    if (!isAuthenticated || !user || !(user._id || user.id)) {
+      const savedFavorites = localStorage.getItem("favoriteRooms");
+      if (savedFavorites) {
+        const favoriteIds = JSON.parse(savedFavorites);
+        setFavorites(new Set(favoriteIds));
       }
+      return;
+    }
 
-      if (response.success) {
-        // Handle different response structures
-        if (hasSearchKeyword) {
-          // Search response structure might be different
-          const roomsData = Array.isArray(response.data) ? response.data : [];
-          setRooms(roomsData);
-          setTotalRooms(response.total || 0);
-        } else {
-          // GetAllRooms returns {rooms: [...], pagination: {...}}
-          const roomsData = Array.isArray(response.data?.rooms) ? response.data.rooms : [];
-          setRooms(roomsData);
-          setTotalRooms(response.data?.pagination?.total || 0);
-        }
-      } else {
-        setError("Không thể tải danh sách phòng");
-        message.error("Không thể tải danh sách phòng");
-        setRooms([]); // Ensure rooms is always an array
+    const token = localStorage.getItem("token");
+    if (!token) {
+      const savedFavorites = localStorage.getItem("favoriteRooms");
+      if (savedFavorites) {
+        const favoriteIds = JSON.parse(savedFavorites);
+        setFavorites(new Set(favoriteIds));
+      }
+      return;
+    }
+
+    try {
+      const response = await savedRoomApi.getSavedRooms();
+      if (response.success && response.data?.savedRooms) {
+        const savedRoomIds = response.data.savedRooms.map(
+          (savedRoom) => savedRoom.roomId?._id || savedRoom.roomId
+        );
+        setFavorites(new Set(savedRoomIds));
       }
     } catch (error) {
-      console.error("Error fetching rooms:", error);
-      setError("Đã xảy ra lỗi khi tải dữ liệu");
-      message.error("Đã xảy ra lỗi khi tải dữ liệu");
-      setRooms([]);
-    } finally {
-      setLoading(false);
+      // fallback to localStorage
+      const savedFavorites = localStorage.getItem("favoriteRooms");
+      if (savedFavorites) {
+        const favoriteIds = JSON.parse(savedFavorites);
+        setFavorites(new Set(favoriteIds));
+      }
     }
-  };
+  }, [isAuthenticated, user]);
+
+  // Fetch rooms from API
+  const fetchRooms = useCallback(
+    async (searchFilters = {}) => {
+      try {
+        setLoading(true);
+        setError(null);
+
+        // Map UI filters to backend params
+        const mapSortBy = (sb) => {
+          switch (sb) {
+            case "priceAsc":
+              return "price";
+            case "priceDesc":
+              return "price";
+            case "rating":
+              return "rating";
+            case "newest":
+            default:
+              return "createdAt";
+          }
+        };
+
+        const sortBy = mapSortBy(searchParams.sortBy);
+
+        const params = {
+          page: currentPage,
+          limit: pageSize,
+          sortBy: sortBy,
+          status: "available", // Add status filter back
+          minPrice: searchParams.priceFrom || undefined,
+          maxPrice: searchParams.priceTo || undefined,
+          minArea: searchParams.area || undefined,
+          type:
+            searchParams.roomType && searchParams.roomType !== "all"
+              ? searchParams.roomType
+              : undefined,
+          amenities: searchParams.amenities || undefined,
+          verified: searchParams.verified || undefined,
+          ...searchFilters,
+        };
+
+        // Remove empty parameters
+        Object.keys(params).forEach((key) => {
+          if (params[key] === "" || params[key] === undefined) {
+            delete params[key];
+          }
+        });
+
+        const hasSearchKeyword =
+          searchFilters.location || searchParams.location;
+        let response;
+
+        // Add location search if present
+        if (hasSearchKeyword) {
+          params.search = hasSearchKeyword;
+        }
+
+        if (hasSearchKeyword) {
+          const sp = {
+            ...params,
+            keyword: searchFilters.location || searchParams.location,
+          };
+          response = await roomApi.searchRooms(sp);
+        } else {
+          response = await roomApi.getAllRooms(params);
+        }
+
+        let roomsData = [];
+        let totalCount = 0;
+
+        console.log("API Response:", response);
+        console.log("Has search keyword:", hasSearchKeyword);
+
+        if (response?.success) {
+          // Handle different response structures
+          if (hasSearchKeyword) {
+            // Search response structure: {data: {rooms: [...], pagination: {...}}}
+            roomsData = Array.isArray(response.data?.rooms)
+              ? response.data.rooms
+              : Array.isArray(response.data)
+              ? response.data
+              : Array.isArray(response?.rooms)
+              ? response.rooms
+              : [];
+            totalCount =
+              response.data?.pagination?.total ||
+              response.total ||
+              roomsData.length ||
+              0;
+            console.log("Search rooms data:", roomsData);
+            console.log("Search total count:", totalCount);
+          } else {
+            // GetAllRooms returns {rooms: [...], pagination: {...}}
+            roomsData = Array.isArray(response.data?.rooms)
+              ? response.data.rooms
+              : Array.isArray(response?.rooms)
+              ? response.rooms
+              : [];
+            totalCount = response.data?.pagination?.total || 0;
+          }
+        } else {
+          setError("Không thể tải danh sách phòng");
+          message.error("Không thể tải danh sách phòng");
+          setRooms([]); // Ensure rooms is always an array
+        }
+
+        // If no rooms found, try fallback queries
+        if (roomsData.length === 0 && !hasSearchKeyword) {
+          try {
+            const fallbackParams = [
+              {
+                limit: pageSize,
+                status: "available",
+                sortBy: "rating",
+              },
+              {
+                limit: pageSize,
+                status: "available",
+                sortBy: "createdAt",
+              },
+              { limit: pageSize, status: "available" },
+              // Try without status filter
+              { limit: pageSize, sortBy: "rating" },
+              { limit: pageSize, sortBy: "createdAt" },
+              { limit: pageSize },
+            ];
+
+            for (const fallbackParam of fallbackParams) {
+              const fallbackResponse = await roomApi.getAllRooms({
+                ...fallbackParam,
+              });
+              if (fallbackResponse?.success) {
+                const fallbackRooms = Array.isArray(
+                  fallbackResponse.data?.rooms
+                )
+                  ? fallbackResponse.data.rooms
+                  : Array.isArray(fallbackResponse?.rooms)
+                  ? fallbackResponse.rooms
+                  : [];
+                if (fallbackRooms.length > 0) {
+                  roomsData = fallbackRooms;
+                  totalCount =
+                    fallbackResponse.data?.pagination?.total ||
+                    fallbackRooms.length;
+                  break;
+                }
+              }
+            }
+          } catch (fallbackError) {
+            console.error("Fallback queries failed:", fallbackError);
+          }
+        }
+
+        setRooms(roomsData);
+        setTotalRooms(totalCount);
+      } catch (error) {
+        console.error("Error fetching rooms:", error);
+        setError("Đã xảy ra lỗi khi tải dữ liệu");
+        message.error("Đã xảy ra lỗi khi tải dữ liệu");
+        setRooms([]);
+      } finally {
+        setLoading(false);
+      }
+    },
+    [currentPage, pageSize, searchParams, message]
+  );
+
+  // Handle search query from URL parameters
+  useEffect(() => {
+    const urlParams = new URLSearchParams(location.search);
+    const searchQuery = urlParams.get("search");
+
+    if (searchQuery) {
+      setSearchParams((prev) => ({
+        ...prev,
+        location: searchQuery,
+      }));
+    }
+  }, [location.search]);
+
+  // Load favorites and initial rooms
+  useEffect(() => {
+    const init = async () => {
+      await loadSavedRooms();
+      await fetchRooms();
+    };
+    init();
+  }, [loadSavedRooms, fetchRooms]);
+
+  // Fetch rooms when search params change
+  useEffect(() => {
+    fetchRooms();
+  }, [fetchRooms]);
 
   // Refresh data when page or pageSize changes
   useEffect(() => {
     fetchRooms();
-  }, [currentPage, pageSize]);
+  }, [fetchRooms]);
 
   const handleInputChange = (field, value) => {
     setSearchParams((prev) => ({ ...prev, [field]: value }));
@@ -162,46 +328,81 @@ const FindRoom = () => {
     // Note: fetchRooms will be called automatically by useEffect when currentPage/pageSize changes
   };
 
-  const handleHeartClick = (roomId) => {
-    setFavorites((prev) => {
-      const newFavorites = new Set(prev);
-      if (newFavorites.has(roomId)) {
-        newFavorites.delete(roomId);
+  const handleHeartClick = async (roomId) => {
+    if (savingRooms.has(roomId)) return;
+
+    const isFavorited = favorites.has(roomId);
+    try {
+      setSavingRooms((prev) => new Set([...prev, roomId]));
+
+      const token = localStorage.getItem("token");
+      if (isAuthenticated && user && (user._id || user.id) && token) {
+        if (isFavorited) {
+          await savedRoomApi.unsaveRoom(roomId);
+          message.success("Đã bỏ lưu phòng");
+        } else {
+          await savedRoomApi.saveRoom(roomId);
+          message.success("Đã lưu phòng vào danh sách yêu thích");
+        }
       } else {
-        newFavorites.add(roomId);
+        const savedFavorites = localStorage.getItem("favoriteRooms");
+        const currentFavorites = savedFavorites
+          ? JSON.parse(savedFavorites)
+          : [];
+        const updated = isFavorited
+          ? currentFavorites.filter((id) => id !== roomId)
+          : [...currentFavorites, roomId];
+        localStorage.setItem("favoriteRooms", JSON.stringify(updated));
+        message.success(
+          isFavorited
+            ? "Đã bỏ lưu phòng"
+            : "Đã lưu phòng vào danh sách yêu thích"
+        );
       }
-      // Store in localStorage for persistence
-      localStorage.setItem("favoriteRooms", JSON.stringify([...newFavorites]));
-      return newFavorites;
-    });
+
+      setFavorites((prev) => {
+        const next = new Set(prev);
+        if (isFavorited) next.delete(roomId);
+        else next.add(roomId);
+        return next;
+      });
+    } catch (error) {
+      message.error("Không thể thực hiện thao tác. Vui lòng thử lại!");
+    } finally {
+      setSavingRooms((prev) => {
+        const next = new Set(prev);
+        next.delete(roomId);
+        return next;
+      });
+    }
   };
 
   // Function để map utilities với icon
   const getUtilityIcon = (utilityName) => {
     const iconMap = {
-      'wifi': <WifiOutlined />,
-      'internet': <WifiOutlined />,
-      'mạng': <WifiOutlined />,
-      'parking': <CarOutlined />,
-      'car': <CarOutlined />,
-      'xe': <CarOutlined />,
-      'electricity': <ThunderboltOutlined />,
-      'power': <ThunderboltOutlined />,
-      'điện': <ThunderboltOutlined />,
-      'gas': <FireOutlined />,
-      'kitchen': <HomeOutlined />,
-      'bếp': <HomeOutlined />,
-      'security': <SafetyCertificateOutlined />,
-      'an ninh': <SafetyCertificateOutlined />,
-      'camera': <CameraOutlined />,
-      'maintenance': <ToolOutlined />,
-      'repair': <ToolOutlined />,
-      'sửa chữa': <ToolOutlined />,
-      'air conditioner': <ThunderboltOutlined />,
-      'máy lạnh': <ThunderboltOutlined />,
-      'water heater': <FireOutlined />,
-      'nóng lạnh': <FireOutlined />,
-      'heater': <FireOutlined />
+      wifi: <WifiOutlined />,
+      internet: <WifiOutlined />,
+      mạng: <WifiOutlined />,
+      parking: <CarOutlined />,
+      car: <CarOutlined />,
+      xe: <CarOutlined />,
+      electricity: <ThunderboltOutlined />,
+      power: <ThunderboltOutlined />,
+      điện: <ThunderboltOutlined />,
+      gas: <FireOutlined />,
+      kitchen: <HomeOutlined />,
+      bếp: <HomeOutlined />,
+      security: <SafetyCertificateOutlined />,
+      "an ninh": <SafetyCertificateOutlined />,
+      camera: <CameraOutlined />,
+      maintenance: <ToolOutlined />,
+      repair: <ToolOutlined />,
+      "sửa chữa": <ToolOutlined />,
+      "air conditioner": <ThunderboltOutlined />,
+      "máy lạnh": <ThunderboltOutlined />,
+      "water heater": <FireOutlined />,
+      "nóng lạnh": <FireOutlined />,
+      heater: <FireOutlined />,
     };
 
     // Tìm icon dựa trên tên utility (case insensitive)
@@ -211,7 +412,7 @@ const FindRoom = () => {
         return icon;
       }
     }
-    
+
     // Default icon nếu không tìm thấy
     return <HomeOutlined />;
   };
@@ -223,12 +424,12 @@ const FindRoom = () => {
     }
 
     const displayUtilities = utilities.slice(0, 3);
-    
+
     return (
       <div className="search-room-utilities">
         {displayUtilities.map((utility, index) => (
           <div key={index} className="search-room-utility-item">
-            <span style={{ fontSize: '12px' }}>
+            <span style={{ fontSize: "12px" }}>
               {getUtilityIcon(utility.name || utility)}
             </span>
             <span>{utility.name || utility}</span>
@@ -236,6 +437,17 @@ const FindRoom = () => {
         ))}
       </div>
     );
+  };
+
+  // Helper: pick a random image from room.images (supports object or string)
+  const getRandomRoomImageUrl = (room) => {
+    const images = room?.images;
+    if (Array.isArray(images) && images.length > 0) {
+      const index = Math.floor(Math.random() * images.length);
+      const chosen = images[index];
+      return chosen?.url || chosen;
+    }
+    return "https://placehold.co/369x180";
   };
 
   return (
@@ -443,11 +655,7 @@ const FindRoom = () => {
                 {/* Room Image */}
                 <div className="search-room-image-container">
                   <img
-                    src={
-                      room.images?.[0] ||
-                      room.image ||
-                      "https://placehold.co/369x180"
-                    }
+                    src={getRandomRoomImageUrl(room)}
                     alt={room.title || room.name}
                     className="search-room-image"
                     onError={(e) => {
@@ -469,7 +677,9 @@ const FindRoom = () => {
                     )}
                   </div>
                   {/* Verified Badge */}
-                  {(room.status === "available" || room.isVerified || room.verified) && (
+                  {(room.status === "available" ||
+                    room.isVerified ||
+                    room.verified) && (
                     <div className="search-room-verified-badge">
                       <div className="search-room-verified-badge-icon">
                         <CheckOutlined />
@@ -556,9 +766,11 @@ const FindRoom = () => {
                     </div>
                   </div> */}
 
-                  <div 
+                  <div
                     className="search-room-view-details"
-                    onClick={() => navigate(`/main/room-detail/${room.id || room._id}`)}
+                    onClick={() =>
+                      navigate(`/main/room-detail/${room.id || room._id}`)
+                    }
                   >
                     <div className="search-room-view-details-text">
                       Xem chi tiết

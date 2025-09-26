@@ -6,6 +6,8 @@ import RoomImages from "./RoomImages/RoomImages";
 import RoomInfo from "./LeftContainer/RoomInfo";
 import Price from "./RightContainer/Price";
 import ScheduleBookingModal from "../../../../components/ScheduleBookingModal/ScheduleBookingModal";
+import { ContractTemplateModal } from "../../../../components/ContractTemplate";
+import { GoogleMapModal } from "../../../../components/GoogleMapModal";
 import roomApi from "../../../../services/api/roomApi";
 import viewingApi from "../../../../services/api/viewingApi";
 import { useAuth } from "../../../../contexts/AuthContext";
@@ -22,6 +24,8 @@ const Detail = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isBookingModalVisible, setIsBookingModalVisible] = useState(false);
+  const [isContractModalVisible, setIsContractModalVisible] = useState(false);
+  const [isMapModalVisible, setIsMapModalVisible] = useState(false);
 
   // Fetch room data from API
   useEffect(() => {
@@ -71,6 +75,10 @@ const Detail = () => {
                   "Phòng trọ hiện đại và đầy đủ tiện nghi. Vị trí thuận tiện, an ninh tốt.",
                   "Khu vực yên tĩnh, thích hợp cho sinh viên và người đi làm.",
                 ],
+            // Room features from API
+            features: room.features || {},
+            // Utilities from API
+            utilities: room.utilities || [],
             amenities:
               room.utilities?.map((utility) => ({
                 icon: "amenity",
@@ -255,7 +263,7 @@ const Detail = () => {
 
   const handleViewOnMap = () => {
     console.log("View on map clicked");
-    // Add map modal logic here
+    setIsMapModalVisible(true);
   };
 
   // Price component event handlers
@@ -283,12 +291,22 @@ const Detail = () => {
 
   const handleViewContract = () => {
     console.log("View contract clicked");
-    // Add view contract logic here
+    setIsContractModalVisible(true);
   };
 
   // Booking modal handlers
   const handleCloseBookingModal = () => {
     setIsBookingModalVisible(false);
+  };
+
+  // Contract modal handlers
+  const handleCloseContractModal = () => {
+    setIsContractModalVisible(false);
+  };
+
+  // Map modal handlers
+  const handleCloseMapModal = () => {
+    setIsMapModalVisible(false);
   };
 
   const handleConfirmBooking = async (bookingData) => {
@@ -430,6 +448,19 @@ const Detail = () => {
           }}
         />
       )}
+
+      {/* Contract Template Modal */}
+      <ContractTemplateModal
+        visible={isContractModalVisible}
+        onClose={handleCloseContractModal}
+      />
+
+      {/* Google Map Modal */}
+      <GoogleMapModal
+        visible={isMapModalVisible}
+        onClose={handleCloseMapModal}
+        roomData={roomData}
+      />
     </div>
   );
 };

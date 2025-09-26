@@ -13,6 +13,7 @@ import {
   SettingOutlined,
   SafetyCertificateOutlined,
   CleaningServicesOutlined,
+  CheckOutlined,
 } from "@ant-design/icons";
 
 const RoomInfo = ({ roomData, onViewAllReviews, onViewOnMap }) => {
@@ -132,18 +133,69 @@ const RoomInfo = ({ roomData, onViewAllReviews, onViewOnMap }) => {
         </div>
       </div>
 
-      {/* Amenities Section */}
+      {/* Room Features Section */}
       <div className="amenities-section">
-        <h2 className="section-title">Tiện ích</h2>
+        <h2 className="section-title">Tính năng phòng</h2>
         <div className="amenities-grid">
-          {roomData.amenities.map((amenity, index) => (
-            <div key={index} className="amenity-item">
-              <div className="amenity-icon">{getAmenityIcon(amenity.icon)}</div>
-              <span className="amenity-name">{amenity.name}</span>
-            </div>
-          ))}
+          {roomData.features &&
+            Object.entries(roomData.features).map(([key, value]) => {
+              if (value === true) {
+                const featureLabels = {
+                  hasBalcony: "Ban công",
+                  hasWindow: "Cửa sổ",
+                  hasAircon: "Điều hòa",
+                  hasWaterHeater: "Nóng lạnh",
+                  hasKitchen: "Bếp",
+                  hasWardrobe: "Tủ quần áo",
+                  hasDesk: "Bàn học/làm việc",
+                  hasTv: "TV",
+                  hasInternet: "Internet",
+                  hasElevator: "Thang máy",
+                };
+
+                const featureIcons = {
+                  hasBalcony: "🏠",
+                  hasWindow: "🪟",
+                  hasAircon: "❄️",
+                  hasWaterHeater: "🚿",
+                  hasKitchen: "🍳",
+                  hasWardrobe: "👔",
+                  hasDesk: "📚",
+                  hasTv: "📺",
+                  hasInternet: "📶",
+                  hasElevator: "🛗",
+                };
+
+                return (
+                  <div key={key} className="amenity-item">
+                    <CheckOutlined />
+                    <span className="amenity-name">
+                      {featureLabels[key] || key}
+                    </span>
+                  </div>
+                );
+              }
+              return null;
+            })}
         </div>
       </div>
+
+      {/* Utilities Section */}
+      {roomData.utilities && roomData.utilities.length > 0 && (
+        <div className="amenities-section">
+          <h2 className="section-title">Tiện ích</h2>
+          <div className="amenities-grid">
+            {roomData.utilities.map((utility, index) => (
+              <div key={index} className="amenity-item">
+                <div className="amenity-icon">
+                  <CheckOutlined />
+                </div>
+                <span className="amenity-name">{utility.name}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Rules Section */}
       <div className="rules-section">

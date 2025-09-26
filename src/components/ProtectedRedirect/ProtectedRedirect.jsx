@@ -4,18 +4,22 @@ import { useAuth } from "../../contexts/AuthContext";
 import LandingPage from "../../pages/CommonPage/Landing/LandingPage";
 
 const ProtectedRedirect = () => {
-  const { isAuthenticated, loading } = useAuth();
+  const { isAuthenticated, user, isLoading } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
     // Only redirect if not loading and user is authenticated
-    if (!loading && isAuthenticated) {
-      navigate("/main", { replace: true });
+    if (!isLoading && isAuthenticated && user) {
+      if (user.role === "landlord") {
+        navigate("/landlord/dashboard", { replace: true });
+      } else {
+        navigate("/main/home", { replace: true });
+      }
     }
-  }, [isAuthenticated, loading, navigate]);
+  }, [isAuthenticated, user, isLoading, navigate]);
 
   // Show loading while checking authentication
-  if (loading) {
+  if (isLoading) {
     return (
       <div
         style={{

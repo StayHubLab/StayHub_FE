@@ -24,7 +24,8 @@ const Header = () => {
 
   const handleSearch = () => {
     if (searchValue.trim()) {
-      console.log("Searching for:", searchValue);
+      // Navigate to find room page with search query
+      navigate(`/main/find?search=${encodeURIComponent(searchValue.trim())}`);
     }
   };
 
@@ -94,7 +95,7 @@ const Header = () => {
               <Button
                 type="text"
                 icon={<HeartOutlined />}
-                onClick={() => navigate("/saved-rooms")}
+                onClick={() => navigate("/main/saved")}
                 className="nav-link"
               >
                 Phòng yêu thích
@@ -149,7 +150,7 @@ const Header = () => {
               </Button>
               <Button
                 type="primary"
-                onClick={() => navigate("/register")}
+                onClick={() => navigate("/start")}
                 className="register-button"
               >
                 Đăng ký

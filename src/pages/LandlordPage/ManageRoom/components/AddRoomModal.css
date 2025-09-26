@@ -30,12 +30,12 @@
 
 .landlord-input:hover,
 .landlord-textarea:hover {
-  border-color: #4739F0;
+  border-color: #4739f0;
 }
 
 .landlord-input:focus,
 .landlord-textarea:focus {
-  border-color: #4739F0;
+  border-color: #4739f0;
   box-shadow: 0 0 0 2px rgba(71, 57, 240, 0.1);
 }
 
@@ -46,11 +46,11 @@
 }
 
 .landlord-select:hover .ant-select-selector {
-  border-color: #4739F0;
+  border-color: #4739f0;
 }
 
 .landlord-select.ant-select-focused .ant-select-selector {
-  border-color: #4739F0 !important;
+  border-color: #4739f0 !important;
   box-shadow: 0 0 0 2px rgba(71, 57, 240, 0.1) !important;
 }
 
@@ -75,8 +75,8 @@
 }
 
 .landlord-add-amenity-btn {
-  background: #4739F0;
-  border-color: #4739F0;
+  background: #4739f0;
+  border-color: #4739f0;
   border-radius: 4px;
   font-size: 12px;
   height: 24px;
@@ -114,15 +114,15 @@
 }
 
 .landlord-common-amenity-tag:hover {
-  border-color: #4739F0;
-  color: #4739F0;
+  border-color: #4739f0;
+  color: #4739f0;
   background: #f8f7ff;
   transform: translateY(-1px);
 }
 
 .landlord-amenity-added {
-  border-color: #4739F0 !important;
-  background: #4739F0 !important;
+  border-color: #4739f0 !important;
+  background: #4739f0 !important;
   color: white !important;
 }
 
@@ -130,6 +130,21 @@
   border-color: #3a2dd6 !important;
   background: #3a2dd6 !important;
   color: white !important;
+}
+
+/* Disabled button styling for amenities */
+.landlord-common-amenities-tags .ant-btn:disabled {
+  background-color: #f5f5f5 !important;
+  border-color: #d9d9d9 !important;
+  color: #bfbfbf !important;
+  cursor: not-allowed !important;
+  opacity: 0.6 !important;
+}
+
+.landlord-common-amenities-tags .ant-btn:disabled:hover {
+  background-color: #f5f5f5 !important;
+  border-color: #d9d9d9 !important;
+  color: #bfbfbf !important;
 }
 
 .landlord-selected-amenities {
@@ -167,7 +182,7 @@
 }
 
 .landlord-upload .ant-upload-select-picture-card:hover {
-  border-color: #4739F0;
+  border-color: #4739f0;
   background: #f8f7ff;
 }
 
@@ -222,8 +237,8 @@
 }
 
 .landlord-submit-btn {
-  background: #4739F0;
-  border-color: #4739F0;
+  background: #4739f0;
+  border-color: #4739f0;
   border-radius: 6px;
   font-weight: 500;
   min-width: 120px;
@@ -240,25 +255,25 @@
     width: 95% !important;
     margin: 10px;
   }
-  
+
   .landlord-add-room-modal .ant-modal-body {
     padding: 16px;
     max-height: 80vh;
   }
-  
+
   .landlord-common-amenities-tags {
     gap: 2px;
   }
-  
+
   .landlord-common-amenity-tag {
     font-size: 11px;
     padding: 2px 6px;
   }
-  
+
   .landlord-form-actions .ant-form-item-control-input-content {
     flex-direction: column;
   }
-  
+
   .landlord-cancel-btn,
   .landlord-submit-btn {
     width: 100%;
@@ -283,3 +298,72 @@
 .landlord-add-room-modal .ant-modal-body::-webkit-scrollbar-thumb:hover {
   background: #a8a8a8;
 }
+
+.landlord-add-room-modal .ant-modal-body::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.landlord-add-room-modal .ant-modal-body::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+.landlord-add-room-modal .ant-modal-body::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+.landlord-add-room-modal .ant-modal-body::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.landlord-add-room-modal .ant-modal-body::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+.landlord-add-room-modal .ant-modal-body::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+.landlord-add-room-modal .ant-modal-body::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.landlord-add-room-modal .ant-modal-body::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+.landlord-add-room-modal .ant-modal-body::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+.landlord-add-room-modal .ant-modal-body::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.landlord-add-room-modal .ant-modal-body::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+.landlord-add-room-modal .ant-modal-body::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+.landlord-add-room-modal .ant-modal-body::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.landlord-add-room-modal .ant-modal-body::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+.landlord-add-room-modal .ant-modal-body::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;

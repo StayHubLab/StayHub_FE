@@ -21,7 +21,7 @@ import {
   HomeOutlined,
 } from "@ant-design/icons";
 import authApi from "../../../services/api/authApi.js";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import logoRemoveBG from "../../../assets/images/logo/logoRemoveBG.png";
 import "./Register.css";
 import {
@@ -37,10 +37,12 @@ const { Option } = Select;
 const Register = () => {
   const [form] = Form.useForm();
   const navigate = useNavigate();
+  const location = useLocation();
 
   // submit/loading
   const [loading, setLoading] = useState(false);
   const [sendingCode, setSendingCode] = useState(false);
+  const [selectedRole, setSelectedRole] = useState("tenant");
 
   // Tabs & validation gate
   const [activeTab, setActiveTab] = useState("1");
@@ -92,6 +94,19 @@ const Register = () => {
   useEffect(() => {
     loadProvinces();
   }, []);
+
+  // Read role from query string (?role=landlord|tenant)
+  useEffect(() => {
+    try {
+      const params = new URLSearchParams(location.search);
+      const roleParam = params.get("role");
+      if (roleParam === "landlord" || roleParam === "tenant") {
+        setSelectedRole(roleParam);
+      }
+    } catch (_) {
+      // ignore
+    }
+  }, [location.search]);
 
   // --- Handlers ---
   const handleProvinceChange = (value) => {
@@ -154,7 +169,7 @@ const Register = () => {
         phone: values.phone,
         name: values.fullName,
         address,
-        role: "tenant", // hoặc hiển thị Select để cho user chọn
+        role: selectedRole,
         verificationCode: values.verificationCode,
       };
 
@@ -168,13 +183,25 @@ const Register = () => {
           message: "Thành công",
           description: "Đăng ký thành công!",
         });
-        handleVerifyRedirect();
+
+        // Redirect based on role
+        if (selectedRole === "landlord") {
+          navigate("/create-building");
+        } else {
+          navigate("/verify");
+        }
       } else {
         notification.success({
           message: "Thành công",
           description: "Đăng ký thành công!",
         });
-        handleVerifyRedirect();
+
+        // Redirect based on role
+        if (selectedRole === "landlord") {
+          navigate("/create-building");
+        } else {
+          navigate("/verify");
+        }
       }
     } catch (error) {
       console.error("Register error:", error?.response?.data || error?.message);
@@ -530,10 +557,10 @@ const Register = () => {
                               !selectedProvinceId
                                 ? "Vui lòng chọn tỉnh/thành phố trước"
                                 : loadingWards
-                                  ? "Đang tải phường/xã..."
-                                  : wards.length === 0
-                                    ? "Không có dữ liệu phường/xã"
-                                    : "Chọn phường/xã"
+                                ? "Đang tải phường/xã..."
+                                : wards.length === 0
+                                ? "Không có dữ liệu phường/xã"
+                                : "Chọn phường/xã"
                             }
                             className="custom-select"
                             loading={loadingWards}
