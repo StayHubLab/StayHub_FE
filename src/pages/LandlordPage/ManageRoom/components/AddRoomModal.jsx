@@ -1,21 +1,21 @@
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
-import { 
-  Modal, 
-  Form, 
-  Input, 
-  Select, 
-  InputNumber, 
-  Upload, 
-  Button, 
-  message, 
-  Row, 
+import React, { useState } from "react";
+import PropTypes from "prop-types";
+import {
+  Modal,
+  Form,
+  Input,
+  Select,
+  InputNumber,
+  Upload,
+  Button,
+  message,
+  Row,
   Col,
   Tag,
-  Typography
-} from 'antd';
-import { PlusOutlined } from '@ant-design/icons';
-import './AddRoomModal.css';
+  Typography,
+} from "antd";
+import { PlusOutlined } from "@ant-design/icons";
+import "./AddRoomModal.css";
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -26,62 +26,62 @@ const AddRoomModal = ({ visible, onClose, onSubmit }) => {
   const [loading, setLoading] = useState(false);
   const [fileList, setFileList] = useState([]);
   const [amenities, setAmenities] = useState([]);
-  const [currentAmenity, setCurrentAmenity] = useState('');
+  const [currentAmenity, setCurrentAmenity] = useState("");
 
   const roomTypes = [
-    'Phòng trọ',
-    'Chung cư mini',
-    'Homestay',
-    'Căn hộ',
-    'Nhà nguyên căn',
-    'Phòng trong nhà'
+    "Phòng trọ",
+    "Chung cư mini",
+    "Homestay",
+    "Căn hộ",
+    "Nhà nguyên căn",
+    "Phòng trong nhà",
   ];
 
   const commonAmenities = [
-    'Wi-Fi miễn phí',
-    'Điều hòa',
-    'Tủ lạnh',
-    'Máy giặt',
-    'Nóng lạnh',
-    'Ban công',
-    'Cửa sổ',
-    'WC riêng',
-    'Bếp',
-    'Thang máy',
-    'Chỗ để xe',
-    'An ninh 24/7',
-    'Gần trường học',
-    'Gần chợ',
-    'Gần bệnh viện'
+    "Wi-Fi miễn phí",
+    "Điều hòa",
+    "Tủ lạnh",
+    "Máy giặt",
+    "Nóng lạnh",
+    "Ban công",
+    "Cửa sổ",
+    "WC riêng",
+    "Bếp",
+    "Thang máy",
+    "Chỗ để xe",
+    "An ninh 24/7",
+    "Gần trường học",
+    "Gần chợ",
+    "Gần bệnh viện",
   ];
 
   const handleSubmit = async (values) => {
     try {
       setLoading(true);
-      
+
       // Create room data
       const roomData = {
         ...values,
         amenities: amenities,
-        images: fileList.map(file => file.url || file.response?.url),
-        status: 'available',
-        createdAt: new Date().toISOString()
+        images: fileList.map((file) => file.url || file.response?.url),
+        status: "available",
+        createdAt: new Date().toISOString(),
       };
 
       // Call the parent submit handler
       await onSubmit(roomData);
-      
+
       // Reset form
       form.resetFields();
       setFileList([]);
       setAmenities([]);
-      setCurrentAmenity('');
-      
-      message.success('Thêm phòng thành công!');
+      setCurrentAmenity("");
+
+      message.success("Thêm phòng thành công!");
       onClose();
     } catch (error) {
-      message.error('Có lỗi xảy ra khi thêm phòng!');
-      console.error('Error adding room:', error);
+      message.error("Có lỗi xảy ra khi thêm phòng!");
+      console.error("Error adding room:", error);
     } finally {
       setLoading(false);
     }
@@ -91,7 +91,7 @@ const AddRoomModal = ({ visible, onClose, onSubmit }) => {
     form.resetFields();
     setFileList([]);
     setAmenities([]);
-    setCurrentAmenity('');
+    setCurrentAmenity("");
     onClose();
   };
 
@@ -100,14 +100,14 @@ const AddRoomModal = ({ visible, onClose, onSubmit }) => {
   };
 
   const beforeUpload = (file) => {
-    const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
+    const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
     if (!isJpgOrPng) {
-      message.error('Chỉ cho phép upload file JPG/PNG!');
+      message.error("Chỉ cho phép upload file JPG/PNG!");
       return false;
     }
     const isLt5M = file.size / 1024 / 1024 < 5;
     if (!isLt5M) {
-      message.error('Hình ảnh phải nhỏ hơn 5MB!');
+      message.error("Hình ảnh phải nhỏ hơn 5MB!");
       return false;
     }
     return true;
@@ -116,12 +116,12 @@ const AddRoomModal = ({ visible, onClose, onSubmit }) => {
   const addAmenity = () => {
     if (currentAmenity.trim() && !amenities.includes(currentAmenity.trim())) {
       setAmenities([...amenities, currentAmenity.trim()]);
-      setCurrentAmenity('');
+      setCurrentAmenity("");
     }
   };
 
   const removeAmenity = (removedAmenity) => {
-    setAmenities(amenities.filter(amenity => amenity !== removedAmenity));
+    setAmenities(amenities.filter((amenity) => amenity !== removedAmenity));
   };
 
   const addCommonAmenity = (amenity) => {
@@ -158,20 +158,29 @@ const AddRoomModal = ({ visible, onClose, onSubmit }) => {
               name="roomCode"
               label="Mã phòng"
               rules={[
-                { required: true, message: 'Vui lòng nhập mã phòng!' },
-                { pattern: /^[A-Za-z0-9]+$/, message: 'Mã phòng chỉ chứa chữ và số!' }
+                { required: true, message: "Vui lòng nhập mã phòng!" },
+                {
+                  pattern: /^[A-Za-z0-9]+$/,
+                  message: "Mã phòng chỉ chứa chữ và số!",
+                },
               ]}
             >
-              <Input placeholder="VD: P101, A1, ..." className="landlord-input" />
+              <Input
+                placeholder="VD: P101, A1, ..."
+                className="landlord-input"
+              />
             </Form.Item>
           </Col>
           <Col span={12}>
             <Form.Item
               name="name"
               label="Tên phòng"
-              rules={[{ required: true, message: 'Vui lòng nhập tên phòng!' }]}
+              rules={[{ required: true, message: "Vui lòng nhập tên phòng!" }]}
             >
-              <Input placeholder="VD: Phòng trọ cao cấp..." className="landlord-input" />
+              <Input
+                placeholder="VD: Phòng trọ cao cấp..."
+                className="landlord-input"
+              />
             </Form.Item>
           </Col>
         </Row>
@@ -179,9 +188,12 @@ const AddRoomModal = ({ visible, onClose, onSubmit }) => {
         <Form.Item
           name="address"
           label="Địa chỉ"
-          rules={[{ required: true, message: 'Vui lòng nhập địa chỉ!' }]}
+          rules={[{ required: true, message: "Vui lòng nhập địa chỉ!" }]}
         >
-          <Input placeholder="VD: 123 Đường ABC, Phường XYZ, Quận DEF..." className="landlord-input" />
+          <Input
+            placeholder="VD: 123 Đường ABC, Phường XYZ, Quận DEF..."
+            className="landlord-input"
+          />
         </Form.Item>
 
         <Row gutter={24}>
@@ -189,11 +201,13 @@ const AddRoomModal = ({ visible, onClose, onSubmit }) => {
             <Form.Item
               name="type"
               label="Loại phòng"
-              rules={[{ required: true, message: 'Vui lòng chọn loại phòng!' }]}
+              rules={[{ required: true, message: "Vui lòng chọn loại phòng!" }]}
             >
               <Select placeholder="Chọn loại phòng" className="landlord-select">
-                {roomTypes.map(type => (
-                  <Option key={type} value={type}>{type}</Option>
+                {roomTypes.map((type) => (
+                  <Option key={type} value={type}>
+                    {type}
+                  </Option>
                 ))}
               </Select>
             </Form.Item>
@@ -202,14 +216,14 @@ const AddRoomModal = ({ visible, onClose, onSubmit }) => {
             <Form.Item
               name="area"
               label="Diện tích (m²)"
-              rules={[{ required: true, message: 'Vui lòng nhập diện tích!' }]}
+              rules={[{ required: true, message: "Vui lòng nhập diện tích!" }]}
             >
               <InputNumber
                 min={1}
                 max={1000}
                 placeholder="VD: 25"
                 className="landlord-input-number"
-                style={{ width: '100%' }}
+                style={{ width: "100%" }}
               />
             </Form.Item>
           </Col>
@@ -217,7 +231,7 @@ const AddRoomModal = ({ visible, onClose, onSubmit }) => {
             <Form.Item
               name="price"
               label="Giá thuê (VNĐ/tháng)"
-              rules={[{ required: true, message: 'Vui lòng nhập giá thuê!' }]}
+              rules={[{ required: true, message: "Vui lòng nhập giá thuê!" }]}
             >
               <InputNumber
                 min={100000}
@@ -225,18 +239,17 @@ const AddRoomModal = ({ visible, onClose, onSubmit }) => {
                 step={100000}
                 placeholder="VD: 3000000"
                 className="landlord-input-number"
-                style={{ width: '100%' }}
-                formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                parser={value => value.replace(/\$\s?|(,*)/g, '')}
+                style={{ width: "100%" }}
+                formatter={(value) =>
+                  `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                }
+                parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
               />
             </Form.Item>
           </Col>
         </Row>
 
-        <Form.Item
-          name="description"
-          label="Mô tả"
-        >
+        <Form.Item name="description" label="Mô tả">
           <TextArea
             rows={4}
             placeholder="Mô tả chi tiết về phòng, vị trí, tiện ích..."
@@ -255,9 +268,9 @@ const AddRoomModal = ({ visible, onClose, onSubmit }) => {
                 className="landlord-input"
                 onPressEnter={addAmenity}
                 suffix={
-                  <Button 
-                    type="primary" 
-                    size="small" 
+                  <Button
+                    type="primary"
+                    size="small"
                     onClick={addAmenity}
                     className="landlord-add-amenity-btn"
                   >
@@ -266,24 +279,26 @@ const AddRoomModal = ({ visible, onClose, onSubmit }) => {
                 }
               />
             </div>
-            
+
             {/* Common amenities quick add */}
             <div className="landlord-common-amenities">
-              <Text type="secondary" className="landlord-common-amenities-label">
+              <Text
+                type="secondary"
+                className="landlord-common-amenities-label"
+              >
                 Tiện nghi phổ biến:
               </Text>
               <div className="landlord-common-amenities-tags">
-                {commonAmenities.map(amenity => (
-                  <Tag
+                {commonAmenities.map((amenity) => (
+                  <Button
                     key={amenity}
-                    className={`landlord-common-amenity-tag ${
-                      amenities.includes(amenity) ? 'landlord-amenity-added' : ''
-                    }`}
+                    size="small"
                     onClick={() => addCommonAmenity(amenity)}
-                    style={{ cursor: 'pointer', margin: '2px' }}
+                    disabled={amenities.includes(amenity)}
+                    style={{ margin: "2px" }}
                   >
-                    {amenities.includes(amenity) ? '✓ ' : '+ '}{amenity}
-                  </Tag>
+                    {amenity}
+                  </Button>
                 ))}
               </div>
             </div>
@@ -295,7 +310,7 @@ const AddRoomModal = ({ visible, onClose, onSubmit }) => {
                   Tiện nghi đã chọn:
                 </Text>
                 <div className="landlord-selected-amenities-tags">
-                  {amenities.map(amenity => (
+                  {amenities.map((amenity) => (
                     <Tag
                       key={amenity}
                       closable
@@ -331,16 +346,16 @@ const AddRoomModal = ({ visible, onClose, onSubmit }) => {
 
         {/* Form Actions */}
         <Form.Item className="landlord-form-actions">
-          <Button 
-            onClick={handleCancel} 
+          <Button
+            onClick={handleCancel}
             className="landlord-cancel-btn"
             size="large"
           >
             Hủy
           </Button>
-          <Button 
-            type="primary" 
-            htmlType="submit" 
+          <Button
+            type="primary"
+            htmlType="submit"
             loading={loading}
             className="landlord-submit-btn"
             size="large"
@@ -356,7 +371,70 @@ const AddRoomModal = ({ visible, onClose, onSubmit }) => {
 AddRoomModal.propTypes = {
   visible: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
-  onSubmit: PropTypes.func.isRequired
+  onSubmit: PropTypes.func.isRequired,
+};
+            Thêm phòng
+          </Button>
+        </Form.Item>
+      </Form>
+    </Modal>
+  );
 };
 
-export default AddRoomModal;
+AddRoomModal.propTypes = {
+  visible: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  onSubmit: PropTypes.func.isRequired,
+};
+            Thêm phòng
+          </Button>
+        </Form.Item>
+      </Form>
+    </Modal>
+  );
+};
+
+AddRoomModal.propTypes = {
+  visible: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  onSubmit: PropTypes.func.isRequired,
+};
+            Thêm phòng
+          </Button>
+        </Form.Item>
+      </Form>
+    </Modal>
+  );
+};
+
+AddRoomModal.propTypes = {
+  visible: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  onSubmit: PropTypes.func.isRequired,
+};
+            Thêm phòng
+          </Button>
+        </Form.Item>
+      </Form>
+    </Modal>
+  );
+};
+
+AddRoomModal.propTypes = {
+  visible: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  onSubmit: PropTypes.func.isRequired,
+};
+            Thêm phòng
+          </Button>
+        </Form.Item>
+      </Form>
+    </Modal>
+  );
+};
+
+AddRoomModal.propTypes = {
+  visible: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  onSubmit: PropTypes.func.isRequired,
+};

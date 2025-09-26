@@ -193,16 +193,17 @@
 }
 
 .ant-btn-primary {
-  background: #667eea;
-  border-color: #667eea;
-  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+  background: #fac227;
+  border-color: #fac227;
+  box-shadow: 0 2px 8px rgba(234, 225, 102, 0.315);
+  padding: 8px !important;
 }
 
 .ant-btn-primary:hover,
 .ant-btn-primary:focus {
-  background: #5a6fd8;
-  border-color: #5a6fd8;
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+  background: #a37800;
+  border-color: #a37800;
+  box-shadow: 0 4px 12px rgba(234, 210, 102, 0.4);
 }
 
 .ant-btn-default {

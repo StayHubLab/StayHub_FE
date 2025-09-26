@@ -32,13 +32,19 @@ const Login = () => {
         const { user } = result.data;
         api.success({
           message: "Đăng nhập thành công!",
-          description: `Chào mừng ${user?.fullName || user?.email || "bạn"} đến với StayHub!`,
+          description: `Chào mừng ${
+            user?.fullName || user?.email || "bạn"
+          } đến với StayHub!`,
           placement: "topRight",
           duration: 4.5,
         });
 
-        // Navigate to home or dashboard
-        navigate("/");
+        // Navigate based on user role
+        if (user?.role === "landlord") {
+          navigate("/landlord/dashboard");
+        } else {
+          navigate("/main/home");
+        }
       } else {
         // Handle login failure
         api.error({

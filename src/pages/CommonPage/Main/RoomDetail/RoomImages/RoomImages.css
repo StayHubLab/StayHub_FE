@@ -8,8 +8,9 @@
 }
 
 .room-images-layout {
-  width: 1248px;
-  height: 500px;
+  width: 100%;
+  max-width: 1248px;
+  height: auto;
   position: relative;
   background: rgba(0, 0, 0, 0);
   display: flex;
@@ -18,15 +19,16 @@
 
 /* Main Image Section */
 .main-image-section {
-  width: 829px;
-  height: 532px;
+  flex: 2;
+  min-width: 0;
+  height: 500px;
   position: relative;
   background: rgba(0, 0, 0, 0);
 }
 
 .main-image {
-  width: 829px;
-  height: 532px;
+  width: 100%;
+  height: 100%;
   position: absolute;
   left: 0;
   top: 0;
@@ -78,8 +80,9 @@
 
 /* Side Images Section */
 .side-images-section {
-  width: 411px;
-  height: 532px;
+  flex: 1;
+  min-width: 0;
+  height: 500px;
   position: relative;
   background: rgba(0, 0, 0, 0);
   display: flex;
@@ -107,8 +110,8 @@
 
 /* Top Image */
 .top-image {
-  width: 411px;
-  height: 206px;
+  width: 100%;
+  height: 40%;
   border-top-right-radius: 8px;
 }
 
@@ -118,20 +121,20 @@
 
 /* Bottom Images Grid */
 .bottom-images-grid {
-  width: 411px;
-  height: 314px;
+  width: 100%;
+  height: 60%;
   display: flex;
   gap: 8px;
 }
 
 .bottom-left {
-  width: 201px;
-  height: 314px;
+  width: 48%;
+  height: 100%;
 }
 
 .bottom-right {
-  width: 202px;
-  height: 314px;
+  width: 52%;
+  height: 100%;
   position: relative;
 }
 
@@ -172,7 +175,7 @@
   width: 162.77px;
   height: 40px;
   position: absolute;
-  left: 1069.23px;
+  right: 20px;
   top: 444px;
   background: white;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);

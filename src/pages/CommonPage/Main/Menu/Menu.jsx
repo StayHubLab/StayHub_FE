@@ -8,6 +8,7 @@ import {
   CustomerServiceOutlined, // Use CustomerServiceOutlined instead of SupportOutlined
   SettingOutlined, // Use SettingOutlined instead of SettingsOutlined
   StarOutlined,
+  CalendarOutlined, // For viewing appointments
 } from "@ant-design/icons";
 import "./Menu.css";
 
@@ -40,11 +41,25 @@ const Menu = () => {
       route: "/main/saved",
     },
     {
+      id: "viewing-appointments",
+      label: "Lịch xem phòng",
+      icon: <CalendarOutlined />,
+      isActive: false,
+      route: "/main/viewing-appointments",
+    },
+    {
       id: "contract",
       label: "Hợp đồng thuê",
       icon: <FileTextOutlined />,
       isActive: false,
       route: "/main/contract",
+    },
+    {
+      id: "bills",
+      label: "Hóa đơn",
+      icon: <FileTextOutlined />,
+      isActive: false,
+      route: "/main/bills",
     },
     {
       id: "history",
@@ -97,14 +112,18 @@ const Menu = () => {
             style={{ top: `${index * 56}px` }}
           >
             <div
-              className={`menu-item-background ${activeItem === item.id ? "active-bg" : ""}`}
+              className={`menu-item-background ${
+                activeItem === item.id ? "active-bg" : ""
+              }`}
             >
               <div className="menu-icon-container">
                 <div className="menu-icon">{item.icon}</div>
               </div>
               <div className="menu-text-container">
                 <div
-                  className={`menu-text ${activeItem === item.id ? "active-text" : ""}`}
+                  className={`menu-text ${
+                    activeItem === item.id ? "active-text" : ""
+                  }`}
                 >
                   {item.label}
                 </div>

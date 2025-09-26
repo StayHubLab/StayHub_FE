@@ -5,6 +5,13 @@ export { default as userApi } from "./userApi";
 export { default as roomApi } from "./roomApi";
 export { default as bookingApi } from "./bookingApi";
 export { default as buildingApi } from "./buildingApi";
+export { default as savedRoomApi } from "./savedRoomApi";
+export { default as viewingApi } from "./viewingApi";
+export { default as notificationApi } from "./notificationApi";
+export { default as reviewApi } from "./reviewApi";
+export { default as tenantApi } from "./tenantApi";
+export { default as dashboardApi } from "./dashboardApi";
+export { default as vietnamProvinceApi } from "./vietnamProvinceApi";
 
 // Helper functions for API error handling
 export const handleApiError = (error) => {

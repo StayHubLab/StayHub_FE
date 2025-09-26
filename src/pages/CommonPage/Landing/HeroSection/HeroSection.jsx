@@ -2,6 +2,7 @@ import React from "react";
 import { Button } from "antd";
 import { useNavigate } from "react-router-dom";
 import "./HeroSection.css";
+import banner from "../../../../assets/images/landing/banner.png";
 
 const HeroSection = () => {
   const navigate = useNavigate();
@@ -17,11 +18,7 @@ const HeroSection = () => {
   return (
     <section className="hero-section">
       <div className="hero-background">
-        <img
-          src="https://placehold.co/1440x700"
-          alt="Hero Background"
-          className="hero-image"
-        />
+        <img src={banner} alt="Hero Background" className="hero-image" />
         <div className="hero-overlay" />
       </div>
 

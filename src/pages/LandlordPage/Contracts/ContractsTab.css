@@ -1,0 +1,17 @@
+.contracts-tab {
+  padding: 16px;
+}
+
+.contracts-header {
+  margin-bottom: 12px;
+}
+
+.ant-table {
+  background: #fff;
+  border-radius: 8px;
+}
+
+.ant-table-thead > tr > th {
+  background: #fafafa;
+  font-weight: 600;
+}
