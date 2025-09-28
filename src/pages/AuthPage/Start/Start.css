@@ -1,0 +1,263 @@
+.start-container {
+  width: auto;
+  height: 100vh;
+  background: linear-gradient(90deg, white 0%, #eeeaff 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.start-content {
+  width: 448px;
+  max-width: 90%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+  position: relative;
+  z-index: 1;
+}
+
+.logo-container {
+  position: relative;
+  margin-bottom: -20px;
+}
+
+.logo-image {
+  width: 300px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.welcome-section {
+  text-align: center;
+  max-width: 448px;
+}
+
+.welcome-title {
+  color: #4739f0 !important;
+  font-size: 30px !important;
+  font-weight: 700 !important;
+  line-height: 36px !important;
+  margin-bottom: 16px !important;
+  text-align: center;
+}
+
+.stay-text {
+  color: #4739f0 !important;
+}
+
+.hub-text {
+  color: #fac227 !important;
+}
+
+.welcome-subtitle {
+  color: #4b5563 !important;
+  font-size: 18px !important;
+  font-weight: 400 !important;
+  line-height: 28px !important;
+  text-align: center;
+  display: block;
+}
+
+.role-cards {
+  width: 100%;
+  max-width: 448px;
+}
+
+.role-card {
+  width: 100% !important;
+  height: 112px !important;
+  border: none !important;
+  border-radius: 12px !important;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1) !important;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.role-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+.tenant-card {
+  background: #4739f0 !important;
+}
+
+.landlord-card {
+  background: #fac227 !important;
+}
+
+.role-card-content {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  padding: 0;
+}
+
+.role-icon {
+  width: 59px;
+  height: 64px;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 16px;
+  flex-shrink: 0;
+}
+
+.tenant-icon,
+.landlord-icon {
+  font-size: 24px;
+  color: white;
+}
+
+.role-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.role-title {
+  color: white !important;
+  font-size: 20px !important;
+  font-weight: 600 !important;
+  line-height: 28px !important;
+  margin: 0 !important;
+}
+
+.role-description {
+  color: rgba(255, 255, 255, 0.9) !important;
+  font-size: 14px !important;
+  font-weight: 400 !important;
+  line-height: 20px !important;
+  margin: 4px 0 0 0 !important;
+}
+
+.login-section {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.login-text {
+  color: #4b5563 !important;
+  font-size: 16px !important;
+  font-weight: 500 !important;
+  line-height: 24px !important;
+}
+
+.login-link {
+  color: #4739f0 !important;
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  line-height: 24px !important;
+  padding: 0 !important;
+  height: auto !important;
+  text-decoration: underline;
+}
+
+.login-link:hover {
+  color: #e6af22 !important;
+}
+
+/* Decorative elements */
+.decoration {
+  position: absolute;
+  opacity: 0.1;
+  border-radius: 12px;
+  z-index: 0;
+}
+
+.decoration-top-right {
+  width: 54px;
+  height: 72px;
+  background: #4739f0;
+  top: 40px;
+  right: 40px;
+}
+
+.decoration-bottom-left {
+  width: 81px;
+  height: 72px;
+  background: #fac227;
+  bottom: 40px;
+  left: 40px;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .start-container {
+    padding: 20px;
+  }
+
+  .start-content {
+    width: 100%;
+    gap: 30px;
+  }
+
+  .logo-image {
+    width: 200px;
+    height: 200px;
+  }
+
+  .welcome-title {
+    font-size: 24px !important;
+    line-height: 30px !important;
+  }
+
+  .welcome-subtitle {
+    font-size: 16px !important;
+    line-height: 24px !important;
+  }
+
+  .role-card {
+    height: 100px !important;
+  }
+
+  .role-icon {
+    width: 50px;
+    height: 55px;
+  }
+
+  .decoration {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .start-content {
+    gap: 20px;
+  }
+
+  .logo-image {
+    width: 150px;
+    height: 150px;
+  }
+
+  .welcome-title {
+    font-size: 20px !important;
+    line-height: 26px !important;
+  }
+
+  .welcome-subtitle {
+    font-size: 14px !important;
+    line-height: 20px !important;
+  }
+}
+
+/* Ant Design overrides */
+/* .ant-card-body {
+  padding: 24px !important;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.ant-space-item {
+  width: 100%;
+} */

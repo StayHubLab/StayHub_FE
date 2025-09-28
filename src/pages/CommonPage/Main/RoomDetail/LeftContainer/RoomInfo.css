@@ -1,0 +1,718 @@
+/* Room Info Container */
+.room-info-container {
+  width: 100%;
+  max-width: 810.67px;
+  position: relative;
+  background: rgba(0, 0, 0, 0);
+  font-family: "Montserrat", sans-serif;
+}
+
+/* Header Section */
+.room-header-section {
+  width: 810.67px;
+  height: 205px;
+  position: relative;
+  background: rgba(0, 0, 0, 0);
+  margin-bottom: 32px;
+}
+
+.room-title {
+  width: 802px;
+  height: 85px;
+  position: absolute;
+  left: 0;
+  top: -17px;
+  color: #4739f0;
+  font-size: 36px;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 400;
+  line-height: 40px;
+  word-wrap: break-word;
+  margin: 0;
+}
+
+.room-price-rating {
+  width: 810.67px;
+  height: 37px;
+  position: absolute;
+  left: 0;
+  top: 96px;
+  background: rgba(0, 0, 0, 0);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.price-section {
+  width: auto;
+  height: 37px;
+  position: relative;
+  background: rgba(0, 0, 0, 0);
+  display: flex;
+  align-items: baseline;
+}
+
+.room-price {
+  width: 235px;
+  height: 38px;
+  color: #4739f0;
+  font-size: 30px;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 400;
+  word-wrap: break-word;
+  line-height: 1;
+}
+
+.price-period {
+  width: 83px;
+  height: 28px;
+  color: #6b7280;
+  font-size: 18px;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 400;
+  line-height: 28px;
+  word-wrap: break-word;
+  margin-left: 8px;
+}
+
+.rating-section {
+  width: 396px;
+  height: 24px;
+  background: rgba(0, 0, 0, 0);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.stars-rating {
+  width: 139.11px;
+  height: 24px;
+  background: rgba(0, 0, 0, 0);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.star-filled {
+  width: 18px;
+  height: 16px;
+  color: #fac227;
+  font-size: 16px;
+}
+
+.star-half {
+  width: 20px;
+  height: 16px;
+  color: #fac227;
+  font-size: 16px;
+}
+
+.star-empty {
+  width: 18px;
+  height: 16px;
+  color: #e5e7eb;
+  font-size: 16px;
+}
+
+.rating-number {
+  width: 33px;
+  height: 24px;
+  color: black;
+  font-size: 16px;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 400;
+  line-height: 24px;
+  word-wrap: break-word;
+  margin-left: 8px;
+}
+
+.review-users-count {
+  width: 108px;
+  height: 24px;
+  color: #6b7280;
+  font-size: 16px;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 400;
+  line-height: 24px;
+  word-wrap: break-word;
+}
+
+.view-all-reviews-users-btn {
+  width: 162px;
+  height: 24px;
+  position: absolute;
+  left: 649px;
+  top: 120px;
+  background: none;
+  border: none;
+  color: #4739f0;
+  font-size: 16px;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 400;
+  line-height: 24px;
+  word-wrap: break-word;
+  cursor: pointer;
+  padding: 0;
+}
+
+.view-all-reviews-users-btn:hover {
+  text-decoration: underline;
+}
+
+.location-section {
+  width: 810.67px;
+  height: 56px;
+  position: absolute;
+  left: 0;
+  top: 149px;
+  background: rgba(0, 0, 0, 0);
+}
+
+.address-row {
+  width: 810.67px;
+  height: 24px;
+  background: rgba(0, 0, 0, 0);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.location-icon {
+  width: 12px;
+  height: 16px;
+  color: #4b5563;
+  font-size: 12px;
+}
+
+.address-text {
+  width: 652px;
+  height: 24px;
+  color: #4b5563;
+  font-size: 16px;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 400;
+  line-height: 24px;
+  word-wrap: break-word;
+}
+
+.view-map-btn {
+  width: 154px;
+  height: 24px;
+  background: none;
+  border: none;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  padding: 0;
+}
+
+.map-icon {
+  width: 12px;
+  height: 16px;
+  color: #4739f0;
+  font-size: 12px;
+}
+
+.view-map-btn:hover span {
+  text-decoration: underline;
+}
+
+/* Section Styles */
+.section-title {
+  color: #1e1e2d;
+  font-size: 24px;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 400;
+  line-height: 32px;
+  word-wrap: break-word;
+  margin: 0 0 20px 0;
+}
+
+/* Description Section */
+.description-section {
+  width: 810.67px;
+  height: fit-content;
+  position: relative;
+  background: rgba(0, 0, 0, 0);
+  margin-bottom: 32px;
+}
+
+.description-content {
+  width: 810.67px;
+  height: fit-content;
+  background: rgba(0, 0, 0, 0);
+}
+
+.description-paragraph {
+  color: #374151;
+  font-size: 16px;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 400;
+  line-height: 24px;
+  word-wrap: break-word;
+  margin: 0 0 16px 0;
+}
+
+.description-paragraph:last-child {
+  margin-bottom: 0;
+}
+
+/* Amenities Section */
+.amenities-section {
+  width: 810.67px;
+  height: 164px;
+  position: relative;
+  background: rgba(0, 0, 0, 0);
+  margin-bottom: 32px;
+}
+
+.amenities-grid {
+  width: 810.67px;
+  height: 116px;
+  background: rgba(0, 0, 0, 0);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  gap: 16px 20px;
+}
+
+.amenity-item {
+  width: 259.55px;
+  height: 28px;
+  background: rgba(0, 0, 0, 0);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.amenity-icon {
+  width: 25px;
+  height: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #4739f0;
+  font-size: 16px;
+}
+
+.amenity-name {
+  color: #374151;
+  font-size: 16px;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 400;
+  line-height: 24px;
+  word-wrap: break-word;
+}
+
+/* Rules Section */
+.rules-section {
+  width: 810.67px;
+  height: fit-content;
+  position: relative;
+  background: rgba(0, 0, 0, 0);
+  margin-bottom: 32px;
+}
+
+.rules-list {
+  width: 810.67px;
+  height: fit-content;
+  background: rgba(0, 0, 0, 0);
+}
+
+.rule-item {
+  width: 810.67px;
+  height: 24px;
+  background: rgba(0, 0, 0, 0);
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.rule-bullet {
+  width: 22px;
+  color: #374151;
+  font-size: 16px;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 400;
+  text-align: center;
+}
+
+.rule-text {
+  color: #374151;
+  font-size: 16px;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 400;
+  word-wrap: break-word;
+  flex: 1;
+}
+
+/* Details Section */
+.details-section {
+  width: 810.67px;
+  height: 152px;
+  position: relative;
+  background: rgba(0, 0, 0, 0);
+  margin-bottom: 32px;
+}
+
+.details-grid {
+  width: 810.67px;
+  height: 104px;
+  background: rgba(0, 0, 0, 0);
+}
+
+.detail-row {
+  width: 810.67px;
+  height: 24px;
+  background: rgba(0, 0, 0, 0);
+  display: flex;
+  margin-bottom: 16px;
+}
+
+.detail-item {
+  width: 405.33px;
+  height: 24px;
+  background: rgba(0, 0, 0, 0);
+  display: flex;
+  align-items: center;
+}
+
+.detail-label {
+  color: #374151;
+  font-size: 16px;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 400;
+  line-height: 24px;
+  word-wrap: break-word;
+  min-width: 140px;
+}
+
+.detail-value {
+  color: #374151;
+  font-size: 16px;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 400;
+  word-wrap: break-word;
+  margin-left: 12px;
+}
+
+.status-available {
+  color: #16a34a;
+}
+
+/* Reviews Section */
+.reviews-users-section {
+  width: 810.67px;
+  height: 514px;
+  position: relative;
+  background: rgba(0, 0, 0, 0);
+}
+
+.reviews-users-header {
+  width: 810.67px;
+  height: 32px;
+  background: rgba(0, 0, 0, 0);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.view-all-reviews-users-link {
+  width: 169px;
+  height: 24px;
+  background: none;
+  border: none;
+  color: #4739f0;
+  font-size: 16px;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 400;
+  line-height: 24px;
+  word-wrap: break-word;
+  cursor: pointer;
+  padding: 0;
+}
+
+.view-all-reviews-users-link:hover {
+  text-decoration: underline;
+}
+
+.rating-summary {
+  width: auto;
+  height: 96px;
+  background: rgba(0, 0, 0, 0);
+}
+
+.overall-rating {
+  width: auto;
+  height: 24px;
+  background: rgba(0, 0, 0, 0);
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 8px;
+}
+
+.rating-breakdown {
+  width: auto;
+  height: 64px;
+  background: rgba(0, 0, 0, 0);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px 20px;
+  margin-bottom: 20px;
+}
+
+.rating-category {
+  width: auto;
+  height: 24px;
+  background: rgba(0, 0, 0, 0);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.category-label {
+  width: 98px;
+  color: #374151;
+  font-size: 16px;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 400;
+  line-height: 24px;
+  word-wrap: break-word;
+}
+
+.rating-bar {
+  width: 238px;
+  height: 8px;
+  background: #e5e7eb;
+  border-radius: 9999px;
+  overflow: hidden;
+  position: relative;
+}
+
+.rating-fill {
+  height: 8px;
+  background: #fac227;
+  border-radius: 9999px;
+  transition: width 0.3s ease;
+}
+
+.category-score {
+  width: 43px;
+  color: black;
+  font-size: 16px;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 400;
+  line-height: 24px;
+  word-wrap: break-word;
+}
+
+/* Reviews List */
+.reviews-users-list {
+  width: 810.67px;
+  height: 346px;
+  background: rgba(0, 0, 0, 0);
+}
+
+.review-users-item {
+  width: 810.67px;
+  height: 161px;
+  background: rgba(0, 0, 0, 0);
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 24px;
+  margin-bottom: 24px;
+}
+
+.review-users-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.review-users-header {
+  width: 810.67px;
+  height: 44px;
+  background: rgba(0, 0, 0, 0);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.reviewer-users-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.reviewer-users-info {
+  background: rgba(0, 0, 0, 0);
+}
+
+.reviewer-users-name {
+  color: black;
+  font-size: 16px;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 400;
+  word-wrap: break-word;
+  margin-bottom: 4px;
+}
+
+.review-users-date {
+  color: #6b7280;
+  font-size: 14px;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 400;
+  word-wrap: break-word;
+}
+
+.review-users-rating {
+  width: 810.67px;
+  height: 24px;
+  background: rgba(0, 0, 0, 0);
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin-bottom: 12px;
+}
+
+.review-users-comment {
+  color: #374151;
+  font-size: 16px;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 400;
+  line-height: 24px;
+  word-wrap: break-word;
+  margin: 0;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .room-info-container,
+  .room-header-section,
+  .description-section,
+  .amenities-section,
+  .rules-section,
+  .details-section,
+  .reviews-users-section {
+    width: 100%;
+    max-width: 810.67px;
+  }
+
+  .room-title {
+    width: 100%;
+    font-size: 32px;
+    line-height: 36px;
+  }
+
+  .room-price-rating {
+    width: 100%;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    height: auto;
+  }
+
+  .view-all-reviews-users-btn {
+    position: static;
+    margin-top: 12px;
+  }
+
+  .amenities-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .rating-breakdown {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .rating-category {
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .room-title {
+    font-size: 28px;
+    line-height: 32px;
+  }
+
+  .room-price {
+    font-size: 26px;
+  }
+
+  .price-period {
+    font-size: 16px;
+  }
+
+  .section-title {
+    font-size: 20px;
+    line-height: 28px;
+  }
+
+  .amenities-grid {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .amenity-item {
+    width: 100%;
+  }
+
+  .detail-row {
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+
+  .detail-item {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .room-title {
+    font-size: 24px;
+    line-height: 28px;
+  }
+
+  .room-price {
+    font-size: 24px;
+  }
+
+  .rating-section {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    height: auto;
+  }
+
+  .address-text {
+    font-size: 14px;
+  }
+
+  .description-paragraph,
+  .rule-text,
+  .detail-label,
+  .detail-value,
+  .category-label,
+  .review-users-comment {
+    font-size: 14px;
+  }
+
+  .amenity-name {
+    font-size: 14px;
+  }
+
+  .review-users-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    height: auto;
+  }
+}

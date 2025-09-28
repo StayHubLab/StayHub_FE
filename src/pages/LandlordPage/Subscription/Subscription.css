@@ -1,0 +1,90 @@
+.subscription-container {
+  padding: 24px;
+}
+
+.subscription-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.subscription-header h2 {
+  color: #ff7a00;
+  margin-bottom: 8px;
+}
+
+.subscription-plans {
+  margin-top: 24px;
+}
+
+.plan-card {
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.plan-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.plan-card.popular {
+  border: 2px solid #ff7a00;
+  box-shadow: 0 4px 16px rgba(255, 122, 0, 0.2);
+}
+
+.plan-card.current {
+  background: #f6f8fa;
+  border: 2px solid #28a745;
+}
+
+.popular-tag {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 1;
+}
+
+.plan-header {
+  text-align: center;
+  padding: 24px 0;
+}
+
+.plan-icon {
+  font-size: 32px;
+  color: #ff7a00;
+  margin-bottom: 16px;
+}
+
+.plan-price {
+  margin-top: 16px;
+}
+
+.price {
+  font-size: 28px;
+  font-weight: 600;
+  color: #ff7a00;
+}
+
+.period {
+  font-size: 14px;
+  color: #666;
+  margin-left: 4px;
+}
+
+.plan-features {
+  padding: 0 24px 24px;
+}
+
+.feature {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.check-icon {
+  color: #52c41a;
+  margin-right: 8px;
+}

@@ -1,0 +1,178 @@
+/* Room Table Styles */
+.landlord-room-table-container {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+
+.landlord-room-table {
+  font-family: "Montserrat", sans-serif;
+}
+
+.landlord-room-table .ant-table-thead > tr > th {
+  background: #f8f9fa;
+  color: #333;
+  font-weight: 600;
+  border-bottom: 2px solid #e1e1e1;
+  padding: 16px 12px;
+  font-family: "Montserrat", sans-serif;
+}
+
+.landlord-room-table .ant-table-tbody > tr > td {
+  padding: 16px 12px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.landlord-table-row {
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.landlord-table-row:hover > td {
+  background: #f8f9ff !important;
+}
+
+.landlord-room-code {
+  color: #4739f0;
+  font-weight: 600;
+}
+
+.landlord-room-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.landlord-room-name {
+  font-weight: 500;
+  color: #333;
+  font-size: 14px;
+}
+
+.landlord-room-address {
+  font-size: 12px;
+  color: #666;
+}
+
+.landlord-price {
+  font-weight: 600;
+  color: #4739f0;
+}
+
+.landlord-status-tag {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
+  border-radius: 6px;
+  padding: 4px 8px;
+}
+
+.landlord-tenant-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.landlord-tenant-name {
+  font-weight: 500;
+  color: #333;
+  font-size: 16px !important;
+}
+
+.landlord-tenant-phone {
+  font-size: 12px;
+  color: #666;
+}
+
+.landlord-due-date {
+  font-weight: 500;
+}
+
+.landlord-action-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.landlord-action-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.landlord-view-btn:hover {
+  background-color: rgba(71, 57, 240, 0.1);
+  color: #4739f0;
+}
+
+.landlord-edit-btn:hover {
+  background-color: rgba(52, 211, 153, 0.1);
+  color: #34d399;
+}
+
+.landlord-delete-btn:hover {
+  background-color: rgba(255, 77, 79, 0.1);
+  color: #ff4d4f;
+}
+
+.landlord-pagination {
+  margin: 24px 0;
+  text-align: center;
+}
+
+.landlord-pagination .ant-pagination-item-active {
+  border-color: #4739f0;
+  background-color: #4739f0;
+}
+
+.landlord-pagination .ant-pagination-item-active a {
+  color: white;
+}
+
+.landlord-pagination .ant-pagination-item:hover {
+  border-color: #4739f0;
+}
+
+.landlord-pagination .ant-pagination-item:hover a {
+  color: #4739f0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .landlord-room-table .ant-table-thead > tr > th,
+  .landlord-room-table .ant-table-tbody > tr > td {
+    padding: 12px 8px;
+    font-size: 12px;
+  }
+
+  .landlord-room-name {
+    font-size: 13px;
+  }
+
+  .landlord-room-address,
+  .landlord-tenant-phone {
+    font-size: 11px;
+  }
+
+  .landlord-action-btn {
+    width: 28px;
+    height: 28px;
+  }
+}
+
+@media (max-width: 480px) {
+  .landlord-room-table-container {
+    margin: 0 -12px;
+    border-radius: 0;
+  }
+
+  .landlord-room-table .ant-table-thead > tr > th,
+  .landlord-room-table .ant-table-tbody > tr > td {
+    padding: 8px 4px;
+    font-size: 11px;
+  }
+}

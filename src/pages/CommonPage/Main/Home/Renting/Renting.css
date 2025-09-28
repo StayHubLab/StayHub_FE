@@ -1,0 +1,414 @@
+.renting-container {
+  padding: 24px 20px 16px 20px;
+  width: 100%;
+  position: relative;
+  background: transparent;
+  margin-bottom: 24px;
+}
+
+/* Section Title */
+.renting-title {
+  width: 272px;
+  height: 32px;
+  color: #4739f0;
+  font-size: 24px;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 600;
+  line-height: 32px;
+  word-wrap: break-word;
+  margin-bottom: 16px;
+}
+
+/* Empty State */
+.renting-empty {
+  width: 100%;
+  max-width: 1156px;
+  min-height: 200px;
+  background: white;
+  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.05);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+.renting-empty-text {
+  text-align: center;
+}
+
+.renting-empty-text p {
+  margin: 8px 0;
+  color: #8c8c8c;
+  font-size: 14px;
+}
+
+.renting-empty-text p:first-child {
+  font-size: 16px;
+  font-weight: 500;
+  color: #595959;
+}
+
+/* Loading State */
+.renting-loading {
+  width: 100%;
+  max-width: 1156px;
+  min-height: 200px;
+  background: white;
+  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.05);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Room Card */
+.renting-card {
+  width: 100%;
+  max-width: 1156px;
+  height: 328px;
+  background: white;
+  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.05);
+  border-radius: 12px;
+  position: relative;
+}
+
+.renting-card-content {
+  width: calc(100% - 48px);
+  height: 280px;
+  margin: 24px;
+  display: flex;
+  gap: 24px;
+  background: transparent;
+}
+
+/* Room Image */
+.renting-image-container {
+  width: 440px;
+  height: 300px;
+  flex-shrink: 0;
+  background: transparent;
+}
+
+.renting-image-wrapper {
+  width: 100%;
+  height: 300px;
+  background: transparent;
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.renting-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+/* Room Details */
+.renting-details {
+  flex: 1;
+  height: 280px;
+  background: transparent;
+  display: flex;
+  flex-direction: column;
+}
+
+.renting-room-title {
+  color: black;
+  font-size: 24px;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 700;
+  line-height: 32px;
+  word-wrap: break-word;
+  margin-bottom: 16px;
+}
+
+.renting-room-address {
+  color: #4b5563;
+  font-size: 16px;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 400;
+  line-height: 24px;
+  word-wrap: break-word;
+  margin-bottom: 24px;
+}
+
+/* Price Section */
+.renting-price-section {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.renting-price {
+  color: #4739f0;
+  font-size: 24px;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 700;
+  line-height: 32px;
+  word-wrap: break-word;
+}
+
+.renting-price-unit {
+  color: #6b7280;
+  font-size: 16px;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 400;
+  line-height: 24px;
+  word-wrap: break-word;
+}
+
+/* Payment Alert */
+.renting-payment-alert {
+  width: 100%;
+  height: 52px;
+  background: #fff3e0;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  margin-bottom: 24px;
+  position: relative;
+}
+
+.renting-payment-text {
+  color: #fac227;
+  font-size: 18px;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 700;
+  word-wrap: break-word;
+}
+
+/* Action Buttons */
+.renting-actions {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Buttons Row */
+.renting-buttons-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+/* Contract Link */
+.renting-contract-link {
+  color: #4739f0;
+  font-size: 16px;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
+  line-height: 24px;
+  word-wrap: break-word;
+  cursor: pointer;
+  text-decoration: underline;
+  width: fit-content;
+  height: 40px;
+  display: flex;
+  align-items: center;
+}
+
+.renting-contract-link:hover {
+  color: #3626d3;
+}
+
+/* Pay Button */
+.renting-pay-button {
+  width: 169.33px;
+  height: 40px;
+  background: #ebe9fe;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.renting-pay-button:hover {
+  background: #d6d1fd;
+  transform: translateY(-1px);
+}
+
+.renting-pay-text {
+  color: #4739f0;
+  font-size: 16px;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
+  text-align: center;
+  word-wrap: break-word;
+}
+
+.renting-view-button {
+  width: 143.89px;
+  height: 40px;
+  background: #fff3e0;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.renting-view-button:hover {
+  background: #ffe7b3;
+  transform: translateY(-1px);
+}
+
+.renting-view-text {
+  color: #fac227;
+  font-size: 16px;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
+  text-align: center;
+  word-wrap: break-word;
+}
+
+/* Report Button */
+.renting-report-button {
+  width: 143.89px;
+  height: 40px;
+  background: #fff3e0;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.renting-report-button:hover {
+  background: #ffe7b3;
+  transform: translateY(-1px);
+}
+
+.renting-report-text {
+  color: #fac227;
+  font-size: 16px;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
+  text-align: center;
+  word-wrap: break-word;
+}
+
+/* Chat Section */
+.renting-chat-section {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  width: fit-content;
+}
+
+.renting-chat-section:hover {
+  background: #f3f4f6;
+}
+
+.renting-chat-icon {
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #4739f0;
+  font-size: 16px;
+}
+
+.renting-chat-text {
+  color: #4739f0;
+  font-size: 16px;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
+  word-wrap: break-word;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .renting-card {
+    max-width: 100%;
+  }
+
+  .renting-image-container {
+    width: 350px;
+  }
+}
+
+@media (max-width: 768px) {
+  .renting-card-content {
+    flex-direction: column;
+    height: auto;
+    gap: 20px;
+  }
+
+  .renting-image-container {
+    width: 100%;
+    height: 200px;
+  }
+
+  .renting-image-wrapper {
+    height: 200px;
+  }
+
+  .renting-details {
+    height: auto;
+  }
+
+  .renting-card {
+    height: auto;
+    padding-bottom: 24px;
+  }
+
+  .renting-actions > div:nth-child(2) {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .renting-pay-button,
+  .renting-report-button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .renting-title {
+    font-size: 20px;
+    width: 100%;
+  }
+
+  .renting-room-title {
+    font-size: 20px;
+    line-height: 28px;
+  }
+
+  .renting-price {
+    font-size: 20px;
+    line-height: 28px;
+  }
+
+  .renting-payment-text {
+    font-size: 16px;
+  }
+}
+
+/* Multiple Indicator */
+.renting-multiple-indicator {
+  margin-top: 12px;
+  padding: 8px 16px;
+  background: #f0f2ff;
+  border: 1px solid #d6e4ff;
+  border-radius: 6px;
+  color: #4739f0;
+  font-size: 12px;
+  font-weight: 500;
+  text-align: center;
+  max-width: 1156px;
+}
