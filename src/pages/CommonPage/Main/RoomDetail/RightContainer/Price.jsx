@@ -8,6 +8,7 @@ import {
   FileTextOutlined,
   CheckCircleOutlined,
   HomeOutlined,
+  StopOutlined,
 } from "@ant-design/icons";
 import "./Price.css";
 
@@ -35,6 +36,7 @@ const Price = ({
     avatar: "https://placehold.co/64x64",
   },
   isUserRenting = false,
+  isRoomOccupied = false,
   onScheduleViewing,
   onContactLandlord,
   onViewContract,
@@ -59,9 +61,10 @@ const Price = ({
 
   return (
     <div className="price-container">
-      {/* Current Renting Status or Booking Section */}
+      {/* Current Renting Status, Room Occupied, or Booking Section */}
       <div className="booking-card">
         {isUserRenting ? (
+          // Scenario 1: Current user is renting this room
           <>
             <div className="booking-header">
               <h2 className="booking-title">Trạng thái thuê</h2>
@@ -98,7 +101,46 @@ const Price = ({
               </Button>
             </div>
           </>
+        ) : isRoomOccupied ? (
+          // Scenario 2: Room is occupied by someone else
+          <>
+            <div className="booking-header">
+              <h2 className="booking-title">Trạng thái phòng</h2>
+            </div>
+            <Alert
+              message="Phòng đã có người thuê"
+              description="Phòng này hiện tại đã có người thuê. Không thể đặt lịch xem phòng lúc này. Bạn có thể liên hệ chủ trọ để biết thêm thông tin."
+              type="warning"
+              icon={<StopOutlined />}
+              showIcon
+              style={{
+                marginBottom: "16px",
+                borderRadius: "8px",
+              }}
+            />
+            <div className="costs-section">
+              <h3 className="costs-title">Chi phí tham khảo</h3>
+              <div className="costs-list">
+                {priceData.costs.map((cost, index) => (
+                  <div key={index} className="cost-item">
+                    <span className="cost-label">{cost.label}</span>
+                    <span className="cost-value">{cost.value}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="action-buttons">
+              <Button
+                size="large"
+                className="contact-button"
+                onClick={handleContactLandlord}
+              >
+                Liên hệ chủ trọ
+              </Button>
+            </div>
+          </>
         ) : (
+          // Scenario 3: Room is available for viewing and booking
           <>
             <div className="booking-header">
               <h2 className="booking-title">Đặt lịch xem phòng hoặc Liên hệ</h2>
@@ -233,6 +275,7 @@ Price.propTypes = {
     avatar: PropTypes.string,
   }),
   isUserRenting: PropTypes.bool,
+  isRoomOccupied: PropTypes.bool,
   onScheduleViewing: PropTypes.func,
   onContactLandlord: PropTypes.func,
   onViewContract: PropTypes.func,

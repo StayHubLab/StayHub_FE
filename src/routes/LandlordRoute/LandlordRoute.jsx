@@ -33,8 +33,3 @@ const LandlordRoute = () => {
 };
 
 export default LandlordRoute;
-export default LandlordRoute;
-export default LandlordRoute;
-export default LandlordRoute;
-export default LandlordRoute;
-export default LandlordRoute;

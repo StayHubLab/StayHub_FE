@@ -27,6 +27,7 @@ const Detail = () => {
   const [isContractModalVisible, setIsContractModalVisible] = useState(false);
   const [isMapModalVisible, setIsMapModalVisible] = useState(false);
   const [isUserRenting, setIsUserRenting] = useState(false);
+  const [isRoomOccupied, setIsRoomOccupied] = useState(false);
 
   // Fetch room data from API
   useEffect(() => {
@@ -164,11 +165,22 @@ const Detail = () => {
           const currentUserRenting = user && transformedData.tenant.id && 
             (transformedData.tenant.id === user._id || transformedData.tenant.id === user.id);
           
+          // Check if room is occupied by anyone (has a tenant)
+          const roomOccupied = Boolean(transformedData.tenant.id) || 
+                               room.status === 'occupied' || 
+                               room.status === 'rented' ||
+                               !room.isAvailable;
+          
           setIsUserRenting(currentUserRenting);
-          console.log("Current user renting check:", {
+          setIsRoomOccupied(roomOccupied);
+          
+          console.log("Room occupancy check:", {
             userId: user?._id || user?.id,
             tenantId: transformedData.tenant.id,
-            isRenting: currentUserRenting
+            isUserRenting: currentUserRenting,
+            isRoomOccupied: roomOccupied,
+            roomStatus: room.status,
+            isAvailable: room.isAvailable
           });
 
           setRoomData(transformedData);
@@ -411,7 +423,7 @@ const Detail = () => {
                   value: `${roomData.additionalCosts.service.toLocaleString()} VNĐ/tháng`,
                 },
               ].filter(Boolean), // Lọc bỏ những giá trị null/undefined
-              deposit: !isUserRenting && roomData.additionalCosts?.deposit
+              deposit: !isRoomOccupied && roomData.additionalCosts?.deposit
                 ? {
                     title: `Đặt cọc: ${roomData.additionalCosts.deposit.toLocaleString()} VNĐ`,
                     description: "Được hoàn trả khi kết thúc hợp đồng",
@@ -434,6 +446,7 @@ const Detail = () => {
             }}
             roomData={roomData}
             isUserRenting={isUserRenting}
+            isRoomOccupied={isRoomOccupied}
             onScheduleViewing={handleScheduleViewing}
             onContactLandlord={handleContactLandlord}
             onViewContract={handleViewContract}
