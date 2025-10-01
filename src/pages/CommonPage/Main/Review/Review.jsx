@@ -14,7 +14,7 @@ const Review = ({
     id: 1,
     name: "Anh Minh Tuấn",
     role: "Chủ trọ",
-    avatar: "https://placehold.co/48x48",
+    avatar: "https://placehold.co/64x64",
   },
 }) => {
   const [roomRating, setRoomRating] = useState(0);
@@ -99,7 +99,7 @@ const Review = ({
         </div>
 
         {/* Room Rating */}
-        <div className="rating-section">
+        <div className="review-rating-section">
           <div className="stars-container">
             {renderStars(roomRating, handleRoomRating)}
           </div>
@@ -137,7 +137,7 @@ const Review = ({
         </div>
 
         {/* Landlord Rating */}
-        <div className="rating-section">
+        <div className="review-rating-section">
           <div className="stars-container">
             {renderStars(landlordRating, handleLandlordRating)}
           </div>

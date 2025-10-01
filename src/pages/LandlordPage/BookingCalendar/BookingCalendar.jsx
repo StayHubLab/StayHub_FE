@@ -65,7 +65,10 @@ const BookingCalendar = () => {
 
     try {
       setLoading(true);
-      const response = await viewingApi.getViewingsByLandlord(user._id);
+      // Add populate parameter to request populated user data
+      const response = await viewingApi.getViewingsByLandlord(user._id, {
+        populate: 'userId roomId buildingId'
+      });
 
       if (response.success) {
         setAppointments(response.data || []);
@@ -273,7 +276,12 @@ const BookingCalendar = () => {
                 />
               }
               onClick={() => {
-                const phone = record.userId?.phone;
+                const userData = record.userId || record.user || record.tenantId;
+                const contactData = record.contactInfo;
+                const phone = userData?.phone || 
+                             userData?.phoneNumber || 
+                             contactData?.phone;
+                             
                 if (phone) {
                   window.open(`tel:${phone}`);
                 } else {
@@ -361,18 +369,36 @@ const BookingCalendar = () => {
       title: "Người thuê",
       key: "tenant",
       width: "18%",
-      render: (_, record) => (
-        <div className="tenant-info">
-          <div className="tenant-name">
-            <UserOutlined className="icon" />
-            <span>{record.userId?.name || "N/A"}</span>
+      render: (_, record) => {
+        // Try multiple possible data sources
+        const userData = record.userId || record.user || record.tenantId;
+        const contactData = record.contactInfo;
+        
+        // Get name from multiple possible sources
+        const userName = userData?.name || 
+                        userData?.fullName || 
+                        contactData?.name || 
+                        "N/A";
+        
+        // Get phone from multiple possible sources  
+        const userPhone = userData?.phone || 
+                         userData?.phoneNumber || 
+                         contactData?.phone || 
+                         "N/A";
+        
+        return (
+          <div className="tenant-info">
+            <div className="tenant-name">
+              <UserOutlined className="icon" />
+              <span>{userName}</span>
+            </div>
+            <div className="tenant-phone">
+              <PhoneOutlined className="icon" />
+              <span>{userPhone}</span>
+            </div>
           </div>
-          <div className="tenant-phone">
-            <PhoneOutlined className="icon" />
-            <span>{record.userId?.phone || "N/A"}</span>
-          </div>
-        </div>
-      ),
+        );
+      },
     },
     {
       title: "Trạng thái",

@@ -9,6 +9,7 @@ import {
   message,
   Space,
   Spin,
+  notification,
 } from "antd";
 import {
   PlusOutlined,
@@ -19,6 +20,7 @@ import {
 import RoomTable from "./components/RoomTable";
 import EditRoomModal from "./components/EditRoomModal";
 import RoomDetailModal from "./components/RoomDetailModal";
+import DeleteRoomModal from "./DeleteRoomModal";
 import { useAuth } from "../../../contexts/AuthContext";
 import roomApi from "../../../services/api/roomApi";
 import "./ManageRoom.css";
@@ -47,8 +49,13 @@ const ManageRoom = () => {
   const [addModalVisible, setAddModalVisible] = useState(false);
   const [editModalVisible, setEditModalVisible] = useState(false);
   const [detailModalVisible, setDetailModalVisible] = useState(false);
+  const [deleteModalVisible, setDeleteModalVisible] = useState(false);
   const [selectedRoom, setSelectedRoom] = useState(null);
   const [detailActiveTab, setDetailActiveTab] = useState("1");
+  const [deleteLoading, setDeleteLoading] = useState(false);
+
+  // Notification context
+  const [api, contextHolder] = notification.useNotification();
 
   // Load rooms from API
   useEffect(() => {
@@ -226,18 +233,52 @@ const ManageRoom = () => {
     setEditModalVisible(true);
   };
 
-  const handleDeleteRoom = async (roomKey) => {
+  const handleDeleteRoom = (room) => {
+    // Find the complete room object
+    const roomToDelete = typeof room === 'string' 
+      ? rooms.find(r => r._id === room || r.key === room)
+      : room;
+    
+    setSelectedRoom(roomToDelete);
+    setDeleteModalVisible(true);
+  };
+
+  const handleConfirmDelete = async (roomId) => {
     try {
-      const response = await roomApi.deleteRoom(roomKey);
+      setDeleteLoading(true);
+      const response = await roomApi.deleteRoom(roomId);
+      
       if (response.success) {
-        message.success("Xóa phòng thành công!");
+        api.open({
+          type: 'success',
+          message: 'Xóa phòng thành công',
+          description: 'Phòng đã được xóa khỏi hệ thống.',
+          placement: 'topRight',
+          duration: 3,
+        });
+        setDeleteModalVisible(false);
+        setSelectedRoom(null);
         loadRooms(); // Reload rooms list
       } else {
-        message.error(response.message || "Không thể xóa phòng");
+        api.open({
+          type: 'error',
+          message: 'Không thể xóa phòng',
+          description: response.message || 'Có lỗi xảy ra khi xóa phòng.',
+          placement: 'topRight',
+          duration: 4,
+        });
       }
     } catch (error) {
-      console.error("Error deleting room:", error);
-      message.error("Có lỗi xảy ra khi xóa phòng");
+      console.error('Error deleting room:', error);
+      api.open({
+        type: 'error',
+        message: 'Lỗi hệ thống',
+        description: 'Có lỗi xảy ra khi xóa phòng. Vui lòng thử lại.',
+        placement: 'topRight',
+        duration: 4,
+      });
+    } finally {
+      setDeleteLoading(false);
     }
   };
 
@@ -293,6 +334,8 @@ const ManageRoom = () => {
   const sortedRooms = rooms;
 
   return (
+    <>
+    {contextHolder}
     <div className="landlord-manage-room">
       <Card className="landlord-header-card">
         <Row justify="space-between" align="middle">
@@ -406,7 +449,20 @@ const ManageRoom = () => {
         activeTab={detailActiveTab}
         onTabChange={setDetailActiveTab}
       />
+
+      {/* Delete Room Modal */}
+      <DeleteRoomModal
+        visible={deleteModalVisible}
+        onClose={() => {
+          setDeleteModalVisible(false);
+          setSelectedRoom(null);
+        }}
+        onConfirm={handleConfirmDelete}
+        room={selectedRoom}
+        loading={deleteLoading}
+      />
     </div>
+    </>
   );
 };
 

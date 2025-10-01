@@ -67,7 +67,7 @@
 /* Room Info Card */
 .room-info-card {
   width: 688px;
-  height: 96px;
+  height: auto;
   background: #f9fafb;
   border-radius: 8px;
   margin-bottom: 16px;
@@ -75,7 +75,7 @@
 
 .room-info-content {
   width: 656px;
-  height: 64px;
+  height: auto;
   margin: 16px;
   background: transparent;
   display: flex;
@@ -116,7 +116,7 @@
 /* Landlord Info Card */
 .landlord-info-card {
   width: 688px;
-  height: 80px;
+  height: auto;
   background: #f9fafb;
   border-radius: 8px;
   margin-bottom: 16px;
@@ -124,7 +124,7 @@
 
 .landlord-info-content {
   width: 656px;
-  height: 48px;
+  height: auto;
   margin: 16px;
   background: transparent;
   display: flex;
@@ -133,8 +133,8 @@
 }
 
 .landlord-avatar {
-  width: 48px;
-  height: 48px;
+  width: 64px;
+  height: 64px;
   border-radius: 50%;
   object-fit: cover;
 }
@@ -163,7 +163,7 @@
 }
 
 /* Rating Section */
-.rating-section {
+.review-rating-section {
   width: 688px;
   height: 64px;
   background: transparent;
@@ -352,7 +352,7 @@
 
   .review-header,
   .review-section,
-  .rating-section,
+  .review-rating-section,
   .review-input-container,
   .checkbox-section,
   .action-section,
