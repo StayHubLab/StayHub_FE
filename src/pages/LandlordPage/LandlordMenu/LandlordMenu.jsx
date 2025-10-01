@@ -1,18 +1,17 @@
-import React, { useState } from "react";
 import {
+  CalendarOutlined,
+  CustomerServiceOutlined,
   DashboardOutlined,
+  FileTextOutlined,
   HomeOutlined,
+  SettingOutlined,
   TeamOutlined,
   TransactionOutlined,
-  FileTextOutlined,
-  SettingOutlined,
-  CustomerServiceOutlined,
-  BankOutlined,
 } from "@ant-design/icons";
+import { useState } from "react";
 import "./LandlordMenu.css";
 
 import { useNavigate } from "react-router-dom";
-
 const LandlordMenu = () => {
   const [activeItem, setActiveItem] = useState("dashboard");
   const navigate = useNavigate();
@@ -47,6 +46,13 @@ const LandlordMenu = () => {
       route: "/landlord/manage-tenants",
     },
     {
+      id: "calendar",
+      label: "Lịch xem phòng",
+      icon: <CalendarOutlined />,
+      isActive: false,
+      route: "/landlord/booking-calendar",
+    },
+    {
       id: "contracts",
       label: "Hợp đồng",
       icon: <FileTextOutlined />,
@@ -67,13 +73,6 @@ const LandlordMenu = () => {
       isActive: false,
       route: "/landlord/payments-by-room",
     },
-    // {
-    //   id: "subscription",
-    //   label: "Gói đăng ký",
-    //   icon: <CrownOutlined />,
-    //   isActive: false,
-    //   route: "/landlord/subscription",
-    // },
     {
       id: "settings",
       label: "Cài đặt",
@@ -88,6 +87,13 @@ const LandlordMenu = () => {
       isActive: false,
       route: "/landlord/support",
     },
+    {
+      id: "chat",
+      label: "Nhắn tin",
+      icon: <CustomerServiceOutlined />,
+      isActive: false,
+      route: "/landlord/chat",
+    },
   ];
 
   const handleItemClick = (itemId, route) => {
@@ -101,25 +107,22 @@ const LandlordMenu = () => {
         {menuItems.map((item, index) => (
           <div
             key={item.id}
-            className={`landlord-menu-item ${
-              activeItem === item.id ? "active" : ""
-            }`}
+            className={`landlord-menu-item ${activeItem === item.id ? "active" : ""
+              }`}
             onClick={() => handleItemClick(item.id, item.route)}
             style={{ top: `${index * 56}px` }}
           >
             <div
-              className={`landlord-menu-item-background ${
-                activeItem === item.id ? "active-bg" : ""
-              }`}
+              className={`landlord-menu-item-background ${activeItem === item.id ? "active-bg" : ""
+                }`}
             >
               <div className="landlord-menu-icon-container">
                 <div className="landlord-menu-icon">{item.icon}</div>
               </div>
               <div className="landlord-menu-text-container">
                 <div
-                  className={`landlord-menu-text ${
-                    activeItem === item.id ? "active-text" : ""
-                  }`}
+                  className={`landlord-menu-text ${activeItem === item.id ? "active-text" : ""
+                    }`}
                 >
                   {item.label}
                 </div>

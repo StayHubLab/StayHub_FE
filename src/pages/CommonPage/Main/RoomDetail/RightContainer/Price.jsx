@@ -1,15 +1,17 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { Button, Avatar } from "antd";
 import {
+  CheckCircleOutlined,
+  FileTextOutlined,
+  HomeOutlined,
   InfoCircleOutlined,
   StarFilled,
+  StopOutlined,
   UserOutlined,
-  FileTextOutlined,
-  CheckCircleOutlined,
 } from "@ant-design/icons";
+import { Alert, Avatar, Button } from "antd";
+import PropTypes from "prop-types";
+import { useNavigate } from "react-router-dom";
+import chatService from "../../../../../services/api/chatService";
 import "./Price.css";
-
 const Price = ({
   priceData = {
     costs: [
@@ -33,19 +35,44 @@ const Price = ({
     isVerified: true,
     avatar: "https://placehold.co/64x64",
   },
+  isUserRenting = false,
+  isRoomOccupied = false,
+  roomData,
   onScheduleViewing,
   onContactLandlord,
   onViewContract,
 }) => {
+  const navigate = useNavigate();
   const handleScheduleViewing = () => {
     if (onScheduleViewing) {
       onScheduleViewing();
     }
   };
 
-  const handleContactLandlord = () => {
-    if (onContactLandlord) {
-      onContactLandlord();
+  const handleContactLandlord = async () => {
+    try {
+      const recipientId =
+        typeof roomData?.landlord?.id === "object"
+          ? roomData.landlord.id._id
+          : roomData?.landlord?.id;
+  
+      if (!recipientId) {
+        console.error("❌ Không tìm thấy hostId (landlord id)");
+        return;
+      }
+  
+      console.log("RecipientId (landlord):", recipientId);
+  
+      const res = await chatService.createConversation(recipientId);
+      const conversation = res.data.conversation;
+  
+      if (conversation?._id) {
+        navigate(`/chat?conversationId=${conversation._id}`);
+      } else {
+        console.error("❌ Không tạo được conversation");
+      }
+    } catch (err) {
+      console.error("Error creating conversation:", err);
     }
   };
 
@@ -57,53 +84,136 @@ const Price = ({
 
   return (
     <div className="price-container">
-      {/* Booking Section */}
+      {/* Current Renting Status, Room Occupied, or Booking Section */}
       <div className="booking-card">
-        <div className="booking-header">
-          <h2 className="booking-title">Đặt lịch xem phòng hoặc Liên hệ</h2>
-        </div>
-
-        <div className="costs-section">
-          <h3 className="costs-title">Chi phí phát sinh ước tính</h3>
-          <div className="costs-list">
-            {priceData.costs.map((cost, index) => (
-              <div key={index} className="cost-item">
-                <span className="cost-label">{cost.label}</span>
-                <span className="cost-value">{cost.value}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div className="deposit-section">
-          <div className="deposit-content">
-            <InfoCircleOutlined className="deposit-icon" />
-            <div className="deposit-text">
-              <div className="deposit-title">{priceData.deposit.title}</div>
-              <div className="deposit-description">
-                {priceData.deposit.description}
+        {isUserRenting ? (
+          // Scenario 1: Current user is renting this room
+          <>
+            <div className="booking-header">
+              <h2 className="booking-title">Trạng thái thuê</h2>
+            </div>
+            <Alert
+              message="Bạn đang thuê phòng này"
+              description="Bạn hiện tại là người thuê của phòng này. Liên hệ chủ trọ nếu cần hỗ trợ."
+              type="success"
+              icon={<HomeOutlined />}
+              showIcon
+              style={{
+                marginBottom: "16px",
+                borderRadius: "8px",
+              }}
+            />
+            <div className="costs-section">
+              <h3 className="costs-title">Chi phí phát sinh hiện tại</h3>
+              <div className="costs-list">
+                {priceData.costs.map((cost, index) => (
+                  <div key={index} className="cost-item">
+                    <span className="cost-label">{cost.label}</span>
+                    <span className="cost-value">{cost.value}</span>
+                  </div>
+                ))}
               </div>
             </div>
-          </div>
-        </div>
+            <div className="action-buttons">
+              <Button
+                size="large"
+                className="contact-button"
+                onClick={handleContactLandlord}
+              >
+                Liên hệ chủ trọ
+              </Button>
+            </div>
+          </>
+        ) : isRoomOccupied ? (
+          // Scenario 2: Room is occupied by someone else
+          <>
+            <div className="booking-header">
+              <h2 className="booking-title">Trạng thái phòng</h2>
+            </div>
+            <Alert
+              message="Phòng đã có người thuê"
+              description="Phòng này hiện tại đã có người thuê. Không thể đặt lịch xem phòng lúc này. Bạn có thể liên hệ chủ trọ để biết thêm thông tin."
+              type="warning"
+              icon={<StopOutlined />}
+              showIcon
+              style={{
+                marginBottom: "16px",
+                borderRadius: "8px",
+              }}
+            />
+            <div className="costs-section">
+              <h3 className="costs-title">Chi phí tham khảo</h3>
+              <div className="costs-list">
+                {priceData.costs.map((cost, index) => (
+                  <div key={index} className="cost-item">
+                    <span className="cost-label">{cost.label}</span>
+                    <span className="cost-value">{cost.value}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="action-buttons">
+              <Button
+                size="large"
+                className="contact-button"
+                onClick={handleContactLandlord}
+              >
+                Liên hệ chủ trọ
+              </Button>
+            </div>
+          </>
+        ) : (
+          // Scenario 3: Room is available for viewing and booking
+          <>
+            <div className="booking-header">
+              <h2 className="booking-title">Đặt lịch xem phòng hoặc Liên hệ</h2>
+            </div>
 
-        <div className="action-buttons">
-          <Button
-            type="primary"
-            size="large"
-            className="schedule-button"
-            onClick={handleScheduleViewing}
-          >
-            Đặt lịch xem phòng
-          </Button>
-          <Button
-            size="large"
-            className="contact-button"
-            onClick={handleContactLandlord}
-          >
-            Liên hệ chủ trọ
-          </Button>
-        </div>
+            <div className="costs-section">
+              <h3 className="costs-title">Chi phí phát sinh ước tính</h3>
+              <div className="costs-list">
+                {priceData.costs.map((cost, index) => (
+                  <div key={index} className="cost-item">
+                    <span className="cost-label">{cost.label}</span>
+                    <span className="cost-value">{cost.value}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {priceData.deposit && (
+              <div className="deposit-section">
+                <div className="deposit-content">
+                  <InfoCircleOutlined className="deposit-icon" />
+                  <div className="deposit-text">
+                    <div className="deposit-title">{priceData.deposit.title}</div>
+                    <div className="deposit-description">
+                      {priceData.deposit.description}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            <div className="action-buttons">
+              <Button
+                type="primary"
+                size="large"
+                className="schedule-button"
+                onClick={handleScheduleViewing}
+              >
+                Đặt lịch xem phòng
+              </Button>
+              <Button
+                size="large"
+                className="contact-button"
+                onClick={handleContactLandlord}
+              >
+                Liên hệ chủ trọ
+              </Button>
+            </div>
+          </>
+        )}
       </div>
 
       {/* Landlord Section */}
@@ -178,6 +288,7 @@ Price.propTypes = {
       title: PropTypes.string,
       description: PropTypes.string,
     }),
+    roomData: PropTypes.object,
   }),
   landlordData: PropTypes.shape({
     name: PropTypes.string,
@@ -187,6 +298,8 @@ Price.propTypes = {
     isVerified: PropTypes.bool,
     avatar: PropTypes.string,
   }),
+  isUserRenting: PropTypes.bool,
+  isRoomOccupied: PropTypes.bool,
   onScheduleViewing: PropTypes.func,
   onContactLandlord: PropTypes.func,
   onViewContract: PropTypes.func,

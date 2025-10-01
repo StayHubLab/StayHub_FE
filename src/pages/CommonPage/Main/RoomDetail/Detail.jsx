@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import { Row, Col, Spin, Alert, App } from "antd";
-import "./Detail.css";
-import RoomImages from "./RoomImages/RoomImages";
-import RoomInfo from "./LeftContainer/RoomInfo";
-import Price from "./RightContainer/Price";
-import ScheduleBookingModal from "../../../../components/ScheduleBookingModal/ScheduleBookingModal";
+import { Alert, App, Col, Row, Spin } from "antd";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { ContractTemplateModal } from "../../../../components/ContractTemplate";
 import { GoogleMapModal } from "../../../../components/GoogleMapModal";
+import ScheduleBookingModal from "../../../../components/ScheduleBookingModal/ScheduleBookingModal";
+import { useAuth } from "../../../../contexts/AuthContext";
 import roomApi from "../../../../services/api/roomApi";
 import viewingApi from "../../../../services/api/viewingApi";
-import { useAuth } from "../../../../contexts/AuthContext";
+import "./Detail.css";
+import RoomInfo from "./LeftContainer/RoomInfo";
+import Price from "./RightContainer/Price";
+import RoomImages from "./RoomImages/RoomImages";
 
 const Detail = () => {
   const { id: roomId } = useParams();
@@ -26,6 +26,8 @@ const Detail = () => {
   const [isBookingModalVisible, setIsBookingModalVisible] = useState(false);
   const [isContractModalVisible, setIsContractModalVisible] = useState(false);
   const [isMapModalVisible, setIsMapModalVisible] = useState(false);
+  const [isUserRenting, setIsUserRenting] = useState(false);
+  const [isRoomOccupied, setIsRoomOccupied] = useState(false);
 
   // Fetch room data from API
   useEffect(() => {
@@ -57,6 +59,7 @@ const Detail = () => {
 
           // Transform API data to match component structure
           const transformedData = {
+            _id: room._id, 
             title: room.name || "Phòng trọ",
             price: room.price?.rent || room.price || 0,
             rating: room.rating || 4.8,
@@ -142,7 +145,15 @@ const Detail = () => {
               email: room.buildingId?.hostId?.email || room.landlord?.email,
               phone: room.buildingId?.hostId?.phone || room.landlord?.phone,
               // Thêm ID để debug
-              id: room.buildingId?.hostId?._id || room.landlord?.id,
+              id: typeof room.buildingId?.hostId === "object"
+              ? room.buildingId.hostId._id
+              : room.buildingId?.hostId || room.landlord?.id,
+            },
+            // Tenant information to check if current user is renting
+            tenant: {
+              id: room.tenantId?._id || room.tenantId || room.currentTenant?._id || room.currentTenant,
+              name: room.tenantId?.name || room.currentTenant?.name,
+              email: room.tenantId?.email || room.currentTenant?.email,
             },
             ratingBreakdown: {
               location: room.rating || 4.8,
@@ -152,6 +163,28 @@ const Detail = () => {
             },
             reviews: room.reviews || [],
           };
+
+          // Check if current user is renting this room
+          const currentUserRenting = user && transformedData.tenant.id && 
+            (transformedData.tenant.id === user._id || transformedData.tenant.id === user.id);
+          
+          // Check if room is occupied by anyone (has a tenant)
+          const roomOccupied = Boolean(transformedData.tenant.id) || 
+                               room.status === 'occupied' || 
+                               room.status === 'rented' ||
+                               !room.isAvailable;
+          
+          setIsUserRenting(currentUserRenting);
+          setIsRoomOccupied(roomOccupied);
+          
+          console.log("Room occupancy check:", {
+            userId: user?._id || user?.id,
+            tenantId: transformedData.tenant.id,
+            isUserRenting: currentUserRenting,
+            isRoomOccupied: roomOccupied,
+            roomStatus: room.status,
+            isAvailable: room.isAvailable
+          });
 
           setRoomData(transformedData);
 
@@ -189,7 +222,7 @@ const Detail = () => {
     };
 
     fetchRoomData();
-  }, [roomId, message]);
+  }, [roomId, message, user]);
 
   // Loading state
   if (loading) {
@@ -393,7 +426,7 @@ const Detail = () => {
                   value: `${roomData.additionalCosts.service.toLocaleString()} VNĐ/tháng`,
                 },
               ].filter(Boolean), // Lọc bỏ những giá trị null/undefined
-              deposit: roomData.additionalCosts?.deposit
+              deposit: !isRoomOccupied && roomData.additionalCosts?.deposit
                 ? {
                     title: `Đặt cọc: ${roomData.additionalCosts.deposit.toLocaleString()} VNĐ`,
                     description: "Được hoàn trả khi kết thúc hợp đồng",
@@ -415,6 +448,8 @@ const Detail = () => {
               phone: roomData.landlord?.phone,
             }}
             roomData={roomData}
+            isUserRenting={isUserRenting}
+            isRoomOccupied={isRoomOccupied}
             onScheduleViewing={handleScheduleViewing}
             onContactLandlord={handleContactLandlord}
             onViewContract={handleViewContract}

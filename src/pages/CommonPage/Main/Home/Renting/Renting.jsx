@@ -64,9 +64,9 @@ const Renting = ({ bookings = [], loading: loadingProp = false }) => {
           } else {
             const d1 = new Date(
               map[cid]?.dueDate ||
-                map[cid]?.paymentDueDate ||
-                map[cid]?.deadline ||
-                0
+              map[cid]?.paymentDueDate ||
+              map[cid]?.deadline ||
+              0
             );
             const d2 = new Date(
               b?.dueDate || b?.paymentDueDate || b?.deadline || 0
@@ -163,6 +163,15 @@ const Renting = ({ bookings = [], loading: loadingProp = false }) => {
     navigate(`/main/bills`);
   };
 
+  const handleViewRoom = (contract) => {
+    const room = contract?.roomId;
+    if (!room?._id) {
+      message.error("Không tìm thấy thông tin phòng");
+      return;
+    }
+    navigate(`/main/room-detail/${room._id}`);
+  }
+
   const handleReportIssue = () => {
     message.info("Tính năng báo cáo sự cố đang được phát triển");
   };
@@ -210,9 +219,9 @@ const Renting = ({ bookings = [], loading: loadingProp = false }) => {
                 <div className="renting-payment-text">
                   {card.hasPendingMonthly && card.dueDate
                     ? `Đến hạn thanh toán: ${card.dueDate.toLocaleDateString(
-                        "vi-VN"
-                      )}`
-                    : "Chưa đến tháng"}
+                      "vi-VN"
+                    )}`
+                    : "Chưa đến hạn thanh toán"}
                 </div>
               </div>
 
@@ -235,13 +244,23 @@ const Renting = ({ bookings = [], loading: loadingProp = false }) => {
                     <div className="renting-pay-text">Thanh toán ngay</div>
                   </div>
 
-                  {/* Report Issue Button */}
+                  {/* View room details */}
+                  <div
+                    className="renting-view-button"
+                    onClick={() => handleViewRoom(card.contract)}
+                  >
+                    <div className="renting-view-text">Xem chi tiết</div>
+                  </div>
+
+                  {/* Report Issue Button
                   <div
                     className="renting-report-button"
                     onClick={handleReportIssue}
                   >
                     <div className="renting-report-text">Báo cáo sự cố</div>
-                  </div>
+                  </div> */}
+
+
                 </div>
               </div>
               {/* Chat with Landlord */}

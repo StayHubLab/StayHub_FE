@@ -150,20 +150,20 @@ const Footer = () => {
                 <Title level={5} className="section-title">
                   Liên hệ
                 </Title>
-                <div className="contact-info">
-                  <div className="contact-item">
-                    <EnvironmentOutlined className="contact-icon" />
-                    <Text className="contact-footer">
+                <div className="stayhub-contact-info">
+                  <div className="stayhub-contact-item">
+                    <EnvironmentOutlined className="stayhub-contact-icon" />
+                    <Text className="stayhub-contact-footer">
                       FPT Da Nang University
                     </Text>
                   </div>
-                  <div className="contact-item">
-                    <MailOutlined className="contact-icon" />
-                    <Text className="contact-footer">stayhub56@gmail.com</Text>
+                  <div className="stayhub-contact-item">
+                    <MailOutlined className="stayhub-contact-icon" />
+                    <Text className="stayhub-contact-footer">stayhub56@gmail.com</Text>
                   </div>
-                  <div className="contact-item">
-                    <PhoneOutlined className="contact-icon" />
-                    <Text className="contact-footer">0000 000 000</Text>
+                  <div className="stayhub-contact-item">
+                    <PhoneOutlined className="stayhub-contact-icon" />
+                    <Text className="stayhub-contact-footer">0000 000 000</Text>
                   </div>
                 </div>
               </div>

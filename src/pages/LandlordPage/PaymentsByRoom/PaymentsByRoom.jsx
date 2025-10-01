@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState, useCallback } from "react";
 import {
   Table,
   Typography,
@@ -14,6 +14,7 @@ import {
 } from "antd";
 import { PlusOutlined, DollarOutlined } from "@ant-design/icons";
 import billApi from "../../../services/api/billApi";
+import roomApi from "../../../services/api/roomApi";
 import { useAuth } from "../../../contexts/AuthContext";
 
 const { Title } = Typography;
@@ -39,14 +40,14 @@ const PaymentsByRoom = () => {
   const [year, setYear] = useState(new Date().getFullYear());
   const [loading, setLoading] = useState(false);
   const [bills, setBills] = useState([]);
+  const [rooms, setRooms] = useState([]);
   const [createBillModal, setCreateBillModal] = useState(false);
   const [selectedRoom, setSelectedRoom] = useState(null);
   const [form] = Form.useForm();
-  const [calculatedTotal, setCalculatedTotal] = useState(0);
   const [unitPrices, setUnitPrices] = useState({
     rent: 0,
-    electricity: 0,
-    water: 0,
+    electricity: 4000,
+    water: 20000,
     service: 0,
   });
 
@@ -54,12 +55,29 @@ const PaymentsByRoom = () => {
     if (!user?._id) return;
     setLoading(true);
     try {
-      const resp = await billApi.listByHost(user._id);
-      const items = Array.isArray(resp?.data)
-        ? resp.data
-        : resp?.data?.items || [];
-      console.log("Fetched bills data:", items);
-      setBills(items || []);
+      // Fetch bills data
+      const billResp = await billApi.listByHost(user._id);
+      const billItems = Array.isArray(billResp?.data)
+        ? billResp.data
+        : billResp?.data?.items || [];
+      console.log("Fetched bills data:", billItems);
+      setBills(billItems || []);
+
+      // Fetch rooms data to get pricing information
+      try {
+        const roomResp = await roomApi.getRooms({ hostId: user._id, populate: 'buildingId' });
+        const roomItems = Array.isArray(roomResp?.data)
+          ? roomResp.data
+          : roomResp?.data?.items || [];
+        console.log("Fetched rooms data:", roomItems);
+        setRooms(roomItems || []);
+      } catch (roomError) {
+        console.error("Error fetching rooms data:", roomError);
+        // Continue without rooms data, fallback to bills
+        setRooms([]);
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
     } finally {
       setLoading(false);
     }
@@ -70,43 +88,34 @@ const PaymentsByRoom = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user?._id]);
 
-  const handleCreateBill = (roomName) => {
+  const handleCreateBill = useCallback((roomName) => {
     setSelectedRoom(roomName);
     setCreateBillModal(true);
-    setCalculatedTotal(0);
     form.resetFields();
 
     // Prefill current month/year
     const now = new Date();
     form.setFieldsValue({ month: now.getMonth() + 1, year: now.getFullYear() });
 
-    // Prefill unit prices from latest bill's contract/room
-    const roomBills = bills.filter((b) => {
-      const billRoomName =
-        b?.contractId?.roomId?.name ||
-        b?.contractId?.roomId?.code ||
-        b?.contractId?.roomId?.roomCode ||
-        "N/A";
-      return billRoomName === roomName;
+    // Get unit prices from rooms data
+    const room = rooms.find((r) => {
+      const roomIdentifier = r?.name || r?.code || r?.roomCode || "N/A";
+      return roomIdentifier === roomName;
     });
 
-    console.log("Room bills for", roomName, ":", roomBills);
+    console.log("Found room for", roomName, ":", room);
+    console.log("Room price data:", room?.price);
 
-    if (roomBills.length > 0) {
-      const latest = roomBills[0];
-      console.log("Latest bill data:", latest);
-      console.log("Room data:", latest?.contractId?.roomId);
-      console.log("Price data:", latest?.contractId?.roomId?.price);
-
-      const price = latest?.contractId?.roomId?.price || {};
+    if (room && room.price) {
+      const price = room.price;
       const nextUnitPrices = {
         rent: Number(price?.rent) || 0,
-        electricity: Number(price?.electricity) || 0,
-        water: Number(price?.water) || 0,
+        electricity: Number(price?.electricity) || 0, // Default electricity price
+        water: Number(price?.water) || 0, // Default water price
         service: Number(price?.service) || 0,
       };
 
-      console.log("Unit prices:", nextUnitPrices);
+      console.log("Unit prices from room:", nextUnitPrices);
       setUnitPrices(nextUnitPrices);
       form.setFieldsValue({
         rent: nextUnitPrices.rent,
@@ -115,16 +124,59 @@ const PaymentsByRoom = () => {
         waterQty: 0,
       });
     } else {
-      console.log("No bills found for room:", roomName);
-      setUnitPrices({ rent: 0, electricity: 0, water: 0, service: 0 });
-      form.setFieldsValue({
-        rent: 0,
-        service: 0,
-        electricityQty: 0,
-        waterQty: 0,
+      // Fallback: try to get from existing bills if room data is not available
+      const roomBills = bills.filter((b) => {
+        const billRoomName =
+          b?.contractId?.roomId?.name ||
+          b?.contractId?.roomId?.code ||
+          b?.contractId?.roomId?.roomCode ||
+          "N/A";
+        return billRoomName === roomName;
       });
+
+      console.log("Room bills for", roomName, ":", roomBills);
+
+      if (roomBills.length > 0) {
+        const latest = roomBills[0];
+        console.log("Latest bill data:", latest);
+        console.log("Room data from bill:", latest?.contractId?.roomId);
+        console.log("Price data from bill:", latest?.contractId?.roomId?.price);
+
+        const price = latest?.contractId?.roomId?.price || {};
+        const nextUnitPrices = {
+          rent: Number(price?.rent) || 0,
+          electricity: Number(price?.electricity) || 0,
+          water: Number(price?.water) || 0,
+          service: Number(price?.service) || 0,
+        };
+
+        console.log("Unit prices from bill:", nextUnitPrices);
+        setUnitPrices(nextUnitPrices);
+        form.setFieldsValue({
+          rent: nextUnitPrices.rent,
+          service: nextUnitPrices.service,
+          electricityQty: 0,
+          waterQty: 0,
+        });
+      } else {
+        console.log("No room or bill data found for:", roomName);
+        // Set default prices
+        const defaultPrices = {
+          rent: 0,
+          electricity: 4000, // Default VNĐ/kWh
+          water: 20000, // Default VNĐ/m³
+          service: 0,
+        };
+        setUnitPrices(defaultPrices);
+        form.setFieldsValue({
+          rent: 0,
+          service: 0,
+          electricityQty: 0,
+          waterQty: 0,
+        });
+      }
     }
-  };
+  }, [rooms, bills, form]);
 
   const handleAmountChange = () => {
     const values = form.getFieldsValue();
@@ -136,7 +188,6 @@ const PaymentsByRoom = () => {
       electricityAmount +
       waterAmount +
       (values.service || 0);
-    setCalculatedTotal(total);
     form.setFieldsValue({ totalAmount: total });
   };
 
@@ -337,7 +388,7 @@ const PaymentsByRoom = () => {
       },
     }));
     return [...base, ...monthCols];
-  }, []);
+  }, [handleCreateBill]);
 
   const dataSource = useMemo(() => {
     return (roomsMonthly || []).map((r) => {
@@ -398,7 +449,6 @@ const PaymentsByRoom = () => {
         onCancel={() => {
           setCreateBillModal(false);
           setSelectedRoom(null);
-          setCalculatedTotal(0);
           form.resetFields();
         }}
         footer={
@@ -407,7 +457,6 @@ const PaymentsByRoom = () => {
               onClick={() => {
                 setCreateBillModal(false);
                 setSelectedRoom(null);
-                setCalculatedTotal(0);
                 form.resetFields();
               }}
             >

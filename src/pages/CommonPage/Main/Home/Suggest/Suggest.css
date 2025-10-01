@@ -152,7 +152,7 @@
 
 /* Verified Badge */
 .suggest-verified-badge {
-  width: 106.12px;
+  width: auto;
   height: 24px;
   position: absolute;
   top: 12px;

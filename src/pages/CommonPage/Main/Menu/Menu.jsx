@@ -1,18 +1,17 @@
-import React, { useState } from "react";
 import {
+  CalendarOutlined,
+  CustomerServiceOutlined,
+  FileTextOutlined,
+  HeartOutlined,
+  HistoryOutlined,
   HomeOutlined,
   SearchOutlined,
-  HeartOutlined, // Use HeartOutlined instead of FavoriteOutlined
-  FileTextOutlined, // Use FileTextOutlined instead of DocumentOutlined
-  HistoryOutlined,
-  CustomerServiceOutlined, // Use CustomerServiceOutlined instead of SupportOutlined
-  SettingOutlined, // Use SettingOutlined instead of SettingsOutlined
+  SettingOutlined,
   StarOutlined,
-  CalendarOutlined, // For viewing appointments
 } from "@ant-design/icons";
-import "./Menu.css";
-
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import "./Menu.css";
 
 const Menu = () => {
   const [activeItem, setActiveItem] = useState("home");

@@ -15,13 +15,14 @@ import PaymentResult from "../../pages/CommonPage/Main/PaymentResult/PaymentResu
 // import History from '../../pages/CommonPage/Main/History/History';
 // import Support from '../../pages/CommonPage/Main/Support/Support';
 // import Settings from '../../pages/CommonPage/Main/Settings/Settings';
-
+import ChatPage from "pages/Chat/ChatPage";
 const CommonRoutes = () => {
   return (
     <Routes>
       <Route path="/" element={<ProtectedRedirect />} />
       <Route path="/landing" element={<LandingPage />} />
       <Route path="/profile" element={<Profile />} />
+      <Route path="/chat" element={<ChatPage />} />
       <Route path="/main" element={<Main />}>
         <Route path="home" element={<Home />} />
         <Route path="room-detail/:id" element={<RoomDetail />} />
