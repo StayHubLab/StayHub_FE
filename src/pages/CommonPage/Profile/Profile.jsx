@@ -1,32 +1,34 @@
-import React, { useState, useEffect } from "react";
 import {
-  Card,
-  Form,
-  Input,
-  Button,
-  Avatar,
-  Typography,
-  Row,
-  Col,
-  Tabs,
-  Upload,
-  notification,
-  Divider,
-  Switch,
-  Space,
-  Select,
-} from "antd";
-import {
-  UserOutlined,
-  SettingOutlined,
-  KeyOutlined,
-  HomeOutlined,
+  BankOutlined,
   CameraOutlined,
+  CreditCardOutlined,
   EditOutlined,
-  SaveOutlined,
+  HomeOutlined,
+  KeyOutlined,
   MailOutlined,
   PhoneOutlined,
+  SaveOutlined,
+  SettingOutlined,
+  UserOutlined,
 } from "@ant-design/icons";
+import {
+  Avatar,
+  Button,
+  Card,
+  Col,
+  Divider,
+  Form,
+  Input,
+  Row,
+  Select,
+  Space,
+  Switch,
+  Tabs,
+  Typography,
+  Upload,
+  notification,
+} from "antd";
+import { useEffect, useState } from "react";
 import { useAuth } from "../../../contexts/AuthContext";
 import authApi from "../../../services/api/authApi";
 import {
@@ -56,6 +58,8 @@ const Profile = () => {
   const [selectedProvinceId, setSelectedProvinceId] = useState(null);
 
   useEffect(() => {
+    console.log("🐛 BankInfo nhận từ backend:", user?.bankInfo);
+
     if (user) {
       form.setFieldsValue({
         name: user.name,
@@ -63,10 +67,15 @@ const Profile = () => {
         phone: user.phone,
         bio: user.bio || "",
         detailedAddress: user.address?.street || "",
+        bankInfo: {
+          bankName: user.bankInfo?.bankName || "",
+          accountNumber: user.bankInfo?.accountNumber || "",
+        },
       });
-      setAvatarUrl(user.avatar || "");
+      setAvatarUrl(user.avatar?.url || "");
     }
   }, [user, form]);
+
 
   // Load provinces on mount
   useEffect(() => {
@@ -167,7 +176,6 @@ const Profile = () => {
   const handleUpdateProfile = async (values) => {
     setLoading(true);
     try {
-      // Build address payload similar to Register
       const provinceObj = provinces.find((p) => p.code === values.province);
       const wardObj = wards.find((w) => w.code === values.ward);
 
@@ -177,7 +185,6 @@ const Profile = () => {
         wardCode: values.ward || null,
         wardName: wardObj ? formatWardName(wardObj) : null,
         street: values.detailedAddress || "",
-        // Fields commonly expected by backend
         ward: wardObj ? formatWardName(wardObj) : "",
         district: provinceObj ? formatProvinceName(provinceObj) : "",
         city: provinceObj ? formatProvinceName(provinceObj) : "",
@@ -189,14 +196,20 @@ const Profile = () => {
         phone: values.phone,
         bio: values.bio,
         address,
+        bankInfo: values.bankInfo, // ✅ lấy trực tiếp từ form
       };
+
+      // 👉 log dữ liệu form build ra
+      console.log("📤 Payload gửi lên backend:", payload);
 
       await authApi.updateProfile(payload);
 
-      // Refresh user data
       const profileData = await authApi.getProfile();
+
+      // 👉 log dữ liệu backend trả về
+      console.log("📥 Profile backend trả về:", profileData);
+
       if (profileData?.data) {
-        // Update AuthContext with new user data
         notification.success({
           message: "Thành công",
           description: "Cập nhật thông tin thành công!",
@@ -204,6 +217,7 @@ const Profile = () => {
         setEditMode(false);
       }
     } catch (error) {
+      console.error("❌ Lỗi cập nhật profile:", error);
       notification.error({
         message: "Lỗi",
         description: error?.response?.data?.message || "Cập nhật thất bại!",
@@ -212,6 +226,8 @@ const Profile = () => {
       setLoading(false);
     }
   };
+
+
 
   const handleChangePassword = async (values) => {
     setLoading(true);
@@ -375,10 +391,10 @@ const Profile = () => {
                       !selectedProvinceId
                         ? "Vui lòng chọn tỉnh/thành phố trước"
                         : loadingWards
-                        ? "Đang tải phường/xã..."
-                        : wards.length === 0
-                        ? "Không có dữ liệu phường/xã"
-                        : "Chọn phường/xã"
+                          ? "Đang tải phường/xã..."
+                          : wards.length === 0
+                            ? "Không có dữ liệu phường/xã"
+                            : "Chọn phường/xã"
                     }
                     loading={loadingWards}
                     disabled={!selectedProvinceId || loadingWards}
@@ -406,11 +422,42 @@ const Profile = () => {
                   />
                 </Form.Item>
               </Col>
+              <Divider orientation="left">Thông tin ngân hàng</Divider>
+              <Row gutter={[16, 16]}>
+                <Col xs={24} md={12}>
+                  <Form.Item
+                    name={["bankInfo", "bankName"]}
+                    label="Tên ngân hàng"
+                    rules={[{ required: true, message: "Vui lòng nhập tên ngân hàng!" }]}
+                  >
+                    <Input
+                      prefix={<BankOutlined />}
+                      placeholder="Ví dụ: Vietcombank, Techcombank..."
+                    />
+                  </Form.Item>
+                </Col>
+                <Col xs={24} md={12}>
+                  <Form.Item
+                    name={["bankInfo", "accountNumber"]}
+                    label="Số tài khoản"
+                    rules={[
+                      { required: true, message: "Vui lòng nhập số tài khoản!" },
+                      { pattern: /^[0-9]{6,20}$/, message: "Số tài khoản không hợp lệ!" },
+                    ]}
+                  >
+                    <Input
+                      prefix={<CreditCardOutlined />}
+                      placeholder="Nhập số tài khoản ngân hàng"
+                    />
+                  </Form.Item>
+                </Col>
+              </Row>
             </Row>
           </Form>
         </div>
       ),
     },
+
     {
       key: "2",
       label: (
@@ -607,6 +654,12 @@ const Profile = () => {
                       </Text>
                       <Text className="profile-phone" type="secondary">
                         <PhoneOutlined /> {user?.phone}
+                      </Text>
+                      <Text className="profile-bank" type="secondary">
+                        <BankOutlined /> {user?.bankInfo?.bankName || "Chưa có ngân hàng"}
+                      </Text>
+                      <Text className="profile-bank" type="secondary">
+                        <CreditCardOutlined /> {user?.bankInfo?.accountNumber || "Chưa có số tài khoản"}
                       </Text>
                     </Space>
                   </div>

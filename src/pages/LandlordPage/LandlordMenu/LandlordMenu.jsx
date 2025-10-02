@@ -88,6 +88,13 @@ const LandlordMenu = () => {
       isActive: false,
       route: "/landlord/support",
     },
+    {
+      id: "chat",
+      label: "Nhắn tin",
+      icon: <CustomerServiceOutlined />,
+      isActive: false,
+      route: "/landlord/chat",
+    },
   ];
 
   const handleItemClick = (itemId, route) => {

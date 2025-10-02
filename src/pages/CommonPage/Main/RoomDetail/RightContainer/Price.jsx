@@ -11,7 +11,8 @@ import {
   StopOutlined,
 } from "@ant-design/icons";
 import "./Price.css";
-
+import { useNavigate } from "react-router-dom";
+import chatService from "../../../../../services/api/chatService";
 const Price = ({
   priceData = {
     costs: [
@@ -37,19 +38,42 @@ const Price = ({
   },
   isUserRenting = false,
   isRoomOccupied = false,
+  roomData,
   onScheduleViewing,
   onContactLandlord,
   onViewContract,
 }) => {
+  const navigate = useNavigate();
   const handleScheduleViewing = () => {
     if (onScheduleViewing) {
       onScheduleViewing();
     }
   };
 
-  const handleContactLandlord = () => {
-    if (onContactLandlord) {
-      onContactLandlord();
+  const handleContactLandlord = async () => {
+    try {
+      const recipientId =
+        typeof roomData?.landlord?.id === "object"
+          ? roomData.landlord.id._id
+          : roomData?.landlord?.id;
+  
+      if (!recipientId) {
+        console.error("❌ Không tìm thấy hostId (landlord id)");
+        return;
+      }
+  
+      console.log("RecipientId (landlord):", recipientId);
+  
+      const res = await chatService.createConversation(recipientId);
+      const conversation = res.data.conversation;
+  
+      if (conversation?._id) {
+        navigate(`/chat?conversationId=${conversation._id}`);
+      } else {
+        console.error("❌ Không tạo được conversation");
+      }
+    } catch (err) {
+      console.error("Error creating conversation:", err);
     }
   };
 
@@ -265,6 +289,7 @@ Price.propTypes = {
       title: PropTypes.string,
       description: PropTypes.string,
     }),
+    roomData: PropTypes.object,
   }),
   landlordData: PropTypes.shape({
     name: PropTypes.string,

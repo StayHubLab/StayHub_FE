@@ -1,39 +1,39 @@
-import React from "react";
-import { Routes, Route } from "react-router-dom";
-import LandingPage from "../pages/CommonPage/Landing/LandingPage";
-import ProtectedRedirect from "../components/ProtectedRedirect/ProtectedRedirect";
+import ChatPage from "pages/Chat/ChatPage";
+import Bills from "pages/CommonPage/Main/Bill/Bills";
+import PaymentResult from "pages/CommonPage/Main/PaymentResult/PaymentResult";
+import BookingCalendar from "pages/LandlordPage/BookingCalendar/BookingCalendar";
+import Buildings from "pages/LandlordPage/Buildings/Buildings";
+import ContractsTab from "pages/LandlordPage/Contracts/ContractsTab";
+import PaymentsByRoom from "pages/LandlordPage/PaymentsByRoom/PaymentsByRoom";
+import { Route, Routes } from "react-router-dom";
 import LandlordProtectedRoute from "../components/LandlordProtectedRoute/LandlordProtectedRoute";
+import ProtectedRedirect from "../components/ProtectedRedirect/ProtectedRedirect";
 import RenterProtectedRoute from "../components/RenterProtectedRoute/RenterProtectedRoute";
-import Main from "../pages/CommonPage/Main/Main";
-import Home from "../pages/CommonPage/Main/Home/Home";
-import Review from "../pages/CommonPage/Main/Review/Review";
+import CreateBuilding from "../pages/AuthPage/CreateBuilding/CreateBuilding";
+import Forgot from "../pages/AuthPage/Forgot/Forgot";
+import Login from "../pages/AuthPage/Login/Login";
+import Register from "../pages/AuthPage/Register/Register";
+import Start from "../pages/AuthPage/Start/Start";
+import Verify from "../pages/AuthPage/Verify/Verify";
+import LandingPage from "../pages/CommonPage/Landing/LandingPage";
+import ContractPage from "../pages/CommonPage/Main/Contract/Contract";
 import Find from "../pages/CommonPage/Main/FindRoom/FindRoom";
+import Home from "../pages/CommonPage/Main/Home/Home";
+import Main from "../pages/CommonPage/Main/Main";
+import Review from "../pages/CommonPage/Main/Review/Review";
+import RoomListWithReviews from "../pages/CommonPage/Main/RoomListWithReviews/RoomListWithReviews";
 import RoomDetail from "../pages/CommonPage/Main/RoomDetail/Detail";
 import Saved from "../pages/CommonPage/Main/Saved/SavedRoom";
 import ViewingAppointments from "../pages/CommonPage/Main/ViewingAppointments/ViewingAppointments";
-import ContractPage from "../pages/CommonPage/Main/Contract/Contract";
 import Profile from "../pages/CommonPage/Profile/Profile";
-import Start from "../pages/AuthPage/Start/Start";
-import Register from "../pages/AuthPage/Register/Register";
-import Login from "../pages/AuthPage/Login/Login";
-import Forgot from "../pages/AuthPage/Forgot/Forgot";
-import Verify from "../pages/AuthPage/Verify/Verify";
-import CreateBuilding from "../pages/AuthPage/CreateBuilding/CreateBuilding";
-import LandlordPage from "../pages/LandlordPage/LandlordPage";
 import Dashboard from "../pages/LandlordPage/Dashboard/Dashboard";
+import LandlordPage from "../pages/LandlordPage/LandlordPage";
 import ManageRoom from "../pages/LandlordPage/ManageRoom/ManageRoom";
 import ManageTenants from "../pages/LandlordPage/ManageTenants/ManageTenants";
-import Transaction from "../pages/LandlordPage/Transaction/Transaction";
-import Subscription from "../pages/LandlordPage/Subscription/Subscription";
 import Settings from "../pages/LandlordPage/Settings/Settings";
+import Subscription from "../pages/LandlordPage/Subscription/Subscription";
 import Support from "../pages/LandlordPage/Support/Support";
-import ContractsTab from "pages/LandlordPage/Contracts/ContractsTab";
-import Bills from "pages/CommonPage/Main/Bill/Bills";
-import PaymentResult from "pages/CommonPage/Main/PaymentResult/PaymentResult";
-import PaymentsByRoom from "pages/LandlordPage/PaymentsByRoom/PaymentsByRoom";
-import Buildings from "pages/LandlordPage/Buildings/Buildings";
-import BookingCalendar from "pages/LandlordPage/BookingCalendar/BookingCalendar";
-
+import Transaction from "../pages/LandlordPage/Transaction/Transaction";
 const AppRoutes = () => {
   return (
     <Routes>
@@ -41,6 +41,7 @@ const AppRoutes = () => {
       <Route path="/" element={<ProtectedRedirect />} />
       <Route path="/landing" element={<LandingPage />} />
       <Route path="/profile" element={<Profile />} />
+      <Route path="/chat" element={<ChatPage />} />
       <Route
         path="/main"
         element={
@@ -56,6 +57,7 @@ const AppRoutes = () => {
         <Route path="viewing-appointments" element={<ViewingAppointments />} />
         <Route path="contract" element={<ContractPage />} />
         <Route path="review" element={<Review />} />
+        <Route path="rooms-with-reviews" element={<RoomListWithReviews />} />
         <Route path="payment-result" element={<PaymentResult />} />
         <Route path="bills" element={<Bills />} />
         <Route index element={<Home />} />
@@ -97,6 +99,7 @@ const AppRoutes = () => {
         <Route path="payments-by-room" element={<PaymentsByRoom />} />
         <Route path="booking-calendar" element={<BookingCalendar />} />
         <Route path="buildings" element={<Buildings />} />
+        <Route path="chat" element={<ChatPage />} />
       </Route>
     </Routes>
   );

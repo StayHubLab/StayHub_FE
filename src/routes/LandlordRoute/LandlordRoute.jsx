@@ -1,17 +1,16 @@
-import React from "react";
-import { Routes, Route } from "react-router-dom";
-import LandlordPage from "../../pages/LandlordPage/LandlordPage";
+import ChatPage from "pages/Chat/ChatPage";
+import { Route, Routes } from "react-router-dom";
+import Buildings from "../../pages/LandlordPage/Buildings/Buildings";
+import ContractsTab from "../../pages/LandlordPage/Contracts/ContractsTab";
 import Dashboard from "../../pages/LandlordPage/Dashboard/Dashboard";
+import LandlordPage from "../../pages/LandlordPage/LandlordPage";
 import ManageRoom from "../../pages/LandlordPage/ManageRoom/ManageRoom";
 import ManageTenants from "../../pages/LandlordPage/ManageTenants/ManageTenants";
-import Transaction from "../../pages/LandlordPage/Transaction/Transaction";
-import Subscription from "../../pages/LandlordPage/Subscription/Subscription";
-import Settings from "../../pages/LandlordPage/Settings/Settings";
-import Support from "../../pages/LandlordPage/Support/Support";
-import ContractsTab from "../../pages/LandlordPage/Contracts/ContractsTab";
 import PaymentsByRoom from "../../pages/LandlordPage/PaymentsByRoom/PaymentsByRoom";
-import Buildings from "../../pages/LandlordPage/Buildings/Buildings";
-
+import Settings from "../../pages/LandlordPage/Settings/Settings";
+import Subscription from "../../pages/LandlordPage/Subscription/Subscription";
+import Support from "../../pages/LandlordPage/Support/Support";
+import Transaction from "../../pages/LandlordPage/Transaction/Transaction";
 const LandlordRoute = () => {
   return (
     <Routes>
@@ -27,6 +26,7 @@ const LandlordRoute = () => {
         <Route path="settings" element={<Settings />} />
         <Route path="support" element={<Support />} />
         <Route path="contracts" element={<ContractsTab />} />
+        <Route path="chat" element={<ChatPage />} />
       </Route>
     </Routes>
   );

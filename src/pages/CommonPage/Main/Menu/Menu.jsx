@@ -87,7 +87,7 @@ const Menu = () => {
       label: "Đánh giá",
       icon: <StarOutlined />,
       isActive: false,
-      route: "/main/review",
+      route: "/main/rooms-with-reviews",
     },
   ];
 
