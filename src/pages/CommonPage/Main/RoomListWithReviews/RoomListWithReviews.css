@@ -418,3 +418,90 @@
     font-size: 24px !important;
   }
 }
+
+/* ===== TABS STYLING ===== */
+.review-tabs {
+  margin-bottom: 32px;
+}
+
+.review-tabs .ant-tabs-nav {
+  margin-bottom: 24px !important;
+}
+
+.review-tabs .ant-tabs-tab {
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  padding: 12px 24px !important;
+}
+
+.review-tabs .ant-tabs-tab-active {
+  background: linear-gradient(135deg, var(--primary-color) 0%, #6366F1 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.review-tabs .ant-tabs-ink-bar {
+  background: var(--primary-color) !important;
+  height: 3px !important;
+}
+
+/* ===== REVIEWED BADGE ===== */
+.reviewed-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 10;
+  font-weight: 600 !important;
+  border-radius: 20px !important;
+  padding: 4px 12px !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.reviewed-badge-inline {
+  margin-bottom: 8px;
+  font-weight: 600 !important;
+  border-radius: 20px !important;
+  padding: 4px 12px !important;
+}
+
+/* ===== SELECTED TARGET INFO ===== */
+.selected-landlord-info {
+  background: linear-gradient(135deg, #F8F9FF 0%, #F0F2FF 100%);
+  border-radius: var(--border-radius);
+  padding: 24px;
+  margin-bottom: 24px;
+  border: 1px solid var(--border-color);
+}
+
+.selected-landlord-info .ant-space {
+  margin-top: 16px;
+}
+
+.selected-landlord-info .ant-typography {
+  color: var(--text-secondary) !important;
+  font-size: 14px !important;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.selected-landlord-info .anticon {
+  color: var(--primary-color);
+}
+
+/* ===== RESPONSIVE ADJUSTMENTS ===== */
+@media (max-width: 768px) {
+  .review-tabs .ant-tabs-tab {
+    font-size: 14px !important;
+    padding: 8px 16px !important;
+  }
+  
+  .landlord-card {
+    min-height: auto;
+  }
+  
+  .landlord-card-content {
+    padding: 16px;
+  }
+}

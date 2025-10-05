@@ -6,7 +6,6 @@ import RoomImages from "./RoomImages/RoomImages";
 import RoomInfo from "./LeftContainer/RoomInfo";
 import Price from "./RightContainer/Price";
 import ScheduleBookingModal from "../../../../components/ScheduleBookingModal/ScheduleBookingModal";
-import { ContractTemplateModal } from "../../../../components/ContractTemplate";
 import { GoogleMapModal } from "../../../../components/GoogleMapModal";
 import roomApi from "../../../../services/api/roomApi";
 import viewingApi from "../../../../services/api/viewingApi";
@@ -480,12 +479,6 @@ const Detail = () => {
           }}
         />
       )}
-
-      {/* Contract Template Modal */}
-      <ContractTemplateModal
-        visible={isContractModalVisible}
-        onClose={handleCloseContractModal}
-      />
 
       {/* Google Map Modal */}
       <GoogleMapModal

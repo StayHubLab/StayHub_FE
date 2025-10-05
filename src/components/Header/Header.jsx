@@ -67,7 +67,7 @@ const Header = () => {
         </div>
 
         {/* Search (ẩn trên mobile) */}
-        <div className="search-section">
+        {/* <div className="search-section">
           <div className="search-container">
             <SearchOutlined className="search-icon" />
             <Input
@@ -86,7 +86,7 @@ const Header = () => {
               Tìm kiếm
             </Button>
           </div>
-        </div>
+        </div> */}
 
         {/* Right section desktop */}
         <div className="desktop-nav">
@@ -100,14 +100,14 @@ const Header = () => {
               >
                 Phòng yêu thích
               </Button>
-              <Button
+              {/* <Button
                 type="text"
                 icon={<HistoryOutlined />}
                 onClick={() => navigate("/rental-history")}
                 className="nav-link"
               >
                 Lịch sử thuê
-              </Button>
+              </Button> */}
               <Button
                 type="text"
                 icon={<QuestionCircleOutlined />}

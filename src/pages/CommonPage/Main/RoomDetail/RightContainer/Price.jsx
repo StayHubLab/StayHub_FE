@@ -254,7 +254,7 @@ const Price = ({
         )}
       </div>
 
-      {/* Contract Section */}
+      {/* Contract Section
       <div className="contract-card">
         <div className="contract-header">
           <h2 className="contract-title">Hợp đồng mẫu tham khảo</h2>
@@ -272,7 +272,7 @@ const Price = ({
         >
           Xem Hợp đồng Mẫu
         </Button>
-      </div>
+      </div> */}
     </div>
   );
 };

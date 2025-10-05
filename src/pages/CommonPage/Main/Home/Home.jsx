@@ -160,7 +160,7 @@ const Home = () => {
         loading={loading}
         onRoomLike={handleRoomLike}
       />
-      <Activity activities={activities} loading={loading} />
+      {/* <Activity activities={activities} loading={loading} /> */}
     </div>
   );
 };

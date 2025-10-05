@@ -41,10 +41,6 @@ export default function ChatPage() {
       return;
     }
 
-    // Debug current user and token
-    console.log("🔑 Current user:", currentUser);
-    console.log("🔑 Token found:", token.substring(0, 20) + "...");
-
     // Connect to socket
     const socket = socketService.connect(token);
     
@@ -64,8 +60,6 @@ export default function ChatPage() {
 
     // Setup socket event listeners
     const handleNewMessage = (msg) => {
-      console.log("📩 Received new message:", msg);
-      
       // Only add message if it belongs to current conversation
       if (selectedConv && msg.conversationId === selectedConv._id) {
         setMessages(prev => {
@@ -106,12 +100,10 @@ export default function ChatPage() {
     };
 
     const handleUserOnline = ({ userId, userName }) => {
-      console.log(`✅ ${userName} is online`);
       setOnlineUsers(prev => new Set([...prev, userId]));
     };
 
     const handleUserOffline = ({ userId, userName }) => {
-      console.log(`❌ ${userName} is offline`);
       setOnlineUsers(prev => {
         const newSet = new Set(prev);
         newSet.delete(userId);
@@ -128,17 +120,14 @@ export default function ChatPage() {
     // Monitor connection status
     if (socket) {
       socket.on('connect', () => {
-        console.log('🔄 Socket connected successfully');
         setIsSocketConnected(true);
       });
 
       socket.on('disconnect', () => {
-        console.log('🔄 Socket disconnected');
         setIsSocketConnected(false);
       });
 
       socket.on('connect_error', (error) => {
-        console.error('🚨 Socket connection error:', error);
         setIsSocketConnected(false);
         
         if (error.message.includes('User not found')) {
@@ -267,7 +256,6 @@ export default function ChatPage() {
       
       if (!socketSent) {
         // Fallback to REST API if socket fails
-        console.log("📡 Socket not connected, using REST API fallback");
         await chatService.sendMessage(selectedConv._id, messageContent);
         
         // Manually add message to UI since socket isn't working
@@ -458,11 +446,11 @@ export default function ChatPage() {
                     <h6>
                       {getOtherParticipant(selectedConv)?.name || "Ẩn danh"}
                     </h6>
-                    <span className="status">
+                    {/* <span className="status">
                       {isUserOnline(getOtherParticipant(selectedConv)?._id) 
                         ? "Đang hoạt động" 
                         : "Không hoạt động"}
-                    </span>
+                    </span> */}
                   </div>
                 </div>
                 <div className="chat-connection-status">

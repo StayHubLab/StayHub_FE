@@ -7,6 +7,7 @@ import LandlordPage from "../../pages/LandlordPage/LandlordPage";
 import ManageRoom from "../../pages/LandlordPage/ManageRoom/ManageRoom";
 import ManageTenants from "../../pages/LandlordPage/ManageTenants/ManageTenants";
 import PaymentsByRoom from "../../pages/LandlordPage/PaymentsByRoom/PaymentsByRoom";
+import PaymentApprovalDashboard from "../../pages/LandlordPage/PaymentApproval/PaymentApprovalDashboard";
 import Settings from "../../pages/LandlordPage/Settings/Settings";
 import Subscription from "../../pages/LandlordPage/Subscription/Subscription";
 import Support from "../../pages/LandlordPage/Support/Support";
@@ -22,6 +23,7 @@ const LandlordRoute = () => {
         <Route path="transaction" element={<Transaction />} />
         <Route path="buildings" element={<Buildings />} />
         <Route path="payments-by-room" element={<PaymentsByRoom />} />
+        <Route path="payment-approvals" element={<PaymentApprovalDashboard />} />
         <Route path="subscription" element={<Subscription />} />
         <Route path="settings" element={<Settings />} />
         <Route path="support" element={<Support />} />

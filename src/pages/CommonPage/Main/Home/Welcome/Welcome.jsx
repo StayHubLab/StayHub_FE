@@ -59,14 +59,14 @@ const Welcome = ({ user }) => {
         </div>
 
         {/* Report Issue Button */}
-        <div className="action-button warning" onClick={handleReportIssue}>
+        {/* <div className="action-button warning" onClick={handleReportIssue}>
           <div className="button-icon-container">
             <div className="button-icon">
               <WarningOutlined style={{ fontSize: "16px", color: "#FAC227" }} />
             </div>
           </div>
           <div className="button-text warning-text">Báo cáo sự cố</div>
-        </div>
+        </div> */}
       </div>
     </div>
   );

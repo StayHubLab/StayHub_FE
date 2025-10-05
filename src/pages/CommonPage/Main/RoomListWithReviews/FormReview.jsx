@@ -17,10 +17,15 @@ import {
 const { TextArea } = Input;
 const { Text } = Typography;
 
-const FormReview = ({ onSubmit, onCancel }) => {
+const FormReview = ({ onSubmit, onCancel, targetType = 'room' }) => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const [commentLength, setCommentLength] = useState(0);
+
+  const targetLabel = targetType === 'room' ? 'phòng trọ' : 'chủ trọ';
+  const placeholderText = targetType === 'room' 
+    ? 'Chia sẻ trải nghiệm của bạn về phòng trọ này... (tiện nghi, vệ sinh, an ninh, dịch vụ...)'
+    : 'Chia sẻ trải nghiệm của bạn về chủ trọ này... (thái độ, trách nhiệm, hỗ trợ...)';
 
   const handleSubmit = async (values) => {
     try {
@@ -90,7 +95,11 @@ const FormReview = ({ onSubmit, onCancel }) => {
           rules={[
             {
               required: true,
-              message: 'Vui lòng nhập nhận xét về phòng trọ!'
+              message: `Vui lòng nhập nhận xét về ${targetLabel}!`
+            },
+            {
+              min: 10,
+              message: 'Nhận xét phải có ít nhất 10 ký tự!'
             },
             {
               max: 500,
@@ -100,7 +109,7 @@ const FormReview = ({ onSubmit, onCancel }) => {
         >
           <TextArea
             rows={6}
-            placeholder="Chia sẻ trải nghiệm của bạn về phòng trọ này... (tiện nghi, vệ sinh, an ninh, dịch vụ...)"
+            placeholder={placeholderText}
             maxLength={500}
             showCount={false}
             onChange={handleCommentChange}

@@ -459,9 +459,9 @@ const RoomDetailModal = ({
                       <div key={index} className="landlord-image-item">
                         <Badge
                           status={image.isVerified ? "success" : "warning"}
-                          text={
-                            image.isVerified ? "Đã xác thực" : "Chưa xác thực"
-                          }
+                          // text={
+                          //   image.isVerified ? "Đã xác thực" : "Chưa xác thực"
+                          // }
                         >
                           <Image
                             width={120}

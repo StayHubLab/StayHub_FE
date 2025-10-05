@@ -203,8 +203,31 @@ export const AuthProvider = ({ children }) => {
   // Update user profile
   const updateProfile = async (profileData) => {
     try {
+      console.log("AuthContext - Updating profile with:", profileData);
       const response = await authApi.updateProfile(profileData);
-      const updatedUser = response.data.user;
+      console.log("AuthContext - Full API response:", response);
+      console.log("AuthContext - response.data:", response.data);
+      
+      // The API response structure is: response.data = { success, message, data: actualUserObject }
+      // But authApi.updateProfile returns response.data (which already unwrapped once)
+      // So the actual user is in response.data.data OR just response.data itself
+      let updatedUser;
+      
+      if (response.data.data) {
+        // If there's a nested data property
+        updatedUser = response.data.data;
+      } else if (response.data.user) {
+        // If there's a user property
+        updatedUser = response.data.user;
+      } else if (response.data._id) {
+        // If response.data itself has user properties (_id is a user field)
+        updatedUser = response.data;
+      } else {
+        console.error("AuthContext - Cannot determine user data structure!");
+        return { success: true, data: response.data };
+      }
+      
+      console.log("AuthContext - Updated user:", updatedUser);
 
       // Update localStorage
       localStorage.setItem("user", JSON.stringify(updatedUser));
@@ -216,6 +239,8 @@ export const AuthProvider = ({ children }) => {
 
       return { success: true, data: response.data };
     } catch (error) {
+      console.error("AuthContext - Update profile error:", error);
+      console.error("AuthContext - Error response:", error.response?.data);
       const errorMessage =
         error.response?.data?.error || "Profile update failed";
       return { success: false, error: errorMessage };
