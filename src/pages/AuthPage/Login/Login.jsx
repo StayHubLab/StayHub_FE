@@ -4,10 +4,11 @@ import {
   LockOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-import { Button, Checkbox, Form, Input, notification } from "antd";
+import { Button, Checkbox, Form, Input, notification, Divider } from "antd";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../../contexts/AuthContext";
+import useGoogleAuth from "../../../hooks/useGoogleAuth";
 import logoRemoveBG from "../../../assets/images/logo/logoRemoveBG.png";
 import "./Login.css";
 const Login = () => {
@@ -15,7 +16,7 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const [api, contextHolder] = notification.useNotification();
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { login, googleLogin } = useAuth();
 
   const handleLogin = async (values) => {
     setLoading(true);
@@ -71,6 +72,67 @@ const Login = () => {
   const handleForgotPassword = () => {
     navigate("/forgot");
   };
+
+  // Google login handlers
+  const handleGoogleSuccess = async (googleData) => {
+    setLoading(true);
+    try {
+      console.log("Google login data:", googleData);
+
+      const result = await googleLogin(googleData);
+
+      if (result.success) {
+        const { user } = result.data;
+        api.success({
+          message: "Đăng nhập Google thành công!",
+          description: `Chào mừng ${
+            user?.fullName || user?.name || user?.email || "bạn"
+          } đến với StayHub!`,
+          placement: "topRight",
+          duration: 4.5,
+        });
+
+        // Navigate based on user role
+        if (user?.role === "landlord") {
+          navigate("/landlord/dashboard");
+        } else {
+          navigate("/main/home");
+        }
+      } else {
+        api.error({
+          message: "Đăng nhập Google thất bại!",
+          description: result.error || "Vui lòng thử lại sau.",
+          placement: "topRight",
+          duration: 4.5,
+        });
+      }
+    } catch (error) {
+      console.error("Google login error:", error);
+      api.error({
+        message: "Lỗi không mong muốn!",
+        description:
+          "Đã có lỗi xảy ra khi đăng nhập Google. Vui lòng thử lại sau.",
+        placement: "topRight",
+        duration: 4.5,
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleGoogleError = (error) => {
+    console.error("Google auth error:", error);
+    api.error({
+      message: "Lỗi xác thực Google!",
+      description: "Không thể đăng nhập bằng Google. Vui lòng thử lại.",
+      placement: "topRight",
+      duration: 4.5,
+    });
+    setLoading(false);
+  };
+
+  // Initialize Google Auth
+  const googleButtonRef = useGoogleAuth(handleGoogleSuccess, handleGoogleError);
 
   return (
     <div className="login-container">
@@ -196,25 +258,19 @@ const Login = () => {
           </Form.Item>
 
           {/* Social Login Divider */}
-          <div className="social-divider">
-            <span className="divider-text">Hoặc đăng nhập với</span>
-          </div>
+          <Divider>Hoặc đăng nhập với</Divider>
 
           {/* Google Login Button */}
           <div className="social-login-section">
-            <Button
-              className="google-login-btn"
-              block
-              icon={
-                <img
-                  src="https://developers.google.com/identity/images/g-logo.png"
-                  alt="Google"
-                  style={{ width: "18px", height: "18px" }}
-                />
-              }
-            >
-              Đăng nhập với Google
-            </Button>
+            <div
+              ref={googleButtonRef}
+              style={{
+                width: "100%",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            />
           </div>
 
           {/* Register Link */}

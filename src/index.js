@@ -3,15 +3,27 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
+import { GoogleOAuthProvider } from "@react-oauth/google";
+import { GOOGLE_CONFIG } from "./config/google";
+
+console.log(
+  "[Bootstrap] REACT_APP_GOOGLE_CLIENT_ID:",
+  process.env.REACT_APP_GOOGLE_CLIENT_ID
+);
+console.log("[Bootstrap] GOOGLE_CONFIG.CLIENT_ID:", GOOGLE_CONFIG.CLIENT_ID);
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   process.env.NODE_ENV === "production" ? (
     <React.StrictMode>
-      <App />
+      <GoogleOAuthProvider clientId={GOOGLE_CONFIG.CLIENT_ID}>
+        <App />
+      </GoogleOAuthProvider>
     </React.StrictMode>
   ) : (
-    <App />
+    <GoogleOAuthProvider clientId={GOOGLE_CONFIG.CLIENT_ID}>
+      <App />
+    </GoogleOAuthProvider>
   )
 );
 

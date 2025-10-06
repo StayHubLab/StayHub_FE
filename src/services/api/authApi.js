@@ -49,6 +49,12 @@ const authApi = {
     return response.data;
   },
 
+  // Google OAuth login
+  googleLogin: async (googleData) => {
+    const response = await apiClient.post("/auth/google-login", googleData);
+    return response.data;
+  },
+
   // Protected endpoints
   sendVerificationEmail: async () => {
     const response = await apiClient.post("/auth/send-verification-email");

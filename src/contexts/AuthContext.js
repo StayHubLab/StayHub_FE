@@ -181,6 +181,36 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  // Google login function
+  const googleLogin = async (googleData) => {
+    dispatch({ type: AUTH_ACTIONS.LOGIN_START });
+
+    try {
+      const response = await authApi.googleLogin(googleData);
+      const { token, user, refreshToken } = response.data;
+
+      // Store in localStorage
+      localStorage.setItem("token", token);
+      localStorage.setItem("refreshToken", refreshToken);
+      localStorage.setItem("user", JSON.stringify(user));
+
+      dispatch({
+        type: AUTH_ACTIONS.LOGIN_SUCCESS,
+        payload: { token, refreshToken, user },
+      });
+
+      return { success: true, data: response.data };
+    } catch (error) {
+      const errorMessage = error.response?.data?.error || "Google login failed";
+      dispatch({
+        type: AUTH_ACTIONS.LOGIN_FAILURE,
+        payload: errorMessage,
+      });
+
+      return { success: false, error: errorMessage };
+    }
+  };
+
   // Logout function
   const logout = async () => {
     try {
@@ -207,12 +237,12 @@ export const AuthProvider = ({ children }) => {
       const response = await authApi.updateProfile(profileData);
       console.log("AuthContext - Full API response:", response);
       console.log("AuthContext - response.data:", response.data);
-      
+
       // The API response structure is: response.data = { success, message, data: actualUserObject }
       // But authApi.updateProfile returns response.data (which already unwrapped once)
       // So the actual user is in response.data.data OR just response.data itself
       let updatedUser;
-      
+
       if (response.data.data) {
         // If there's a nested data property
         updatedUser = response.data.data;
@@ -226,7 +256,7 @@ export const AuthProvider = ({ children }) => {
         console.error("AuthContext - Cannot determine user data structure!");
         return { success: true, data: response.data };
       }
-      
+
       console.log("AuthContext - Updated user:", updatedUser);
 
       // Update localStorage
@@ -257,6 +287,7 @@ export const AuthProvider = ({ children }) => {
     ...state,
     login,
     register,
+    googleLogin,
     logout,
     updateProfile,
     clearError,

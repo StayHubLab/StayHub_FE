@@ -11,10 +11,12 @@ import {
   Input,
   InputNumber,
   message,
+  Checkbox,
 } from "antd";
 import { PlusOutlined, DollarOutlined } from "@ant-design/icons";
 import billApi from "../../../services/api/billApi";
 import roomApi from "../../../services/api/roomApi";
+import emailApi from "../../../services/api/emailApi";
 import { useAuth } from "../../../contexts/AuthContext";
 
 const { Title } = Typography;
@@ -44,6 +46,8 @@ const PaymentsByRoom = () => {
   const [createBillModal, setCreateBillModal] = useState(false);
   const [selectedRoom, setSelectedRoom] = useState(null);
   const [form] = Form.useForm();
+  const [sendEmailNotification, setSendEmailNotification] = useState(true);
+  const [renterEmailInfo, setRenterEmailInfo] = useState(null);
   const [unitPrices, setUnitPrices] = useState({
     rent: 0,
     electricity: 4000,
@@ -63,9 +67,12 @@ const PaymentsByRoom = () => {
       console.log("Fetched bills data:", billItems);
       setBills(billItems || []);
 
-      // Fetch rooms data to get pricing information
+      // Fetch rooms data to get pricing information and current tenant info
       try {
-        const roomResp = await roomApi.getRooms({ hostId: user._id, populate: 'buildingId' });
+        const roomResp = await roomApi.getRooms({
+          hostId: user._id,
+          populate: "buildingId,currentTenant",
+        });
         const roomItems = Array.isArray(roomResp?.data)
           ? roomResp.data
           : roomResp?.data?.items || [];
@@ -88,69 +95,39 @@ const PaymentsByRoom = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user?._id]);
 
-  const handleCreateBill = useCallback((roomName) => {
-    setSelectedRoom(roomName);
-    setCreateBillModal(true);
-    form.resetFields();
+  const handleCreateBill = useCallback(
+    (roomName) => {
+      setSelectedRoom(roomName);
+      setCreateBillModal(true);
+      form.resetFields();
 
-    // Prefill current month/year
-    const now = new Date();
-    form.setFieldsValue({ month: now.getMonth() + 1, year: now.getFullYear() });
-
-    // Get unit prices from rooms data
-    const room = rooms.find((r) => {
-      const roomIdentifier = r?.name || r?.code || r?.roomCode || "N/A";
-      return roomIdentifier === roomName;
-    });
-
-    console.log("Found room for", roomName, ":", room);
-    console.log("Room price data:", room?.price);
-
-    if (room && room.price) {
-      const price = room.price;
-      const nextUnitPrices = {
-        rent: Number(price?.rent) || 0,
-        electricity: Number(price?.electricity) || 0, // Default electricity price
-        water: Number(price?.water) || 0, // Default water price
-        service: Number(price?.service) || 0,
-      };
-
-      console.log("Unit prices from room:", nextUnitPrices);
-      setUnitPrices(nextUnitPrices);
+      // Prefill current month/year
+      const now = new Date();
       form.setFieldsValue({
-        rent: nextUnitPrices.rent,
-        service: nextUnitPrices.service,
-        electricityQty: 0,
-        waterQty: 0,
-      });
-    } else {
-      // Fallback: try to get from existing bills if room data is not available
-      const roomBills = bills.filter((b) => {
-        const billRoomName =
-          b?.contractId?.roomId?.name ||
-          b?.contractId?.roomId?.code ||
-          b?.contractId?.roomId?.roomCode ||
-          "N/A";
-        return billRoomName === roomName;
+        month: now.getMonth() + 1,
+        year: now.getFullYear(),
       });
 
-      console.log("Room bills for", roomName, ":", roomBills);
+      // Get unit prices from rooms data and current tenant info
+      const room = rooms.find((r) => {
+        const roomIdentifier = r?.name || r?.code || r?.roomCode || "N/A";
+        return roomIdentifier === roomName;
+      });
 
-      if (roomBills.length > 0) {
-        const latest = roomBills[0];
-        console.log("Latest bill data:", latest);
-        console.log("Room data from bill:", latest?.contractId?.roomId);
-        console.log("Price data from bill:", latest?.contractId?.roomId?.price);
+      console.log("Found room for", roomName, ":", room);
+      console.log("Room price data:", room?.price);
+      console.log("Room current tenant:", room?.currentTenant);
 
-        const price = latest?.contractId?.roomId?.price || {};
+      if (room && room.price) {
+        const price = room.price;
         const nextUnitPrices = {
           rent: Number(price?.rent) || 0,
-          electricity: Number(price?.electricity) || 0,
-          water: Number(price?.water) || 0,
+          electricity: Number(price?.electricity) || 0, // Default electricity price
+          water: Number(price?.water) || 0, // Default water price
           service: Number(price?.service) || 0,
         };
 
-        console.log("Unit prices from bill:", nextUnitPrices);
+        console.log("Unit prices from room:", nextUnitPrices);
         setUnitPrices(nextUnitPrices);
         form.setFieldsValue({
           rent: nextUnitPrices.rent,
@@ -158,25 +135,109 @@ const PaymentsByRoom = () => {
           electricityQty: 0,
           waterQty: 0,
         });
+
+        // Set renter email info from current tenant
+        if (room.currentTenant) {
+          setRenterEmailInfo({
+            email: room.currentTenant.email,
+            name:
+              room.currentTenant.fullName ||
+              room.currentTenant.name ||
+              "Người thuê",
+            hasEmail: !!room.currentTenant.email,
+          });
+          console.log(
+            "Set renter email from room currentTenant:",
+            room.currentTenant.email
+          );
+        } else {
+          setRenterEmailInfo({
+            email: null,
+            name: "Người thuê",
+            hasEmail: false,
+          });
+        }
       } else {
-        console.log("No room or bill data found for:", roomName);
-        // Set default prices
-        const defaultPrices = {
-          rent: 0,
-          electricity: 4000, // Default VNĐ/kWh
-          water: 20000, // Default VNĐ/m³
-          service: 0,
-        };
-        setUnitPrices(defaultPrices);
-        form.setFieldsValue({
-          rent: 0,
-          service: 0,
-          electricityQty: 0,
-          waterQty: 0,
+        // Fallback: try to get from existing bills if room data is not available
+        const roomBills = bills.filter((b) => {
+          const billRoomName =
+            b?.contractId?.roomId?.name ||
+            b?.contractId?.roomId?.code ||
+            b?.contractId?.roomId?.roomCode ||
+            "N/A";
+          return billRoomName === roomName;
         });
+
+        console.log("Room bills for", roomName, ":", roomBills);
+
+        if (roomBills.length > 0) {
+          const latest = roomBills[0];
+          console.log("Latest bill data:", latest);
+          console.log("Room data from bill:", latest?.contractId?.roomId);
+          console.log(
+            "Price data from bill:",
+            latest?.contractId?.roomId?.price
+          );
+
+          const price = latest?.contractId?.roomId?.price || {};
+          const nextUnitPrices = {
+            rent: Number(price?.rent) || 0,
+            electricity: Number(price?.electricity) || 0,
+            water: Number(price?.water) || 0,
+            service: Number(price?.service) || 0,
+          };
+
+          console.log("Unit prices from bill:", nextUnitPrices);
+          setUnitPrices(nextUnitPrices);
+          form.setFieldsValue({
+            rent: nextUnitPrices.rent,
+            service: nextUnitPrices.service,
+            electricityQty: 0,
+            waterQty: 0,
+          });
+
+          // Try to get renter info from bill
+          const renterEmail = latest?.renterId?.email || latest?.renter?.email;
+          const renterName =
+            latest?.renterId?.fullName ||
+            latest?.renterId?.name ||
+            latest?.renter?.fullName ||
+            latest?.renter?.name ||
+            "Người thuê";
+
+          setRenterEmailInfo({
+            email: renterEmail,
+            name: renterName,
+            hasEmail: !!renterEmail,
+          });
+        } else {
+          console.log("No room or bill data found for:", roomName);
+          // Set default prices
+          const defaultPrices = {
+            rent: 0,
+            electricity: 4000, // Default VNĐ/kWh
+            water: 20000, // Default VNĐ/m³
+            service: 0,
+          };
+          setUnitPrices(defaultPrices);
+          form.setFieldsValue({
+            rent: 0,
+            service: 0,
+            electricityQty: 0,
+            waterQty: 0,
+          });
+
+          // No renter info available
+          setRenterEmailInfo({
+            email: null,
+            name: "Người thuê",
+            hasEmail: false,
+          });
+        }
       }
-    }
-  }, [rooms, bills, form]);
+    },
+    [rooms, bills, form]
+  );
 
   const handleAmountChange = () => {
     const values = form.getFieldsValue();
@@ -215,6 +276,10 @@ const PaymentsByRoom = () => {
       const contractId = latestBill.contractId?._id || latestBill.contractId;
       const renterId = latestBill.renterId?._id || latestBill.renterId;
 
+      // Get renter email from renterEmailInfo (set in handleCreateBill)
+      const renterEmail = renterEmailInfo?.email;
+      const renterName = renterEmailInfo?.name || "Người thuê";
+
       // Calculate from quantities and unit prices
       const electricityAmount =
         (values.electricityQty || 0) * (unitPrices.electricity || 0);
@@ -225,7 +290,7 @@ const PaymentsByRoom = () => {
         waterAmount +
         (values.service || 0);
 
-      await billApi.create({
+      const billResponse = await billApi.create({
         contractId,
         renterId,
         amount: {
@@ -246,6 +311,62 @@ const PaymentsByRoom = () => {
       });
 
       message.success("Đã tạo hóa đơn thành công");
+
+      // Get the created bill ID from response
+      const createdBillId = billResponse.data?._id || billResponse._id;
+
+      // Send email notification to renter if email is available and user chose to send
+      if (sendEmailNotification && renterEmail) {
+        try {
+          // Find room info for address
+          const roomInfo = rooms.find((r) => {
+            const roomIdentifier = r?.name || r?.code || r?.roomCode || "N/A";
+            return roomIdentifier === selectedRoom;
+          });
+
+          const billData = {
+            billId: createdBillId, // Use actual bill ID from database
+            renterName,
+            roomName: selectedRoom,
+            roomAddress:
+              roomInfo?.buildingId?.address ||
+              roomInfo?.address ||
+              "Chưa cập nhật",
+            totalAmount: billResponse.data?.totalAmount || totalAmount,
+            amount: billResponse.data?.amount || {
+              rent: values.rent || 0,
+              electricity: electricityAmount,
+              water: waterAmount,
+              service: values.service || 0,
+            },
+            dueDate:
+              billResponse.data?.dueDate ||
+              new Date(values.dueDate).toISOString(),
+            month: billResponse.data?.month || values.month,
+            year: billResponse.data?.year || values.year,
+            type: billResponse.data?.type || "monthly",
+            status: billResponse.data?.status || "pending",
+            note:
+              billResponse.data?.note ||
+              values.note ||
+              `Hóa đơn tháng ${values.month}/${values.year} - Phòng ${selectedRoom}`,
+            landlordName: user?.fullName || user?.name || "Chủ trọ",
+            landlordPhone: user?.phone || "",
+          };
+
+          console.log("Sending email with bill data:", billData);
+          await emailApi.sendBillNotification(billData, renterEmail);
+          message.success(`Đã gửi email thông báo hóa đơn đến ${renterEmail}`);
+        } catch (emailError) {
+          console.error("Error sending email notification:", emailError);
+          message.warning(
+            "Hóa đơn đã được tạo nhưng không thể gửi email thông báo"
+          );
+        }
+      } else if (sendEmailNotification && !renterEmail) {
+        message.warning("Không tìm thấy email của người thuê để gửi thông báo");
+      }
+
       setCreateBillModal(false);
       fetchData(); // Refresh data
     } catch (error) {
@@ -449,6 +570,8 @@ const PaymentsByRoom = () => {
         onCancel={() => {
           setCreateBillModal(false);
           setSelectedRoom(null);
+          setSendEmailNotification(true);
+          setRenterEmailInfo(null);
           form.resetFields();
         }}
         footer={
@@ -457,6 +580,8 @@ const PaymentsByRoom = () => {
               onClick={() => {
                 setCreateBillModal(false);
                 setSelectedRoom(null);
+                setSendEmailNotification(true);
+                setRenterEmailInfo(null);
                 form.resetFields();
               }}
             >
@@ -623,6 +748,58 @@ const PaymentsByRoom = () => {
 
           <Form.Item label="Ghi chú" name="note">
             <Input.TextArea rows={3} placeholder="Ghi chú cho hóa đơn" />
+          </Form.Item>
+
+          <Form.Item>
+            <div style={{ marginBottom: 8 }}>
+              {renterEmailInfo?.hasEmail ? (
+                <div
+                  style={{
+                    background: "#f6ffed",
+                    border: "1px solid #b7eb8f",
+                    borderRadius: 6,
+                    padding: 12,
+                    marginBottom: 8,
+                  }}
+                >
+                  <div style={{ fontWeight: 600, color: "#52c41a" }}>
+                    📧 Thông tin email người thuê:
+                  </div>
+                  <div style={{ marginTop: 4 }}>
+                    <strong>Tên:</strong> {renterEmailInfo.name}
+                  </div>
+                  <div>
+                    <strong>Email:</strong> {renterEmailInfo.email}
+                  </div>
+                </div>
+              ) : (
+                <div
+                  style={{
+                    background: "#fff2e8",
+                    border: "1px solid #ffbb96",
+                    borderRadius: 6,
+                    padding: 12,
+                    marginBottom: 8,
+                  }}
+                >
+                  <div style={{ fontWeight: 600, color: "#fa8c16" }}>
+                    ⚠️ Không tìm thấy email của người thuê
+                  </div>
+                  <div style={{ marginTop: 4, fontSize: 13 }}>
+                    Không thể gửi email thông báo hóa đơn
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <Checkbox
+              checked={sendEmailNotification}
+              onChange={(e) => setSendEmailNotification(e.target.checked)}
+              disabled={!renterEmailInfo?.hasEmail}
+            >
+              Gửi email thông báo hóa đơn cho người thuê
+              {!renterEmailInfo?.hasEmail && " (Không có email)"}
+            </Checkbox>
           </Form.Item>
         </Form>
       </Modal>
