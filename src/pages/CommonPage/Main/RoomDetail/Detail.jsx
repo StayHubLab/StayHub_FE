@@ -58,6 +58,8 @@ const Detail = () => {
 
           // Transform API data to match component structure
           const transformedData = {
+            _id: room._id || room.id || roomId, // Add room ID
+            id: room._id || room.id || roomId,  // Add room ID for compatibility
             title: room.name || "Phòng trọ",
             price: room.price?.rent || room.price || 0,
             rating: room.rating || 4.8,

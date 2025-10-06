@@ -20,7 +20,6 @@ import ContractPage from "../pages/CommonPage/Main/Contract/Contract";
 import Find from "../pages/CommonPage/Main/FindRoom/FindRoom";
 import Home from "../pages/CommonPage/Main/Home/Home";
 import Main from "../pages/CommonPage/Main/Main";
-import Review from "../pages/CommonPage/Main/Review/Review";
 import RoomListWithReviews from "../pages/CommonPage/Main/RoomListWithReviews/RoomListWithReviews";
 import RoomDetail from "../pages/CommonPage/Main/RoomDetail/Detail";
 import Saved from "../pages/CommonPage/Main/Saved/SavedRoom";
@@ -56,7 +55,6 @@ const AppRoutes = () => {
         <Route path="saved" element={<Saved />} />
         <Route path="viewing-appointments" element={<ViewingAppointments />} />
         <Route path="contract" element={<ContractPage />} />
-        <Route path="review" element={<Review />} />
         <Route path="rooms-with-reviews" element={<RoomListWithReviews />} />
         <Route path="payment-result" element={<PaymentResult />} />
         <Route path="bills" element={<Bills />} />

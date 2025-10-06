@@ -16,7 +16,8 @@ import {
   EnvironmentOutlined,
   DollarOutlined,
   UserOutlined,
-  StarOutlined
+  StarOutlined,
+  StarFilled
 } from '@ant-design/icons';
 import FormReview from './FormReview';
 import { useAuth } from '../../../../contexts/AuthContext';
@@ -33,6 +34,8 @@ const RoomListWithReviews = () => {
   const [rooms, setRooms] = useState([]);
   const [selectedRoom, setSelectedRoom] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isViewReviewModalVisible, setIsViewReviewModalVisible] = useState(false);
+  const [selectedReview, setSelectedReview] = useState(null);
   const [loading, setLoading] = useState(true);
   const [userReviews, setUserReviews] = useState([]);
 
@@ -88,6 +91,48 @@ const RoomListWithReviews = () => {
             addressObj.city,
           ].filter(Boolean).join(', ') || addressObj.fullAddress || 'Địa chỉ không có sẵn';
           
+          // Get landlord info - try multiple paths including hostId from building
+          const getLandlordInfo = () => {
+            // Try building.hostId (most likely based on Renting.jsx pattern)
+            if (building.hostId) {
+              return {
+                id: building.hostId._id || building.hostId,
+                name: building.hostId.name || building.hostId.fullName || 'Chủ trọ',
+                phone: building.hostId.phone,
+                email: building.hostId.email,
+                avatar: building.hostId.avatar,
+              };
+            }
+            // Try building.landlordId
+            if (building.landlordId) {
+              return {
+                id: building.landlordId._id || building.landlordId,
+                name: building.landlordId.name || building.landlordId.fullName || 'Chủ trọ',
+                phone: building.landlordId.phone,
+                email: building.landlordId.email,
+                avatar: building.landlordId.avatar,
+              };
+            }
+            // Try contract.hostId
+            if (contract.hostId) {
+              return {
+                id: contract.hostId._id || contract.hostId,
+                name: contract.hostId.name || contract.hostId.fullName || 'Chủ trọ',
+                phone: contract.hostId.phone,
+                email: contract.hostId.email,
+                avatar: contract.hostId.avatar,
+              };
+            }
+            // Fallback
+            return {
+              id: null,
+              name: 'Chủ trọ',
+              phone: null,
+              email: null,
+              avatar: null,
+            };
+          };
+          
           // Add room
           if (room._id) {
             rentedRooms.push({
@@ -97,13 +142,7 @@ const RoomListWithReviews = () => {
               price: contract.terms?.rentAmount || room.price?.rent || room.price || 0,
               image: room.images?.[0]?.url || room.images?.[0] || room.image,
               status: 'rented',
-              landlord: {
-                id: building.landlordId?._id || building.landlordId || building.ownerId?._id || building.ownerId,
-                name: building.landlordId?.name || building.landlordId?.fullName || building.ownerId?.name || building.ownerId?.fullName || 'Chủ trọ',
-                phone: building.landlordId?.phone || building.ownerId?.phone,
-                email: building.landlordId?.email || building.ownerId?.email,
-                avatar: building.landlordId?.avatar || building.ownerId?.avatar,
-              },
+              landlord: getLandlordInfo(),
               contract: contract,
               roomData: room,
               buildingData: building
@@ -132,6 +171,11 @@ const RoomListWithReviews = () => {
     return userReviews.some(r => (r.roomId?._id || r.roomId) === roomId);
   };
 
+  // Get review for a specific room
+  const getReviewForRoom = (roomId) => {
+    return userReviews.find(r => (r.roomId?._id || r.roomId) === roomId);
+  };
+
   // Handle opening review modal
   const handleOpenReviewModal = (room) => {
     if (!user) {
@@ -143,13 +187,12 @@ const RoomListWithReviews = () => {
       return;
     }
 
-    // Check if already reviewed
+    // Check if already reviewed - show existing review
     if (hasReviewed(room.id)) {
-      api.info({
-        message: 'Đã đánh giá',
-        description: 'Bạn đã đánh giá phòng trọ này rồi.',
-        placement: 'topRight'
-      });
+      const review = getReviewForRoom(room.id);
+      setSelectedRoom(room);
+      setSelectedReview(review);
+      setIsViewReviewModalVisible(true);
       return;
     }
 
@@ -161,6 +204,13 @@ const RoomListWithReviews = () => {
   const handleCloseReviewModal = () => {
     setIsModalVisible(false);
     setSelectedRoom(null);
+  };
+
+  // Handle closing view review modal
+  const handleCloseViewReviewModal = () => {
+    setIsViewReviewModalVisible(false);
+    setSelectedRoom(null);
+    setSelectedReview(null);
   };
 
   // Handle review submission
@@ -207,7 +257,7 @@ const RoomListWithReviews = () => {
 
   if (loading) {
     return (
-      <div className="room-list-loading">
+      <div className="review-room-list-loading">
         <Spin size="large" />
         <Text style={{ marginTop: 16, display: 'block', textAlign: 'center' }}>
           Đang tải dữ liệu...
@@ -217,13 +267,13 @@ const RoomListWithReviews = () => {
   }
 
   return (
-    <div className="room-list-container">
+    <div className="review-room-list-container">
       {contextHolder}
-      <div className="room-list-header">
-        <Title level={2} className="page-title">
+      <div className="review-room-list-header">
+        <Title level={2} className="review-page-title">
           Đánh giá phòng trọ
         </Title>
-        <Text className="page-subtitle">
+        <Text className="review-page-subtitle">
           Đánh giá các phòng trọ mà bạn đang thuê
         </Text>
       </div>
@@ -234,7 +284,7 @@ const RoomListWithReviews = () => {
         </div>
       ) : (
         <>
-          <Row gutter={[24, 24]} className="room-grid">
+          <Row gutter={[24, 24]} className="review-room-grid">
             {rooms.map((room) => {
               const reviewed = hasReviewed(room.id);
               
@@ -242,13 +292,13 @@ const RoomListWithReviews = () => {
                 <Col xs={24} sm={12} lg={8} xl={6} key={room.id}>
                   <Card
                     hoverable
-                    className="room-card"
+                    className="review-room-card"
                     cover={
-                      <div className="room-image-container">
+                      <div className="review-room-image-container">
                         <img
                           alt={`Hình ảnh phòng trọ ${room.name}`}
                           src={room.image || 'https://images.unsplash.com/photo-1505691938895-1758d7feb511?q=80&w=300&h=200&auto=format&fit=crop&ixlib=rb-4.0.3'}
-                          className="room-image"
+                          className="review-room-image"
                           onError={(e) => {
                             e.target.src = 'https://images.unsplash.com/photo-1505691938895-1758d7feb511?q=80&w=300&h=200&auto=format&fit=crop&ixlib=rb-4.0.3';
                           }}
@@ -265,48 +315,48 @@ const RoomListWithReviews = () => {
                       </div>
                     }
                     actions={[
+                      
                       <Button
                         type="primary"
                         className="review-button"
                         icon={<StarOutlined />}
                         onClick={() => handleOpenReviewModal(room)}
-                        disabled={reviewed}
                       >
-                        {reviewed ? 'Đã đánh giá' : 'Đánh giá'}
+                        {reviewed ? 'Xem đánh giá' : 'Đánh giá'}
                       </Button>
                     ]}
                   >
                     <Meta
                       title={
-                        <div className="room-title">
+                        <div className="review-room-title">
                           {room.name}
                         </div>
                       }
                       description={
-                        <div className="room-description">
+                        <div className="review-room-description">
                           <Space direction="vertical" size="small" style={{ width: '100%' }}>
-                            <div className="room-info-item">
-                              <EnvironmentOutlined className="room-info-icon" />
-                              <Text className="room-address" ellipsis>{room.address}</Text>
+                            <div className="review-room-info-item">
+                              <EnvironmentOutlined className="review-room-info-icon" />
+                              <Text className="review-room-address" ellipsis>{room.address}</Text>
                             </div>
                             
-                            <div className="room-info-item">
-                              <DollarOutlined className="room-info-icon" />
-                              <Text strong className="room-price">
+                            <div className="review-room-info-item">
+                              <DollarOutlined className="review-room-info-icon" />
+                              <Text strong className="review-room-price">
                                 {formatPrice(room.price)}/tháng
                               </Text>
                             </div>
                             
-                            <div className="room-info-item">
-                              <UserOutlined className="room-info-icon" />
-                              <Text className="landlord-name" ellipsis>
+                            <div className="review-room-info-item">
+                              <UserOutlined className="review-room-info-icon" />
+                              <Text className="review-landlord-name" ellipsis>
                                 Chủ trọ: {room.landlord?.name || 'N/A'}
                               </Text>
                             </div>
                             
                             <Tag 
                               color="blue"
-                              className="room-status-tag"
+                              className="review-room-status-tag"
                             >
                               Đang thuê
                             </Tag>
@@ -336,7 +386,7 @@ const RoomListWithReviews = () => {
       {/* Review Modal */}
       <Modal
         title={
-          <div className="modal-title">
+          <div className="review-modal-title">
             <StarOutlined style={{ color: '#4739F0', marginRight: 8 }} />
             Đánh giá phòng trọ
           </div>
@@ -349,15 +399,15 @@ const RoomListWithReviews = () => {
         destroyOnClose
       >
         {selectedRoom && (
-          <div className="modal-content">
-            <div className="selected-room-info">
-              <Title level={4} className="selected-room-name">
+          <div className="review-modal-content">
+            <div className="review-selected-room-info">
+              <Title level={4} className="review-selected-room-name">
                 {selectedRoom.name}
               </Title>
-              <Text className="selected-room-address">
+              <Text className="review-selected-room-address">
                 <EnvironmentOutlined /> {selectedRoom.address}
               </Text>
-              <Text className="selected-landlord">
+              <Text className="review-selected-landlord">
                 <UserOutlined /> Chủ trọ: {selectedRoom.landlord?.name}
               </Text>
             </div>
@@ -367,6 +417,89 @@ const RoomListWithReviews = () => {
               onCancel={handleCloseReviewModal}
               targetType="room"
             />
+          </div>
+        )}
+      </Modal>
+
+      {/* View Review Modal */}
+      <Modal
+        title={
+          <div className="review-modal-title">
+            <StarOutlined style={{ color: '#4739F0', marginRight: 8 }} />
+            Đánh giá của bạn
+          </div>
+        }
+        open={isViewReviewModalVisible}
+        onCancel={handleCloseViewReviewModal}
+        footer={[
+          <Button key="close" onClick={handleCloseViewReviewModal}>
+            Đóng
+          </Button>
+        ]}
+        width={600}
+        className="review-modal"
+      >
+        {selectedRoom && selectedReview && (
+          <div className="review-modal-content">
+            <div className="review-selected-room-info">
+              <Title level={4} className="review-selected-room-name">
+                {selectedRoom.name}
+              </Title>
+              <Text className="review-selected-room-address">
+                <EnvironmentOutlined /> {selectedRoom.address}
+              </Text>
+              <Text className="review-selected-landlord">
+                <UserOutlined /> Chủ trọ: {selectedRoom.landlord?.name}
+              </Text>
+            </div>
+
+            {/* Display Review */}
+            <div style={{ marginTop: 24 }}>
+              <div style={{ marginBottom: 16 }}>
+                <Text strong style={{ fontSize: 15, display: 'block', marginBottom: 8 }}>
+                  Đánh giá của bạn:
+                </Text>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <StarFilled
+                      key={star}
+                      style={{
+                        fontSize: 24,
+                        color: star <= (selectedReview.rating || 0) ? '#FAC227' : '#E8E8E8'
+                      }}
+                    />
+                  ))}
+                  <Text style={{ marginLeft: 8, fontSize: 16, fontWeight: 600 }}>
+                    {selectedReview.rating}/5
+                  </Text>
+                </div>
+              </div>
+
+              <div>
+                <Text strong style={{ fontSize: 15, display: 'block', marginBottom: 8 }}>
+                  Nhận xét:
+                </Text>
+                <div style={{
+                  background: '#F8F9FF',
+                  padding: 16,
+                  borderRadius: 12,
+                  border: '1px solid rgba(71, 57, 240, 0.1)',
+                  minHeight: 100
+                }}>
+                  <Text style={{ whiteSpace: 'pre-wrap', lineHeight: 1.6 }}>
+                    {selectedReview.comment || 'Không có nhận xét'}
+                  </Text>
+                </div>
+              </div>
+
+              {selectedReview.createdAt && (
+                <div style={{ marginTop: 16 }}>
+                  <Text type="secondary" style={{ fontSize: 13 }}>
+                    Đánh giá vào: {new Date(selectedReview.createdAt).toLocaleString('vi-VN')}
+                  </Text>
+                </div>
+              )}
+            </div>
           </div>
         )}
       </Modal>
