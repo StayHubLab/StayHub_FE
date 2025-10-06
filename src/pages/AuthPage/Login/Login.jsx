@@ -4,7 +4,7 @@ import {
   LockOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-import { Button, Checkbox, Form, Input, notification } from "antd";
+import { Button, Checkbox, Form, Input, notification, Divider } from "antd";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../../contexts/AuthContext";
@@ -258,9 +258,7 @@ const Login = () => {
           </Form.Item>
 
           {/* Social Login Divider */}
-          <div className="social-divider">
-            <span className="divider-text">Hoặc đăng nhập với</span>
-          </div>
+          <Divider>Hoặc đăng nhập với</Divider>
 
           {/* Google Login Button */}
           <div className="social-login-section">
