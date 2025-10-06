@@ -6,7 +6,6 @@ import RoomImages from "./RoomImages/RoomImages";
 import RoomInfo from "./LeftContainer/RoomInfo";
 import Price from "./RightContainer/Price";
 import ScheduleBookingModal from "../../../../components/ScheduleBookingModal/ScheduleBookingModal";
-import { ContractTemplateModal } from "../../../../components/ContractTemplate";
 import { GoogleMapModal } from "../../../../components/GoogleMapModal";
 import roomApi from "../../../../services/api/roomApi";
 import viewingApi from "../../../../services/api/viewingApi";
@@ -26,6 +25,8 @@ const Detail = () => {
   const [isBookingModalVisible, setIsBookingModalVisible] = useState(false);
   const [isContractModalVisible, setIsContractModalVisible] = useState(false);
   const [isMapModalVisible, setIsMapModalVisible] = useState(false);
+  const [isUserRenting, setIsUserRenting] = useState(false);
+  const [isRoomOccupied, setIsRoomOccupied] = useState(false);
 
   // Fetch room data from API
   useEffect(() => {
@@ -57,6 +58,8 @@ const Detail = () => {
 
           // Transform API data to match component structure
           const transformedData = {
+            _id: room._id || room.id || roomId, // Add room ID
+            id: room._id || room.id || roomId,  // Add room ID for compatibility
             title: room.name || "Phòng trọ",
             price: room.price?.rent || room.price || 0,
             rating: room.rating || 4.8,
@@ -144,6 +147,12 @@ const Detail = () => {
               // Thêm ID để debug
               id: room.buildingId?.hostId?._id || room.landlord?.id,
             },
+            // Tenant information to check if current user is renting
+            tenant: {
+              id: room.tenantId?._id || room.tenantId || room.currentTenant?._id || room.currentTenant,
+              name: room.tenantId?.name || room.currentTenant?.name,
+              email: room.tenantId?.email || room.currentTenant?.email,
+            },
             ratingBreakdown: {
               location: room.rating || 4.8,
               cleanliness: room.rating || 4.5,
@@ -152,6 +161,28 @@ const Detail = () => {
             },
             reviews: room.reviews || [],
           };
+
+          // Check if current user is renting this room
+          const currentUserRenting = user && transformedData.tenant.id && 
+            (transformedData.tenant.id === user._id || transformedData.tenant.id === user.id);
+          
+          // Check if room is occupied by anyone (has a tenant)
+          const roomOccupied = Boolean(transformedData.tenant.id) || 
+                               room.status === 'occupied' || 
+                               room.status === 'rented' ||
+                               !room.isAvailable;
+          
+          setIsUserRenting(currentUserRenting);
+          setIsRoomOccupied(roomOccupied);
+          
+          console.log("Room occupancy check:", {
+            userId: user?._id || user?.id,
+            tenantId: transformedData.tenant.id,
+            isUserRenting: currentUserRenting,
+            isRoomOccupied: roomOccupied,
+            roomStatus: room.status,
+            isAvailable: room.isAvailable
+          });
 
           setRoomData(transformedData);
 
@@ -189,7 +220,7 @@ const Detail = () => {
     };
 
     fetchRoomData();
-  }, [roomId, message]);
+  }, [roomId, message, user]);
 
   // Loading state
   if (loading) {
@@ -393,7 +424,7 @@ const Detail = () => {
                   value: `${roomData.additionalCosts.service.toLocaleString()} VNĐ/tháng`,
                 },
               ].filter(Boolean), // Lọc bỏ những giá trị null/undefined
-              deposit: roomData.additionalCosts?.deposit
+              deposit: !isRoomOccupied && roomData.additionalCosts?.deposit
                 ? {
                     title: `Đặt cọc: ${roomData.additionalCosts.deposit.toLocaleString()} VNĐ`,
                     description: "Được hoàn trả khi kết thúc hợp đồng",
@@ -415,6 +446,8 @@ const Detail = () => {
               phone: roomData.landlord?.phone,
             }}
             roomData={roomData}
+            isUserRenting={isUserRenting}
+            isRoomOccupied={isRoomOccupied}
             onScheduleViewing={handleScheduleViewing}
             onContactLandlord={handleContactLandlord}
             onViewContract={handleViewContract}
@@ -448,12 +481,6 @@ const Detail = () => {
           }}
         />
       )}
-
-      {/* Contract Template Modal */}
-      <ContractTemplateModal
-        visible={isContractModalVisible}
-        onClose={handleCloseContractModal}
-      />
 
       {/* Google Map Modal */}
       <GoogleMapModal

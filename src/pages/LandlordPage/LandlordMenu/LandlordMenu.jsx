@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   DashboardOutlined,
   HomeOutlined,
@@ -7,15 +7,16 @@ import {
   FileTextOutlined,
   SettingOutlined,
   CustomerServiceOutlined,
-  BankOutlined,
+  CalendarOutlined,
 } from "@ant-design/icons";
 import "./LandlordMenu.css";
 
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const LandlordMenu = () => {
-  const [activeItem, setActiveItem] = useState("dashboard");
   const navigate = useNavigate();
+  const location = useLocation();
+  const [activeItem, setActiveItem] = useState("dashboard");
 
   const menuItems = [
     {
@@ -47,6 +48,13 @@ const LandlordMenu = () => {
       route: "/landlord/manage-tenants",
     },
     {
+      id: "calendar",
+      label: "Lịch xem phòng",
+      icon: <CalendarOutlined />,
+      isActive: false,
+      route: "/landlord/booking-calendar",
+    },
+    {
       id: "contracts",
       label: "Hợp đồng",
       icon: <FileTextOutlined />,
@@ -68,27 +76,49 @@ const LandlordMenu = () => {
       route: "/landlord/payments-by-room",
     },
     // {
-    //   id: "subscription",
-    //   label: "Gói đăng ký",
-    //   icon: <CrownOutlined />,
+    //   id: "settings",
+    //   label: "Cài đặt",
+    //   icon: <SettingOutlined />,
     //   isActive: false,
-    //   route: "/landlord/subscription",
+    //   route: "/landlord/settings",
+    // },
+    // {
+    //   id: "support",
+    //   label: "Hỗ trợ",
+    //   icon: <CustomerServiceOutlined />,
+    //   isActive: false,
+    //   route: "/landlord/support",
     // },
     {
-      id: "settings",
-      label: "Cài đặt",
-      icon: <SettingOutlined />,
-      isActive: false,
-      route: "/landlord/settings",
-    },
-    {
-      id: "support",
-      label: "Hỗ trợ",
+      id: "chat",
+      label: "Nhắn tin",
       icon: <CustomerServiceOutlined />,
       isActive: false,
-      route: "/landlord/support",
+      route: "/landlord/chat",
     },
   ];
+
+  // Update active item based on current route
+  useEffect(() => {
+    const currentPath = location.pathname;
+    
+    // Map routes to item IDs
+    const routeMap = {
+      '/landlord/dashboard': 'dashboard',
+      '/landlord/manage-room': 'manage-room',
+      '/landlord/manage-tenants': 'manage-tenants',
+      '/landlord/booking-calendar': 'calendar',
+      '/landlord/contracts': 'contracts',
+      '/landlord/transaction': 'transaction',
+      '/landlord/payments-by-room': 'payments-by-room',
+      '/landlord/chat': 'chat',
+    };
+    
+    const matchedItem = routeMap[currentPath];
+    if (matchedItem) {
+      setActiveItem(matchedItem);
+    }
+  }, [location.pathname]);
 
   const handleItemClick = (itemId, route) => {
     setActiveItem(itemId);
@@ -98,28 +128,24 @@ const LandlordMenu = () => {
   return (
     <div className="landlord-menu-container">
       <div className="landlord-menu-content">
-        {menuItems.map((item, index) => (
+        {menuItems.map((item) => (
           <div
             key={item.id}
-            className={`landlord-menu-item ${
-              activeItem === item.id ? "active" : ""
-            }`}
+            className={`landlord-menu-item ${activeItem === item.id ? "active" : ""
+              }`}
             onClick={() => handleItemClick(item.id, item.route)}
-            style={{ top: `${index * 56}px` }}
           >
             <div
-              className={`landlord-menu-item-background ${
-                activeItem === item.id ? "active-bg" : ""
-              }`}
+              className={`landlord-menu-item-background ${activeItem === item.id ? "active-bg" : ""
+                }`}
             >
               <div className="landlord-menu-icon-container">
                 <div className="landlord-menu-icon">{item.icon}</div>
               </div>
               <div className="landlord-menu-text-container">
                 <div
-                  className={`landlord-menu-text ${
-                    activeItem === item.id ? "active-text" : ""
-                  }`}
+                  className={`landlord-menu-text ${activeItem === item.id ? "active-text" : ""
+                    }`}
                 >
                   {item.label}
                 </div>

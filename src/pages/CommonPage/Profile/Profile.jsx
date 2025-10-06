@@ -1,32 +1,34 @@
-import React, { useState, useEffect } from "react";
 import {
-  Card,
-  Form,
-  Input,
-  Button,
-  Avatar,
-  Typography,
-  Row,
-  Col,
-  Tabs,
-  Upload,
-  notification,
-  Divider,
-  Switch,
-  Space,
-  Select,
-} from "antd";
-import {
-  UserOutlined,
-  SettingOutlined,
-  KeyOutlined,
-  HomeOutlined,
+  BankOutlined,
   CameraOutlined,
+  CreditCardOutlined,
   EditOutlined,
-  SaveOutlined,
+  HomeOutlined,
+  KeyOutlined,
   MailOutlined,
   PhoneOutlined,
+  SaveOutlined,
+  SettingOutlined,
+  UserOutlined,
 } from "@ant-design/icons";
+import {
+  Avatar,
+  Button,
+  Card,
+  Col,
+  Divider,
+  Form,
+  Input,
+  Row,
+  Select,
+  Space,
+  Switch,
+  Tabs,
+  Typography,
+  Upload,
+  notification,
+} from "antd";
+import { useEffect, useState } from "react";
 import { useAuth } from "../../../contexts/AuthContext";
 import authApi from "../../../services/api/authApi";
 import {
@@ -41,14 +43,15 @@ const { Title, Text } = Typography;
 const { TextArea } = Input;
 
 const Profile = () => {
-  const { user } = useAuth();
+  const { user, updateProfile } = useAuth();
+  const [api, contextHolder] = notification.useNotification();
   const [form] = Form.useForm();
   const [passwordForm] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [activeTab, setActiveTab] = useState("1");
   const [avatarUrl, setAvatarUrl] = useState("");
-  // Address states (use same approach as Register)
+
   const [provinces, setProvinces] = useState([]);
   const [wards, setWards] = useState([]);
   const [loadingProvinces, setLoadingProvinces] = useState(false);
@@ -57,157 +60,133 @@ const Profile = () => {
 
   useEffect(() => {
     if (user) {
+      console.log('User data:', user);
+      console.log('Bank info:', user.bankInfo);
+      
       form.setFieldsValue({
         name: user.name,
         email: user.email,
         phone: user.phone,
         bio: user.bio || "",
         detailedAddress: user.address?.street || "",
+        bankInfo: {
+          bankName: user.bankInfo?.bankName || "",
+          accountNumber: user.bankInfo?.accountNumber || "",
+        },
       });
-      setAvatarUrl(user.avatar || "");
+      setAvatarUrl(user.avatar?.url || "");
+      
+      console.log('Form values set:', form.getFieldsValue());
     }
   }, [user, form]);
 
-  // Load provinces on mount
   useEffect(() => {
     const loadProvinces = async () => {
       setLoadingProvinces(true);
       try {
         const data = await fetchProvinces();
         setProvinces(data || []);
-      } catch (error) {
-        notification.error({
-          message: "Lỗi",
-          description:
-            error?.message || "Không tải được danh sách tỉnh/thành phố",
-        });
+        
+        // Auto-match province from user.address.city
+        if (user?.address?.city && data?.length > 0) {
+          const cityName = user.address.city;
+          const matchedProvince = data.find(
+            (p) => 
+              p.name === cityName ||
+              p.name.includes(cityName) ||
+              cityName.includes(p.name)
+          );
+          
+          if (matchedProvince) {
+            form.setFieldsValue({ province: matchedProvince.code });
+            setSelectedProvinceId(matchedProvince.code);
+          }
+        }
+      } catch {
+        api.error({ message: "Lỗi tải danh sách tỉnh/thành phố" });
       } finally {
         setLoadingProvinces(false);
       }
     };
-
     loadProvinces();
-  }, []);
+  }, [user, form, api]);
+
+  // Auto-load wards when province is selected
+  useEffect(() => {
+    const loadWards = async () => {
+      if (selectedProvinceId) {
+        setLoadingWards(true);
+        try {
+          const data = await fetchWards(selectedProvinceId);
+          setWards(data || []);
+          
+          // Auto-match ward from user.address.ward
+          if (user?.address?.ward && data?.length > 0) {
+            const wardName = user.address.ward;
+            const matchedWard = data.find(
+              (w) =>
+                w.name === wardName ||
+                w.name.includes(wardName) ||
+                wardName.includes(w.name)
+            );
+            
+            if (matchedWard) {
+              form.setFieldsValue({ ward: matchedWard.code });
+            }
+          }
+        } catch {
+          api.error({ message: "Lỗi tải phường/xã" });
+        } finally {
+          setLoadingWards(false);
+        }
+      }
+    };
+    loadWards();
+  }, [selectedProvinceId, user, form, api]);
 
   const handleProvinceChange = async (provinceCode) => {
     setSelectedProvinceId(provinceCode);
     setWards([]);
     form.setFieldsValue({ ward: undefined });
-    setLoadingWards(true);
-    try {
-      const data = await fetchWards(provinceCode);
-      setWards(data || []);
-    } catch (error) {
-      notification.error({
-        message: "Lỗi",
-        description: error?.message || "Không tải được danh sách phường/xã",
-      });
-    } finally {
-      setLoadingWards(false);
-    }
   };
-
-  // Helper: normalize Vietnamese names for matching
-  const normalizeName = (str) =>
-    (str || "")
-      .toString()
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "")
-      .toLowerCase()
-      .trim();
-
-  // Prefill province & ward from existing user.address after provinces load
-  useEffect(() => {
-    const prefillAddress = async () => {
-      if (!user || !provinces || provinces.length === 0) return;
-
-      const cityName = user.address?.city || user.address?.provinceName;
-      const wardName = user.address?.ward || user.address?.wardName;
-
-      if (cityName) {
-        const provinceMatch = provinces.find(
-          (p) => normalizeName(p.name) === normalizeName(cityName)
-        );
-
-        if (provinceMatch) {
-          form.setFieldsValue({ province: provinceMatch.code });
-          setSelectedProvinceId(provinceMatch.code);
-
-          // Load wards and set ward if found
-          setLoadingWards(true);
-          try {
-            const data = await fetchWards(provinceMatch.code);
-            setWards(data || []);
-            if (wardName) {
-              const wardMatch = (data || []).find(
-                (w) => normalizeName(w.name) === normalizeName(wardName)
-              );
-              if (wardMatch) {
-                form.setFieldsValue({ ward: wardMatch.code });
-              }
-            }
-          } catch (_) {
-            // ignore, already handled elsewhere
-          } finally {
-            setLoadingWards(false);
-          }
-        }
-      }
-
-      // Ensure street is shown
-      if (user.address?.street) {
-        form.setFieldsValue({ detailedAddress: user.address.street });
-      }
-    };
-
-    prefillAddress();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user, provinces]);
 
   const handleUpdateProfile = async (values) => {
     setLoading(true);
     try {
-      // Build address payload similar to Register
+      console.log("Form values:", values);
       const provinceObj = provinces.find((p) => p.code === values.province);
       const wardObj = wards.find((w) => w.code === values.ward);
-
+      
+      // Match backend structure: city, ward, district, street
       const address = {
-        provinceCode: values.province || null,
-        provinceName: provinceObj ? formatProvinceName(provinceObj) : null,
-        wardCode: values.ward || null,
-        wardName: wardObj ? formatWardName(wardObj) : null,
+        city: provinceObj ? formatProvinceName(provinceObj) : null,
+        district: provinceObj ? formatProvinceName(provinceObj) : null, // Same as city for now
+        ward: wardObj ? formatWardName(wardObj) : null,
         street: values.detailedAddress || "",
-        // Fields commonly expected by backend
-        ward: wardObj ? formatWardName(wardObj) : "",
-        district: provinceObj ? formatProvinceName(provinceObj) : "",
-        city: provinceObj ? formatProvinceName(provinceObj) : "",
       };
 
       const payload = {
         name: values.name,
-        email: values.email,
         phone: values.phone,
         bio: values.bio,
         address,
+        bankInfo: values.bankInfo,
       };
 
-      await authApi.updateProfile(payload);
-
-      // Refresh user data
-      const profileData = await authApi.getProfile();
-      if (profileData?.data) {
-        // Update AuthContext with new user data
-        notification.success({
-          message: "Thành công",
-          description: "Cập nhật thông tin thành công!",
-        });
+      console.log("Sending payload:", payload);
+      const result = await updateProfile(payload);
+      console.log("Update result:", result);
+      
+      if (result.success) {
+        api.success({ message: "Cập nhật thành công" });
         setEditMode(false);
+      } else {
+        api.error({ message: result.error || "Lỗi cập nhật thông tin" });
       }
     } catch (error) {
-      notification.error({
-        message: "Lỗi",
-        description: error?.response?.data?.message || "Cập nhật thất bại!",
-      });
+      console.error("Update profile error:", error);
+      console.error("Error response:", error.response?.data);
+      api.error({ message: "Lỗi cập nhật thông tin" });
     } finally {
       setLoading(false);
     }
@@ -217,340 +196,22 @@ const Profile = () => {
     setLoading(true);
     try {
       await authApi.changePassword(values);
-      notification.success({
-        message: "Thành công",
-        description: "Đổi mật khẩu thành công!",
-      });
+      api.success({ message: "Đổi mật khẩu thành công" });
       passwordForm.resetFields();
     } catch (error) {
-      notification.error({
-        message: "Lỗi",
-        description: error?.response?.data?.message || "Đổi mật khẩu thất bại!",
-      });
+      console.error("Change password error:", error);
+      console.error("Error response:", error.response?.data);
+      api.error({ message: "Đổi mật khẩu thất bại" });
     } finally {
       setLoading(false);
     }
   };
 
-  const handleAvatarUpload = async (info) => {
-    if (info.file.status === "uploading") {
-      setLoading(true);
-      return;
-    }
+  const handleAvatarUpload = (info) => {
     if (info.file.status === "done") {
       setAvatarUrl(info.file.response?.url);
-      setLoading(false);
     }
   };
-
-  const uploadButton = (
-    <div className="avatar-upload-button">
-      <CameraOutlined style={{ fontSize: "20px" }} />
-      <div>Đổi ảnh</div>
-    </div>
-  );
-
-  const tabItems = [
-    {
-      key: "1",
-      label: (
-        <span>
-          <UserOutlined />
-          Thông tin cá nhân
-        </span>
-      ),
-      children: (
-        <div className="tab-content">
-          <div className="tab-header">
-            <Title level={4}>Thông tin cá nhân</Title>
-            <Button
-              type={editMode ? "primary" : "default"}
-              icon={editMode ? <SaveOutlined /> : <EditOutlined />}
-              onClick={() => {
-                if (editMode) {
-                  form.submit();
-                } else {
-                  setEditMode(true);
-                }
-              }}
-              loading={loading}
-            >
-              {editMode ? "Lưu" : "Chỉnh sửa"}
-            </Button>
-          </div>
-
-          <Form
-            form={form}
-            layout="vertical"
-            onFinish={handleUpdateProfile}
-            disabled={!editMode}
-          >
-            <Row gutter={[16, 16]}>
-              <Col xs={24} md={12}>
-                <Form.Item
-                  name="name"
-                  label="Họ và tên"
-                  rules={[{ required: true, message: "Vui lòng nhập họ tên!" }]}
-                >
-                  <Input
-                    prefix={<UserOutlined />}
-                    placeholder="Nhập họ và tên"
-                  />
-                </Form.Item>
-              </Col>
-              <Col xs={24} md={12}>
-                <Form.Item
-                  name="phone"
-                  label="Số điện thoại"
-                  rules={[
-                    { required: true, message: "Vui lòng nhập số điện thoại!" },
-                    {
-                      pattern: /^[0-9]{10,11}$/,
-                      message: "Số điện thoại không hợp lệ!",
-                    },
-                  ]}
-                >
-                  <Input
-                    prefix={<PhoneOutlined />}
-                    placeholder="Nhập số điện thoại"
-                  />
-                </Form.Item>
-              </Col>
-              <Col xs={24}>
-                <Form.Item name="bio" label="Giới thiệu">
-                  <TextArea
-                    rows={4}
-                    placeholder="Viết một vài dòng giới thiệu về bản thân..."
-                    maxLength={500}
-                    showCount
-                  />
-                </Form.Item>
-              </Col>
-            </Row>
-
-            <Divider orientation="left">Địa chỉ</Divider>
-
-            <Row gutter={[16, 16]}>
-              <Col xs={24} md={12}>
-                <Form.Item
-                  name="province"
-                  label="Tỉnh/Thành phố"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Vui lòng chọn tỉnh/thành phố!",
-                    },
-                  ]}
-                >
-                  <Select
-                    placeholder="Chọn tỉnh/thành phố"
-                    loading={loadingProvinces}
-                    onChange={handleProvinceChange}
-                    showSearch
-                    optionFilterProp="children"
-                    filterOption={(input, option) =>
-                      option?.children
-                        ?.toLowerCase()
-                        ?.includes(input.toLowerCase())
-                    }
-                  >
-                    {provinces.map((province) => (
-                      <Select.Option key={province.code} value={province.code}>
-                        {formatProvinceName(province)}
-                      </Select.Option>
-                    ))}
-                  </Select>
-                </Form.Item>
-              </Col>
-              <Col xs={24} md={12}>
-                <Form.Item
-                  name="ward"
-                  label="Phường/Xã"
-                  rules={[
-                    { required: true, message: "Vui lòng chọn phường/xã!" },
-                  ]}
-                >
-                  <Select
-                    placeholder={
-                      !selectedProvinceId
-                        ? "Vui lòng chọn tỉnh/thành phố trước"
-                        : loadingWards
-                        ? "Đang tải phường/xã..."
-                        : wards.length === 0
-                        ? "Không có dữ liệu phường/xã"
-                        : "Chọn phường/xã"
-                    }
-                    loading={loadingWards}
-                    disabled={!selectedProvinceId || loadingWards}
-                    showSearch
-                    optionFilterProp="children"
-                    filterOption={(input, option) =>
-                      option?.children
-                        ?.toLowerCase()
-                        ?.includes(input.toLowerCase())
-                    }
-                  >
-                    {wards.map((ward) => (
-                      <Select.Option key={ward.code} value={ward.code}>
-                        {formatWardName(ward)}
-                      </Select.Option>
-                    ))}
-                  </Select>
-                </Form.Item>
-              </Col>
-              <Col xs={24} md={12}>
-                <Form.Item name="detailedAddress" label="Địa chỉ cụ thể">
-                  <Input
-                    prefix={<HomeOutlined />}
-                    placeholder="Số nhà, tên đường..."
-                  />
-                </Form.Item>
-              </Col>
-            </Row>
-          </Form>
-        </div>
-      ),
-    },
-    {
-      key: "2",
-      label: (
-        <span>
-          <KeyOutlined />
-          Bảo mật
-        </span>
-      ),
-      children: (
-        <div className="tab-content">
-          <Title level={4}>Đổi mật khẩu</Title>
-          <Text type="secondary">
-            Để bảo mật tài khoản, vui lòng không chia sẻ mật khẩu cho người
-            khác.
-          </Text>
-
-          <Form
-            form={passwordForm}
-            layout="vertical"
-            onFinish={handleChangePassword}
-            style={{ marginTop: 24, maxWidth: 500 }}
-          >
-            <Form.Item
-              name="currentPassword"
-              label="Mật khẩu hiện tại"
-              rules={[
-                { required: true, message: "Vui lòng nhập mật khẩu hiện tại!" },
-              ]}
-            >
-              <Input.Password placeholder="Nhập mật khẩu hiện tại" />
-            </Form.Item>
-
-            <Form.Item
-              name="newPassword"
-              label="Mật khẩu mới"
-              rules={[
-                { required: true, message: "Vui lòng nhập mật khẩu mới!" },
-                { min: 8, message: "Mật khẩu phải có ít nhất 8 ký tự!" },
-              ]}
-            >
-              <Input.Password placeholder="Nhập mật khẩu mới" />
-            </Form.Item>
-
-            <Form.Item
-              name="confirmPassword"
-              label="Xác nhận mật khẩu mới"
-              dependencies={["newPassword"]}
-              rules={[
-                { required: true, message: "Vui lòng xác nhận mật khẩu mới!" },
-                ({ getFieldValue }) => ({
-                  validator(_, value) {
-                    if (!value || getFieldValue("newPassword") === value) {
-                      return Promise.resolve();
-                    }
-                    return Promise.reject(
-                      new Error("Mật khẩu xác nhận không khớp!")
-                    );
-                  },
-                }),
-              ]}
-            >
-              <Input.Password placeholder="Xác nhận mật khẩu mới" />
-            </Form.Item>
-
-            <Form.Item>
-              <Button type="primary" htmlType="submit" loading={loading}>
-                Đổi mật khẩu
-              </Button>
-            </Form.Item>
-          </Form>
-        </div>
-      ),
-    },
-    {
-      key: "3",
-      label: (
-        <span>
-          <SettingOutlined />
-          Cài đặt
-        </span>
-      ),
-      children: (
-        <div className="tab-content">
-          <Title level={4}>Cài đặt tài khoản</Title>
-
-          <div className="settings-list">
-            <div className="setting-item">
-              <div className="setting-info">
-                <Text strong>Thông báo email</Text>
-                <br />
-                <Text type="secondary">
-                  Nhận thông báo qua email về đặt phòng và tin nhắn
-                </Text>
-              </div>
-              <Switch defaultChecked />
-            </div>
-
-            <Divider />
-
-            <div className="setting-item">
-              <div className="setting-info">
-                <Text strong>Thông báo push</Text>
-                <br />
-                <Text type="secondary">
-                  Nhận thông báo đẩy trên trình duyệt
-                </Text>
-              </div>
-              <Switch />
-            </div>
-
-            <Divider />
-
-            <div className="setting-item">
-              <div className="setting-info">
-                <Text strong>Hiển thị số điện thoại</Text>
-                <br />
-                <Text type="secondary">
-                  Cho phép người khác xem số điện thoại của bạn
-                </Text>
-              </div>
-              <Switch defaultChecked />
-            </div>
-
-            <Divider />
-
-            <div className="setting-item">
-              <div className="setting-info">
-                <Text strong>Chế độ riêng tư</Text>
-                <br />
-                <Text type="secondary">
-                  Ẩn hồ sơ khỏi kết quả tìm kiếm công khai
-                </Text>
-              </div>
-              <Switch />
-            </div>
-          </div>
-        </div>
-      ),
-    },
-  ];
 
   if (!user) {
     return (
@@ -560,67 +221,321 @@ const Profile = () => {
     );
   }
 
+  const uploadButton = (
+    <div className="avatar-upload-button">
+      <CameraOutlined style={{ fontSize: "18px" }} />
+      <div>Đổi ảnh</div>
+    </div>
+  );
+
   return (
     <div className="profile-container">
+      {contextHolder}
       <div className="profile-content">
         <Row gutter={[24, 24]}>
-          <Col xs={24}>
-            <Card className="profile-header-card">
-              <Row align="middle" gutter={[16, 16]}>
-                <Col xs={24} sm={6} md={4}>
-                  <div className="avatar-container">
-                    <Avatar
-                      size={120}
-                      src={avatarUrl}
-                      icon={<UserOutlined />}
-                      className="profile-avatar"
-                    />
-                    <Upload
-                      name="avatar"
-                      showUploadList={false}
-                      action="/api/users/profile"
-                      method="PUT"
-                      onChange={handleAvatarUpload}
-                      className="avatar-upload"
-                      headers={{
-                        Authorization: `Bearer ${localStorage.getItem(
-                          "token"
-                        )}`,
-                      }}
-                    >
-                      {uploadButton}
-                    </Upload>
-                  </div>
-                </Col>
-                <Col xs={24} sm={18} md={20}>
-                  <div className="profile-info">
-                    <Title level={2} className="profile-name">
-                      {user?.name}
-                    </Title>
-                    <Space direction="vertical" size="small">
-                      <Text className="profile-role" type="secondary">
-                        <UserOutlined />{" "}
-                        {user?.role === "tenant" ? "Người thuê" : "Chủ nhà"}
-                      </Text>
-                      <Text className="profile-email" type="secondary">
-                        <MailOutlined /> {user?.email}
-                      </Text>
-                      <Text className="profile-phone" type="secondary">
-                        <PhoneOutlined /> {user?.phone}
-                      </Text>
-                    </Space>
-                  </div>
-                </Col>
-              </Row>
+          {/* LEFT COLUMN */}
+          <Col xs={24} md={8}>
+            <Card className="profile-left-card">
+              <div className="avatar-container">
+                <Avatar
+                  size={120}
+                  src={avatarUrl}
+                  icon={<UserOutlined />}
+                  className="profile-avatar"
+                />
+                <Upload
+                  name="avatar"
+                  showUploadList={false}
+                  action="/api/users/profile"
+                  method="PUT"
+                  onChange={handleAvatarUpload}
+                  className="avatar-upload"
+                  headers={{
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                  }}
+                >
+                  {uploadButton}
+                </Upload>
+              </div>
+
+              <Divider />
+              <div className="profile-info">
+                <Title level={3} className="profile-name">
+                  {user?.name}
+                </Title>
+                <Space direction="vertical" size="small">
+                  <Text type="secondary">
+                    <UserOutlined />{" "}
+                    {user?.role === "landlord" ? "Chủ Trọ" : "Người thuê"}
+                  </Text>
+                  <Text>
+                    <MailOutlined /> {user?.email}
+                  </Text>
+                  <Text>
+                    <PhoneOutlined /> {user?.phone}
+                  </Text>
+                  <Text>
+                    <BankOutlined /> {user?.bankInfo?.bankName || "Chưa có ngân hàng"}
+                  </Text>
+                  <Text>
+                    <CreditCardOutlined />{" "}
+                    {user?.bankInfo?.accountNumber || "Chưa có số tài khoản"}
+                  </Text>
+                </Space>
+              </div>
             </Card>
           </Col>
 
-          <Col xs={24}>
-            <Card>
+          {/* RIGHT COLUMN */}
+          <Col xs={24} md={16}>
+            <Card className="profile-right-card">
               <Tabs
                 activeKey={activeTab}
                 onChange={setActiveTab}
-                items={tabItems}
+                type="line"
+                className="profile-tabs"
+                items={[
+                  {
+                    key: "1",
+                    label: (
+                      <span>
+                        <UserOutlined /> Thông tin cá nhân
+                      </span>
+                    ),
+                    children: (
+                      <div className="tab-content">
+                        <div className="tab-header">
+                          <Title level={4}>Thông tin cá nhân</Title>
+                          <Button
+                            type={editMode ? "primary" : "default"}
+                            icon={editMode ? <SaveOutlined /> : <EditOutlined />}
+                            onClick={() => {
+                              if (editMode) form.submit();
+                              else setEditMode(true);
+                            }}
+                            loading={loading}
+                          >
+                            {editMode ? "Lưu" : "Chỉnh sửa"}
+                          </Button>
+                        </div>
+
+                        <Form
+                          form={form}
+                          layout="vertical"
+                          onFinish={handleUpdateProfile}
+                          disabled={!editMode}
+                        >
+                          <Row gutter={[16, 16]}>
+                            <Col xs={24} md={12}>
+                              <Form.Item
+                                name="name"
+                                label="Họ và tên"
+                                rules={[{ required: true }]}
+                              >
+                                <Input prefix={<UserOutlined />} />
+                              </Form.Item>
+                            </Col>
+                            <Col xs={24} md={12}>
+                              <Form.Item
+                                name="phone"
+                                label="Số điện thoại"
+                                rules={[
+                                  { required: true },
+                                  {
+                                    pattern: /^[0-9]{10,11}$/,
+                                    message: "Số điện thoại không hợp lệ!",
+                                  },
+                                ]}
+                              >
+                                <Input prefix={<PhoneOutlined />} />
+                              </Form.Item>
+                            </Col>
+                            <Col xs={24}>
+                              <Form.Item name="bio" label="Giới thiệu">
+                                <TextArea rows={4} maxLength={500} showCount />
+                              </Form.Item>
+                            </Col>
+                          </Row>
+
+                          <Divider orientation="left">Địa chỉ</Divider>
+
+                          <Row gutter={[16, 16]}>
+                            <Col xs={24} md={12}>
+                              <Form.Item
+                                name="province"
+                                label="Tỉnh/Thành phố"
+                                rules={[{ required: true }]}
+                              >
+                                <Select
+                                  placeholder="Chọn tỉnh/thành phố"
+                                  loading={loadingProvinces}
+                                  onChange={handleProvinceChange}
+                                >
+                                  {provinces.map((p) => (
+                                    <Select.Option key={p.code} value={p.code}>
+                                      {formatProvinceName(p)}
+                                    </Select.Option>
+                                  ))}
+                                </Select>
+                              </Form.Item>
+                            </Col>
+                            <Col xs={24} md={12}>
+                              <Form.Item
+                                name="ward"
+                                label="Phường/Xã"
+                                rules={[{ required: true }]}
+                              >
+                                <Select
+                                  placeholder="Chọn phường/xã"
+                                  loading={loadingWards}
+                                  disabled={!editMode || !selectedProvinceId}
+                                >
+                                  {wards.map((w) => (
+                                    <Select.Option key={w.code} value={w.code}>
+                                      {formatWardName(w)}
+                                    </Select.Option>
+                                  ))}
+                                </Select>
+                              </Form.Item>
+                            </Col>
+                            <Col xs={24}>
+                              <Form.Item
+                                name="detailedAddress"
+                                label="Địa chỉ cụ thể"
+                              >
+                                <Input prefix={<HomeOutlined />} />
+                              </Form.Item>
+                            </Col>
+                          </Row>
+
+                          <Divider orientation="left">
+                            Thông tin ngân hàng
+                          </Divider>
+
+                          <Row gutter={[16, 16]}>
+                            <Col xs={24} md={12}>
+                              <Form.Item
+                                name={["bankInfo", "bankName"]}
+                                label="Tên ngân hàng"
+                                rules={[{ required: true }]}
+                              >
+                                <Input prefix={<BankOutlined />} />
+                              </Form.Item>
+                            </Col>
+                            <Col xs={24} md={12}>
+                              <Form.Item
+                                name={["bankInfo", "accountNumber"]}
+                                label="Số tài khoản"
+                                rules={[{ required: true }]}
+                              >
+                                <Input prefix={<CreditCardOutlined />} />
+                              </Form.Item>
+                            </Col>
+                          </Row>
+                        </Form>
+                      </div>
+                    ),
+                  },
+                  {
+                    key: "2",
+                    label: (
+                      <span>
+                        <KeyOutlined /> Bảo mật
+                      </span>
+                    ),
+                    children: (
+                      <Form
+                        form={passwordForm}
+                        layout="vertical"
+                        onFinish={handleChangePassword}
+                        className="tab-content"
+                      >
+                        <Title level={4}>Đổi mật khẩu</Title>
+                        <Form.Item
+                          name="currentPassword"
+                          label="Mật khẩu hiện tại"
+                          rules={[{ required: true }]}
+                        >
+                          <Input.Password />
+                        </Form.Item>
+                        <Form.Item
+                          name="newPassword"
+                          label="Mật khẩu mới"
+                          rules={[{ required: true, min: 8 }]}
+                        >
+                          <Input.Password />
+                        </Form.Item>
+                        <Form.Item
+                          name="confirmPassword"
+                          label="Xác nhận mật khẩu mới"
+                          dependencies={["newPassword"]}
+                          rules={[
+                            { required: true },
+                            ({ getFieldValue }) => ({
+                              validator(_, value) {
+                                return !value ||
+                                  getFieldValue("newPassword") === value
+                                  ? Promise.resolve()
+                                  : Promise.reject(
+                                      new Error("Mật khẩu xác nhận không khớp!")
+                                    );
+                              },
+                            }),
+                          ]}
+                        >
+                          <Input.Password />
+                        </Form.Item>
+                        <Button type="primary" htmlType="submit" loading={loading}>
+                          Đổi mật khẩu
+                        </Button>
+                      </Form>
+                    ),
+                  },
+                  {
+                    key: "3",
+                    label: (
+                      <span>
+                        <SettingOutlined /> Cài đặt
+                      </span>
+                    ),
+                    children: (
+                      <div className="tab-content settings-list">
+                        <div className="setting-item">
+                          <div className="setting-info">
+                            <Text strong>Thông báo email</Text>
+                            <br />
+                            <Text type="secondary">
+                              Nhận thông báo qua email về đặt phòng và tin nhắn
+                            </Text>
+                          </div>
+                          <Switch defaultChecked />
+                        </div>
+                        <Divider />
+                        <div className="setting-item">
+                          <div className="setting-info">
+                            <Text strong>Thông báo push</Text>
+                            <br />
+                            <Text type="secondary">
+                              Nhận thông báo đẩy trên trình duyệt
+                            </Text>
+                          </div>
+                          <Switch />
+                        </div>
+                        <Divider />
+                        <div className="setting-item">
+                          <div className="setting-info">
+                            <Text strong>Hiển thị số điện thoại</Text>
+                            <br />
+                            <Text type="secondary">
+                              Cho phép người khác xem số điện thoại của bạn
+                            </Text>
+                          </div>
+                          <Switch defaultChecked />
+                        </div>
+                      </div>
+                    ),
+                  },
+                ]}
               />
             </Card>
           </Col>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import "./RoomInfo.css";
 import {
@@ -15,8 +15,53 @@ import {
   CleaningServicesOutlined,
   CheckOutlined,
 } from "@ant-design/icons";
+import { Spin } from "antd";
+import reviewApi from "../../../../../services/api/reviewApi";
 
 const RoomInfo = ({ roomData, onViewAllReviews, onViewOnMap }) => {
+  const [reviews, setReviews] = useState([]);
+  const [reviewStats, setReviewStats] = useState({
+    averageRating: 0,
+    totalReviews: 0,
+  });
+  const [loadingReviews, setLoadingReviews] = useState(false);
+
+  // Fetch reviews when component mounts or roomData changes
+  useEffect(() => {
+    const fetchReviews = async () => {
+      if (!roomData?._id && !roomData?.id) return;
+      
+      try {
+        setLoadingReviews(true);
+        const roomId = roomData._id || roomData.id;
+        
+        const response = await reviewApi.getRoomReviews(roomId, {
+          page: 1,
+          limit: 10,
+          sort: '-createdAt'
+        });
+        
+        // API returns: { success, data: { reviews, pagination, statistics } }
+        const fetchedReviews = response.data?.reviews || [];
+        const statistics = response.data?.statistics || {};
+        
+        setReviews(fetchedReviews);
+        setReviewStats({
+          averageRating: statistics.averageRating || 0,
+          totalReviews: statistics.totalReviews || 0,
+        });
+      } catch (error) {
+        console.error('Error fetching reviews:', error);
+        setReviews([]);
+        setReviewStats({ averageRating: 0, totalReviews: 0 });
+      } finally {
+        setLoadingReviews(false);
+      }
+    };
+
+    fetchReviews();
+  }, [roomData]);
+
   // Safety check for roomData
   if (!roomData) {
     return <div>Loading room information...</div>;
@@ -94,11 +139,11 @@ const RoomInfo = ({ roomData, onViewAllReviews, onViewOnMap }) => {
 
           <div className="rating-section">
             <div className="stars-rating">
-              {renderStars(roomData.rating)}
-              <span className="rating-number">{roomData.rating}</span>
+              {renderStars(reviewStats.averageRating || roomData.rating || 0)}
+              <span className="rating-number">{(reviewStats.averageRating || roomData.rating || 0).toFixed(1)}</span>
             </div>
             <span className="review-users-count">
-              ({roomData.reviewCount} đánh giá)
+              ({reviewStats.totalReviews || roomData.reviewCount || 0} đánh giá)
             </span>
           </div>
         </div>
@@ -269,17 +314,17 @@ const RoomInfo = ({ roomData, onViewAllReviews, onViewOnMap }) => {
         <div className="rating-summary">
           <div className="overall-rating">
             <div className="stars-rating">
-              {renderStars(roomData.rating)}
-              <span className="rating-number">{roomData.rating}</span>
+              {renderStars(reviewStats.averageRating || roomData.rating || 0)}
+              <span className="rating-number">{(reviewStats.averageRating || roomData.rating || 0).toFixed(1)}</span>
             </div>
             <span className="review-users-count">
-              ({roomData.reviewCount} đánh giá)
+              ({reviewStats.totalReviews || roomData.reviewCount || 0} đánh giá)
             </span>
           </div>
         </div>
 
         {/* Rating Breakdown */}
-        <div className="rating-breakdown">
+        {/* <div className="rating-breakdown">
           <div className="rating-category">
             <span className="category-label">Vị trí</span>
             <div className="rating-bar">
@@ -336,29 +381,46 @@ const RoomInfo = ({ roomData, onViewAllReviews, onViewOnMap }) => {
               {roomData.ratingBreakdown.landlord}
             </span>
           </div>
-        </div>
+        </div> */}
 
         {/* Individual Reviews */}
         <div className="reviews-users-list">
-          {roomData.reviews.map((review) => (
-            <div key={review.id} className="review-users-item">
-              <div className="review-users-header">
-                <img
-                  src={review.avatar}
-                  alt={review.name}
-                  className="reviewer-users-avatar"
-                />
-                <div className="reviewer-users-info">
-                  <div className="reviewer-users-name">{review.name}</div>
-                  <div className="review-users-date">{review.date}</div>
-                </div>
-              </div>
-              <div className="review-users-rating">
-                {renderStars(review.rating)}
-              </div>
-              <p className="review-users-comment">{review.comment}</p>
+          {loadingReviews ? (
+            <div style={{ textAlign: 'center', padding: '40px 0' }}>
+              <Spin size="large" tip="Đang tải đánh giá..." />
             </div>
-          ))}
+          ) : reviews.length > 0 ? (
+            reviews.map((review) => (
+              <div key={review._id || review.id} className="review-users-item">
+                <div className="review-users-header">
+                  <img
+                    src={review.createdBy?.avatar || review.renterId?.avatar || 'https://ui-avatars.com/api/?name=' + (review.createdBy?.name || review.renterId?.name || 'User')}
+                    alt={review.createdBy?.name || review.renterId?.name || 'User'}
+                    className="reviewer-users-avatar"
+                    onError={(e) => {
+                      e.target.src = 'https://ui-avatars.com/api/?name=User&background=4739F0&color=fff';
+                    }}
+                  />
+                  <div className="reviewer-users-info">
+                    <div className="reviewer-users-name">
+                      {review.createdBy?.name || review.renterId?.name || 'Người dùng'}
+                    </div>
+                    <div className="review-users-date">
+                      {new Date(review.createdAt).toLocaleDateString('vi-VN')}
+                    </div>
+                  </div>
+                </div>
+                <div className="review-users-rating">
+                  {renderStars(review.rating)}
+                </div>
+                <p className="review-users-comment">{review.comment}</p>
+              </div>
+            ))
+          ) : (
+            <div style={{ textAlign: 'center', padding: '40px 0', color: '#999' }}>
+              Chưa có đánh giá nào
+            </div>
+          )}
         </div>
       </div>
     </div>

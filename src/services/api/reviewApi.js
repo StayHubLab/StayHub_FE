@@ -1,95 +1,103 @@
-/**
- * @fileoverview Review API - API calls for reviews and testimonials
- * @created 2025-09-25
- * @file reviewApi.js
- */
-
 import apiClient from "./apiClient";
 
 const reviewApi = {
   /**
-   * Get all public testimonials/reviews
-   * @param {Object} options - Query options
-   * @param {number} options.page - Page number
-   * @param {number} options.limit - Items per page
-   * @param {number} options.minRating - Minimum rating filter
-   * @returns {Promise<Object>} API response with testimonials
-   */
-  getTestimonials: async (options = {}) => {
-    try {
-      const { page = 1, limit = 10, minRating = 4 } = options;
-      const params = new URLSearchParams({
-        page: page.toString(),
-        limit: limit.toString(),
-        minRating: minRating.toString(),
-        isPublic: "true",
-      });
-
-      const response = await apiClient.get(
-        `/api/reviews/testimonials?${params}`
-      );
-      return response.data;
-    } catch (error) {
-      console.error("Error fetching testimonials:", error);
-      throw error;
-    }
-  },
-
-  /**
    * Get reviews for a specific room
    * @param {string} roomId - Room ID
-   * @param {Object} options - Query options
-   * @returns {Promise<Object>} API response with reviews
+   * @param {object} options - Query options (page, limit, sort)
    */
   getRoomReviews: async (roomId, options = {}) => {
-    try {
-      const { page = 1, limit = 10 } = options;
-      const params = new URLSearchParams({
-        page: page.toString(),
-        limit: limit.toString(),
-      });
-
-      const response = await apiClient.get(
-        `/api/reviews/room/${roomId}?${params}`
-      );
-      return response.data;
-    } catch (error) {
-      console.error("Error fetching room reviews:", error);
-      throw error;
-    }
+    const { page = 1, limit = 10, sort = '-createdAt' } = options;
+    const response = await apiClient.get(
+      `/reviews/room/${roomId}?page=${page}&limit=${limit}&sort=${sort}`
+    );
+    return response.data;
   },
 
   /**
-   * Create a new review
-   * @param {Object} reviewData - Review data
-   * @param {string} reviewData.roomId - Room ID
+   * Get reviews for a specific landlord
+   * @param {string} landlordId - Landlord ID
+   * @param {object} options - Query options (page, limit, sort)
+   */
+  getLandlordReviews: async (landlordId, options = {}) => {
+    const { page = 1, limit = 10, sort = '-createdAt' } = options;
+    const response = await apiClient.get(
+      `/reviews/landlord/${landlordId}?page=${page}&limit=${limit}&sort=${sort}`
+    );
+    return response.data;
+  },
+
+  /**
+   * Get landlord statistics
+   * @param {string} landlordId - Landlord ID
+   */
+  getLandlordStats: async (landlordId) => {
+    const response = await apiClient.get(`/reviews/landlord/${landlordId}/stats`);
+    return response.data;
+  },
+
+  /**
+   * Get reviews created by a specific renter
+   * @param {string} renterId - Renter ID
+   */
+  getRenterReviews: async (renterId) => {
+    const response = await apiClient.get(`/reviews/renter/${renterId}`);
+    return response.data;
+  },
+
+  /**
+   * Create a new review (Room or Landlord)
+   * @param {object} reviewData - Review data
+   * @param {string} reviewData.targetType - 'room' or 'landlord'
+   * @param {string} reviewData.roomId - Room ID (if targetType is 'room')
+   * @param {string} reviewData.landlordId - Landlord ID (if targetType is 'landlord')
    * @param {number} reviewData.rating - Rating (1-5)
-   * @param {string} reviewData.comment - Review comment
-   * @param {boolean} reviewData.allowPublic - Allow public display
-   * @returns {Promise<Object>} API response
+   * @param {string} reviewData.comment - Review comment (min 10, max 500 chars)
+   * @param {string} reviewData.contractId - Contract ID (optional)
    */
   createReview: async (reviewData) => {
-    try {
-      const response = await apiClient.post("/api/reviews", reviewData);
-      return response.data;
-    } catch (error) {
-      console.error("Error creating review:", error);
-      throw error;
-    }
+    const response = await apiClient.post("/reviews", reviewData);
+    return response.data;
   },
 
   /**
-   * Get review statistics
-   * @returns {Promise<Object>} API response with stats
+   * Update an existing review
+   * @param {string} reviewId - Review ID
+   * @param {object} updateData - Updated review data
+   * @param {number} updateData.rating - New rating (1-5)
+   * @param {string} updateData.comment - New comment
    */
-  getReviewStats: async () => {
-    try {
-      const response = await apiClient.get("/api/reviews/stats");
-      return response.data;
-    } catch (error) {
-      console.error("Error fetching review stats:", error);
-      throw error;
+  updateReview: async (reviewId, updateData) => {
+    const response = await apiClient.put(`/reviews/${reviewId}`, updateData);
+    return response.data;
+  },
+
+  /**
+   * Delete a review
+   * @param {string} reviewId - Review ID
+   */
+  deleteReview: async (reviewId) => {
+    const response = await apiClient.delete(`/reviews/${reviewId}`);
+    return response.data;
+  },
+
+  /**
+   * Check if user has already reviewed a target
+   * @param {string} userId - User ID
+   * @param {string} targetId - Room or Landlord ID
+   * @param {string} targetType - 'room' or 'landlord'
+   */
+  checkExistingReview: async (userId, targetId, targetType) => {
+    const response = await reviewApi.getRenterReviews(userId);
+    const reviews = response.data?.reviews || [];
+    
+    if (targetType === 'room') {
+      return reviews.find(r => r.roomId?._id === targetId || r.roomId === targetId);
+    } else if (targetType === 'landlord') {
+      return reviews.find(r => r.landlordId?._id === targetId || r.landlordId === targetId);
     }
+    
+    return null;
   },
 };
 

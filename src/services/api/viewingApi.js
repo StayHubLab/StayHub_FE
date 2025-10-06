@@ -47,26 +47,6 @@ apiClient.interceptors.response.use(
  * Viewing API Service
  */
 class ViewingApi {
-  /**
-   * Create a new viewing appointment
-   * @param {Object} viewingData - Viewing appointment data
-   * @returns {Promise<Object>} API response
-   */
-  static async createViewing(viewingData) {
-    try {
-      const response = await apiClient.post("/viewings", viewingData);
-      return response;
-    } catch (error) {
-      console.error("Error creating viewing appointment:", error);
-      throw error;
-    }
-  }
-
-  /**
-   * Get viewing appointments with pagination and filters
-   * @param {Object} params - Query parameters
-   * @returns {Promise<Object>} API response
-   */
   static async getViewings(params = {}) {
     try {
       const response = await apiClient.get("/viewings", { params });
@@ -77,11 +57,26 @@ class ViewingApi {
     }
   }
 
-  /**
-   * Get a specific viewing appointment by ID
-   * @param {string} viewingId - Viewing appointment ID
-   * @returns {Promise<Object>} API response
-   */
+  static async createViewing(viewingData) {
+    try {
+      const response = await apiClient.post("/viewings", viewingData);
+      return response;
+    } catch (error) {
+      console.error("Error creating viewing appointment:", error);
+      throw error;
+    }
+  }
+
+  static async getMyViewings(params = {}) {
+    try {
+      const response = await apiClient.get("/viewings/me", { params });
+      return response;
+    } catch (error) {
+      console.error("Error getting my viewing appointments:", error);
+      throw error;
+    }
+  }
+
   static async getViewingById(viewingId) {
     try {
       const response = await apiClient.get(`/viewings/${viewingId}`);
@@ -92,13 +87,30 @@ class ViewingApi {
     }
   }
 
-  /**
-   * Update viewing appointment status
-   * @param {string} viewingId - Viewing appointment ID
-   * @param {string} status - New status
-   * @param {string} message - Optional message
-   * @returns {Promise<Object>} API response
-   */
+  static async getViewingsByUser(userId, params = {}) {
+    try {
+      const response = await apiClient.get(`/viewings/user/${userId}`, {
+        params,
+      });
+      return response;
+    } catch (error) {
+      console.error("Error getting user viewing appointments:", error);
+      throw error;
+    }
+  }
+
+  static async getViewingsByLandlord(landlordId, params = {}) {
+    try {
+      const response = await apiClient.get(`/viewings/landlord/${landlordId}`, {
+        params,
+      });
+      return response;
+    } catch (error) {
+      console.error("Error getting landlord viewing appointments:", error);
+      throw error;
+    }
+  }
+
   static async updateViewingStatus(viewingId, status, message = null) {
     try {
       const response = await apiClient.put(`/viewings/${viewingId}/status`, {
@@ -112,63 +124,6 @@ class ViewingApi {
     }
   }
 
-  /**
-   * Get viewing appointments for a specific user
-   * @param {string} userId - User ID
-   * @param {Object} params - Query parameters
-   * @returns {Promise<Object>} API response
-   */
-  static async getViewingsByUser(userId, params = {}) {
-    try {
-      const response = await apiClient.get(`/viewings/user/${userId}`, {
-        params,
-      });
-      return response;
-    } catch (error) {
-      console.error("Error getting user viewing appointments:", error);
-      throw error;
-    }
-  }
-
-  /**
-   * Get viewing appointments for a specific landlord
-   * @param {string} landlordId - Landlord ID
-   * @param {Object} params - Query parameters
-   * @returns {Promise<Object>} API response
-   */
-  static async getViewingsByLandlord(landlordId, params = {}) {
-    try {
-      const response = await apiClient.get(`/viewings/landlord/${landlordId}`, {
-        params,
-      });
-      return response;
-    } catch (error) {
-      console.error("Error getting landlord viewing appointments:", error);
-      throw error;
-    }
-  }
-
-  /**
-   * Get viewing appointments for the authenticated user
-   * @param {Object} params - Query parameters
-   * @returns {Promise<Object>} API response
-   */
-  static async getMyViewings(params = {}) {
-    try {
-      const response = await apiClient.get("/viewings/me", { params });
-      return response;
-    } catch (error) {
-      console.error("Error getting my viewing appointments:", error);
-      throw error;
-    }
-  }
-
-  /**
-   * Confirm a viewing appointment (landlord only)
-   * @param {string} viewingId - Viewing appointment ID
-   * @param {string} message - Confirmation message
-   * @returns {Promise<Object>} API response
-   */
   static async confirmViewing(viewingId, message = null) {
     try {
       const response = await apiClient.post(`/viewings/${viewingId}/confirm`, {
@@ -181,12 +136,6 @@ class ViewingApi {
     }
   }
 
-  /**
-   * Cancel a viewing appointment
-   * @param {string} viewingId - Viewing appointment ID
-   * @param {string} reason - Cancellation reason
-   * @returns {Promise<Object>} API response
-   */
   static async cancelViewing(viewingId, reason = null) {
     try {
       const response = await apiClient.post(`/viewings/${viewingId}/cancel`, {
@@ -199,11 +148,6 @@ class ViewingApi {
     }
   }
 
-  /**
-   * Mark a viewing appointment as completed
-   * @param {string} viewingId - Viewing appointment ID
-   * @returns {Promise<Object>} API response
-   */
   static async completeViewing(viewingId) {
     try {
       const response = await apiClient.post(`/viewings/${viewingId}/complete`);
@@ -214,11 +158,6 @@ class ViewingApi {
     }
   }
 
-  /**
-   * Delete a viewing appointment
-   * @param {string} viewingId - Viewing appointment ID
-   * @returns {Promise<Object>} API response
-   */
   static async deleteViewing(viewingId) {
     try {
       const response = await apiClient.delete(`/viewings/${viewingId}`);
@@ -229,12 +168,6 @@ class ViewingApi {
     }
   }
 
-  /**
-   * Check available time slots for a specific date and room
-   * @param {string} roomId - Room ID
-   * @param {string} date - Date in YYYY-MM-DD format
-   * @returns {Promise<Object>} Available time slots
-   */
   static async getAvailableTimeSlots(roomId, date) {
     try {
       const response = await apiClient.get("/viewings", {

@@ -1,10 +1,173 @@
+﻿/* CreateBuilding.css */
 
+.building-create-container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  background-color: #f8f9fe;
+  padding: 60px 20px;
+  font-family: "Montserrat", sans-serif;
+}
 
+.building-create-card {
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+  width: 100%;
+  max-width: 950px;
+  padding: 50px 60px;
+  animation: buildingFadeIn 0.3s ease-in-out;
+}
 
+.building-create-header {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+  margin-bottom: 40px;
+}
 
+.building-logo-container {
+  flex-shrink: 0;
+  width: 100px;
+  height: 100px;
+  background: #f3f1ff;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
+.building-logo-image {
+  width: 55px;
+  height: auto;
+  object-fit: contain;
+}
 
+.building-create-title-section {
+  display: flex;
+  flex-direction: column;
+}
 
+.building-create-title {
+  color: #4739f0;
+  margin-bottom: 4px !important;
+  font-weight: 700 !important;
+}
 
+.building-create-subtitle {
+  color: #666;
+  font-size: 15px;
+}
 
+.building-create-form .building-form-section {
+  margin-bottom: 40px;
+}
 
+.building-create-form .ant-typography h4 {
+  color: #4739f0;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.building-create-form .ant-form-item-label > label {
+  font-weight: 600;
+  color: #333;
+}
+
+.building-create-form input,
+.building-create-form textarea,
+.building-create-form .ant-input-number,
+.building-create-form .ant-select-selector {
+  border-radius: 10px !important;
+}
+
+.building-create-form input:focus,
+.building-create-form textarea:focus,
+.building-create-form .ant-select-focused .ant-select-selector {
+  border-color: #4739f0 !important;
+  box-shadow: 0 0 0 2px rgba(71, 57, 240, 0.2) !important;
+}
+
+.building-create-form .ant-btn {
+  border-radius: 10px;
+  height: 45px;
+  font-weight: 600;
+}
+
+.building-create-form .building-create-btn {
+  background-color: #4739f0;
+  border-color: #4739f0;
+  color: #fff;
+  width: 180px;
+  transition: all 0.3s;
+}
+
+.building-create-form .building-create-btn:hover {
+  background-color: #372bcf;
+  border-color: #372bcf;
+  transform: translateY(-1px);
+}
+
+.building-create-form .building-skip-btn {
+  background: #f3f1ff;
+  color: #4739f0;
+  border: none;
+  width: 120px;
+  transition: all 0.3s;
+}
+
+.building-create-form .building-skip-btn:hover {
+  background-color: #e9e6ff;
+  color: #372bcf;
+}
+
+.building-create-form .building-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 20px;
+  margin-top: 30px;
+}
+
+.ant-divider {
+  border-color: #f0f0f0;
+}
+
+.ant-spin-dot-item {
+  background-color: #4739f0 !important;
+}
+
+/* Animation */
+@keyframes buildingFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .building-create-card {
+    padding: 30px 25px;
+  }
+
+  .building-create-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .building-create-form .building-form-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .building-create-form .building-create-btn,
+  .building-create-form .building-skip-btn {
+    width: 100%;
+  }
+}

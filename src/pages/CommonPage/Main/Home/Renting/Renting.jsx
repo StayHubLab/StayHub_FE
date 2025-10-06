@@ -6,6 +6,7 @@ import { Spin, Empty, message } from "antd";
 import { useAuth } from "../../../../../contexts/AuthContext";
 import contractApi from "../../../../../services/api/contractApi";
 import billApi from "../../../../../services/api/billApi";
+import chatService from "../../../../../services/api/chatService";
 import { useNavigate } from "react-router-dom";
 
 const Renting = ({ bookings = [], loading: loadingProp = false }) => {
@@ -64,9 +65,9 @@ const Renting = ({ bookings = [], loading: loadingProp = false }) => {
           } else {
             const d1 = new Date(
               map[cid]?.dueDate ||
-                map[cid]?.paymentDueDate ||
-                map[cid]?.deadline ||
-                0
+              map[cid]?.paymentDueDate ||
+              map[cid]?.deadline ||
+              0
             );
             const d2 = new Date(
               b?.dueDate || b?.paymentDueDate || b?.deadline || 0
@@ -163,12 +164,45 @@ const Renting = ({ bookings = [], loading: loadingProp = false }) => {
     navigate(`/main/bills`);
   };
 
+  const handleViewRoom = (contract) => {
+    const room = contract?.roomId;
+    if (!room?._id) {
+      message.error("Không tìm thấy thông tin phòng");
+      return;
+    }
+    navigate(`/main/room-detail/${room._id}`);
+  }
+
   const handleReportIssue = () => {
     message.info("Tính năng báo cáo sự cố đang được phát triển");
   };
 
-  const handleChatWithLandlord = () => {
-    message.info("Tính năng chat đang được phát triển");
+  const handleChatWithLandlord = async (contract) => {
+    try {
+      // Get landlord ID from contract - the landlord is stored as hostId
+      const landlordId = 
+        contract?.hostId || // Direct hostId on contract (string ID)
+        contract?.hostId?._id || // Populated hostId object
+        contract?.roomId?.buildingId?.hostId?._id || // From building.hostId (populated)
+        contract?.roomId?.buildingId?.hostId; // From building.hostId (string ID)
+
+      if (!landlordId) {
+        message.error("Không tìm thấy thông tin chủ trọ");
+        return;
+      }
+
+      const res = await chatService.createConversation(landlordId);
+      const conversation = res.data.conversation;
+
+      if (conversation?._id) {
+        navigate(`/chat?conversationId=${conversation._id}`);
+      } else {
+        message.error("Không thể tạo cuộc trò chuyện");
+      }
+    } catch (err) {
+      message.error("Có lỗi xảy ra khi tạo cuộc trò chuyện");
+      console.error("Error creating conversation:", err);
+    }
   };
 
   return (
@@ -210,9 +244,9 @@ const Renting = ({ bookings = [], loading: loadingProp = false }) => {
                 <div className="renting-payment-text">
                   {card.hasPendingMonthly && card.dueDate
                     ? `Đến hạn thanh toán: ${card.dueDate.toLocaleDateString(
-                        "vi-VN"
-                      )}`
-                    : "Chưa đến tháng"}
+                      "vi-VN"
+                    )}`
+                    : "Chưa đến hạn thanh toán"}
                 </div>
               </div>
 
@@ -235,19 +269,29 @@ const Renting = ({ bookings = [], loading: loadingProp = false }) => {
                     <div className="renting-pay-text">Thanh toán ngay</div>
                   </div>
 
-                  {/* Report Issue Button */}
+                  {/* View room details */}
+                  <div
+                    className="renting-view-button"
+                    onClick={() => handleViewRoom(card.contract)}
+                  >
+                    <div className="renting-view-text">Xem chi tiết</div>
+                  </div>
+
+                  {/* Report Issue Button
                   <div
                     className="renting-report-button"
                     onClick={handleReportIssue}
                   >
                     <div className="renting-report-text">Báo cáo sự cố</div>
-                  </div>
+                  </div> */}
+
+
                 </div>
               </div>
               {/* Chat with Landlord */}
               <div
                 className="renting-chat-section"
-                onClick={handleChatWithLandlord}
+                onClick={() => handleChatWithLandlord(card.contract)}
               >
                 <div className="renting-chat-icon">
                   <MessageOutlined />

@@ -684,10 +684,10 @@
 
 /* Verified Badge */
 .search-room-verified-badge {
-  width: 106.12px;
+  width: auto;
   height: 24px;
   position: absolute;
-  left: 251.2px;
+  right: 12px;
   top: 12px;
   background: #4739f0;
   border-radius: 4px;
