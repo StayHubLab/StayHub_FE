@@ -220,19 +220,19 @@ const CreateBuilding = () => {
   }
 
   return (
-    <div className="create-building-container">
-      <div className="create-building-card">
+    <div className="building-create-container">
+      <div className="building-create-card">
         {/* Header */}
-        <div className="create-building-header">
-          <div className="logo-container">
-            <img src={logoRemoveBG} alt="StayHub Logo" className="logo-image" />
+        <div className="building-create-header">
+          <div className="building-logo-container">
+            <img src={logoRemoveBG} alt="StayHub Logo" className="building-logo-image" />
           </div>
 
-          <div className="create-building-title-section">
-            <Title level={2} className="create-building-title">
+          <div className="building-create-title-section">
+            <Title level={2} className="building-create-title">
               Tạo tòa nhà đầu tiên
             </Title>
-            <Text className="create-building-subtitle">
+            <Text className="building-create-subtitle">
               Để bắt đầu quản lý, hãy tạo tòa nhà đầu tiên của bạn.
             </Text>
           </div>
@@ -245,10 +245,10 @@ const CreateBuilding = () => {
           onFinish={handleSubmit}
           layout="vertical"
           size="large"
-          className="create-building-form"
+          className="building-create-form"
           initialValues={{}}
         >
-          <div className="form-section">
+          <div className="building-form-section">
             <Title level={4}>Thông tin cơ bản</Title>
             <Form.Item
               label="Tên tòa nhà"
@@ -320,7 +320,7 @@ const CreateBuilding = () => {
 
           <Divider />
 
-          <div className="form-section">
+          <div className="building-form-section">
             <Title level={4}>Địa chỉ</Title>
             <Row gutter={16}>
               <Col span={12}>
@@ -442,15 +442,15 @@ const CreateBuilding = () => {
             </Row>
           </div>
 
-          <div className="form-actions">
-            <Button onClick={handleSkip} className="skip-btn">
+          <div className="building-form-actions">
+            {/* <Button onClick={handleSkip} className="building-skip-btn">
               Bỏ qua
-            </Button>
+            </Button> */}
             <Button
               type="primary"
               htmlType="submit"
               loading={loading}
-              className="create-btn"
+              className="building-create-btn"
             >
               Tạo tòa nhà
             </Button>
