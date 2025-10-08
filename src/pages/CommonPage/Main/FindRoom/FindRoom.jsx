@@ -696,7 +696,6 @@ const FindRoom = () => {
                   {(room.isAIRecommended || room.aiRecommended) && (
                     <div className="search-room-ai-badge">
                       <div className="search-room-ai-badge-text">
-                        AI đề xuất
                       </div>
                     </div>
                   )}

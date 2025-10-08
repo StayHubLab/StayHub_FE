@@ -435,7 +435,7 @@ const Suggest = ({
       <div className="suggest-room-details">
         {/* AI Recommendation Badge - luôn hiển thị cho suggested rooms */}
         <div className="suggest-ai-badge">
-          <span className="suggest-ai-text">AI đề xuất</span>
+          <span className="suggest-ai-text"></span>
         </div>
 
         {/* Room Title */}

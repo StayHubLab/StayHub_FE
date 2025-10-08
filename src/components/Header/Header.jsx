@@ -111,7 +111,6 @@ const Header = () => {
               <Button
                 type="text"
                 icon={<QuestionCircleOutlined />}
-                onClick={() => navigate("/support")}
                 className="nav-link"
               >
                 Hỗ trợ
@@ -123,7 +122,6 @@ const Header = () => {
                     <BellOutlined className="notification-icon" />
                   </Badge>
                 }
-                onClick={() => navigate("/notifications")}
                 className="notification-btn"
               />
               <Dropdown

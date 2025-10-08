@@ -232,11 +232,11 @@ const Login = () => {
             <Checkbox>
               <span className="agreement-text">
                 Tôi đồng ý với{" "}
-                <Link to="/terms" className="terms-link">
+                <Link className="terms-link">
                   Điều khoản sử dụng
                 </Link>{" "}
                 và{" "}
-                <Link to="/privacy" className="privacy-link">
+                <Link className="privacy-link">
                   Chính sách bảo mật
                 </Link>{" "}
                 của StayHub

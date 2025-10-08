@@ -109,7 +109,7 @@ const GoogleMapModal = ({ visible, onClose, roomData }) => {
             <p>Đang tải bản đồ...</p>
           </div>
         )}
-
+{/* 
         <LoadScript
           googleMapsApiKey={
             process.env.REACT_APP_GOOGLE_MAPS_API_KEY ||
@@ -160,7 +160,7 @@ const GoogleMapModal = ({ visible, onClose, roomData }) => {
               </InfoWindow>
             )}
           </GoogleMap>
-        </LoadScript>
+        </LoadScript> */}
 
         <div className="map-info">
           <div className="location-details">

@@ -321,7 +321,7 @@ const Saved = ({ savedRooms: propSavedRooms = [], onRoomLike }) => {
           {/* AI Recommendation Badge */}
           {room.isAiRecommended && (
             <div className="saved-ai-badge">
-              <span className="saved-ai-text">AI đề xuất</span>
+              <span className="saved-ai-text"></span>
             </div>
           )}
 

@@ -258,7 +258,6 @@ const SavedRoom = () => {
                     {room.isAIRecommended && (
                       <div className="saved-room-ai-badge">
                         <div className="saved-room-ai-badge-text">
-                          AI đề xuất
                         </div>
                       </div>
                     )}
