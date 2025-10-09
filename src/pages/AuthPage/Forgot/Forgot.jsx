@@ -65,7 +65,6 @@ const Forgot = () => {
       setStep(2);
       startCountdown();
     } catch (error) {
-      console.error("Send code error:", error);
       api.error({
         message: "Lỗi gửi mã!",
         description: error.response?.data?.error,
@@ -79,7 +78,6 @@ const Forgot = () => {
   const handleResetPassword = async (values) => {
     setLoading(true);
     try {
-      console.log("Reset password values:", values);
       const res = await axios.post(
         "http://localhost:5000/api/auth/reset-password",
         {
@@ -97,10 +95,6 @@ const Forgot = () => {
       });
       navigate("/login");
     } catch (error) {
-      console.error(
-        "Reset password error:",
-        error.response?.data || error.message
-      );
       api.error({
         message: "Có lỗi xảy ra!",
         description:

@@ -51,6 +51,7 @@ const Profile = () => {
   const [editMode, setEditMode] = useState(false);
   const [activeTab, setActiveTab] = useState("1");
   const [avatarUrl, setAvatarUrl] = useState("");
+  const [avatarFile, setAvatarFile] = useState(null);
 
   const [provinces, setProvinces] = useState([]);
   const [wards, setWards] = useState([]);
@@ -60,8 +61,7 @@ const Profile = () => {
 
   useEffect(() => {
     if (user) {
-      console.log('User data:', user);
-      console.log('Bank info:', user.bankInfo);
+
       
       form.setFieldsValue({
         name: user.name,
@@ -76,7 +76,6 @@ const Profile = () => {
       });
       setAvatarUrl(user.avatar?.url || "");
       
-      console.log('Form values set:', form.getFieldsValue());
     }
   }, [user, form]);
 
@@ -153,7 +152,6 @@ const Profile = () => {
   const handleUpdateProfile = async (values) => {
     setLoading(true);
     try {
-      console.log("Form values:", values);
       const provinceObj = provinces.find((p) => p.code === values.province);
       const wardObj = wards.find((w) => w.code === values.ward);
       
@@ -165,28 +163,78 @@ const Profile = () => {
         street: values.detailedAddress || "",
       };
 
-      const payload = {
-        name: values.name,
-        phone: values.phone,
-        bio: values.bio,
-        address,
-        bankInfo: values.bankInfo,
-      };
+      let result;
 
-      console.log("Sending payload:", payload);
-      const result = await updateProfile(payload);
-      console.log("Update result:", result);
-      
+      // Create FormData if there's an avatar file
+      if (avatarFile) {
+        const formData = new FormData();
+        formData.append('avatar', avatarFile, avatarFile.name);
+        formData.append('name', values.name);
+        formData.append('phone', values.phone);
+        formData.append('bio', values.bio || '');
+        
+        // Backend expects JSON string for complex objects
+        formData.append('address', JSON.stringify(address));
+        formData.append('bankInfo', JSON.stringify(values.bankInfo));
+
+
+        // Call authApi.updateProfile directly with FormData
+        try {
+          const response = await authApi.updateProfile(formData);
+          
+          // Backend returns: { success: true, message: "...", data: user }
+          if (response && response.success && response.data) {
+            result = { success: true, data: response.data };
+            
+            // Update avatar URL from response
+            if (response.data.avatar?.url) {
+              setAvatarUrl(response.data.avatar.url);
+            }
+          } else {
+            result = { success: true, data: response };
+          }
+        } catch (error) {
+          throw error;
+        }
+      } else {
+        // No avatar file, send JSON payload
+        const payload = {
+          name: values.name,
+          phone: values.phone,
+          bio: values.bio,
+          address,
+          bankInfo: values.bankInfo,
+        };
+
+        result = await updateProfile(payload);
+      }
+
       if (result.success) {
         api.success({ message: "Cập nhật thành công" });
         setEditMode(false);
+        setAvatarFile(null); // Reset avatar file after successful upload
+        
+        // Update user in localStorage and AuthContext
+        const updatedUserData = result.data;
+        if (updatedUserData) {
+          // Update localStorage
+          const currentUser = JSON.parse(localStorage.getItem("user") || "{}");
+          const mergedUser = { ...currentUser, ...updatedUserData };
+          localStorage.setItem("user", JSON.stringify(mergedUser));
+          
+          // Update avatar URL if available
+          if (updatedUserData.avatar?.url) {
+            setAvatarUrl(updatedUserData.avatar.url);
+          }
+          
+          // Reload page to reflect changes (optional)
+          // window.location.reload();
+        }
       } else {
         api.error({ message: result.error || "Lỗi cập nhật thông tin" });
       }
     } catch (error) {
-      console.error("Update profile error:", error);
-      console.error("Error response:", error.response?.data);
-      api.error({ message: "Lỗi cập nhật thông tin" });
+      api.error({ message: error?.response?.data?.message || "Lỗi cập nhật thông tin" });
     } finally {
       setLoading(false);
     }
@@ -199,18 +247,42 @@ const Profile = () => {
       api.success({ message: "Đổi mật khẩu thành công" });
       passwordForm.resetFields();
     } catch (error) {
-      console.error("Change password error:", error);
-      console.error("Error response:", error.response?.data);
       api.error({ message: "Đổi mật khẩu thất bại" });
     } finally {
       setLoading(false);
     }
   };
 
-  const handleAvatarUpload = (info) => {
-    if (info.file.status === "done") {
-      setAvatarUrl(info.file.response?.url);
+  const beforeAvatarUpload = (file) => {
+    // Validate file type
+    const isValidType = file.type === 'image/png' || file.type === 'image/jpeg' || file.type === 'image/jpg';
+    if (!isValidType) {
+      api.error({
+        message: 'Lỗi định dạng file',
+        description: 'Chỉ chấp nhận file .png hoặc .jpg!',
+      });
+      return false;
     }
+
+    // Validate file size (max 5MB)
+    const isValidSize = file.size / 1024 / 1024 < 5;
+    if (!isValidSize) {
+      api.error({
+        message: 'Lỗi kích thước file',
+        description: 'Kích thước file không được vượt quá 5MB!',
+      });
+      return false;
+    }
+
+    // Create preview
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      setAvatarUrl(e.target.result);
+    };
+    reader.readAsDataURL(file);
+    setAvatarFile(file);
+
+    return false; // Prevent auto upload
   };
 
   if (!user) {
@@ -246,15 +318,12 @@ const Profile = () => {
                 <Upload
                   name="avatar"
                   showUploadList={false}
-                  action="/api/users/profile"
-                  method="PUT"
-                  onChange={handleAvatarUpload}
+                  beforeUpload={beforeAvatarUpload}
+                  accept=".png,.jpg,.jpeg"
+                  disabled={!editMode}
                   className="avatar-upload"
-                  headers={{
-                    Authorization: `Bearer ${localStorage.getItem("token")}`,
-                  }}
                 >
-                  {uploadButton}
+                  {editMode && uploadButton}
                 </Upload>
               </div>
 
@@ -305,18 +374,58 @@ const Profile = () => {
                     children: (
                       <div className="tab-content">
                         <div className="tab-header">
+                          <Space>
                           <Title level={4}>Thông tin cá nhân</Title>
-                          <Button
-                            type={editMode ? "primary" : "default"}
-                            icon={editMode ? <SaveOutlined /> : <EditOutlined />}
-                            onClick={() => {
-                              if (editMode) form.submit();
-                              else setEditMode(true);
-                            }}
-                            loading={loading}
-                          >
-                            {editMode ? "Lưu" : "Chỉnh sửa"}
-                          </Button>
+                            {editMode && (
+                              <Button
+                                onClick={() => {
+                                  setEditMode(false);
+                                  setAvatarFile(null);
+                                  // Reset avatar to original
+                                  setAvatarUrl(user?.avatar?.url || "");
+                                  // Reset form to original user values
+                                  form.setFieldsValue({
+                                    name: user.name,
+                                    email: user.email,
+                                    phone: user.phone,
+                                    bio: user.bio || "",
+                                    detailedAddress: user.address?.street || "",
+                                    bankInfo: {
+                                      bankName: user.bankInfo?.bankName || "",
+                                      accountNumber: user.bankInfo?.accountNumber || "",
+                                    },
+                                  });
+                                  // Reset province and ward selections
+                                  if (user?.address?.city && provinces.length > 0) {
+                                    const cityName = user.address.city;
+                                    const matchedProvince = provinces.find(
+                                      (p) => 
+                                        p.name === cityName ||
+                                        p.name.includes(cityName) ||
+                                        cityName.includes(p.name)
+                                    );
+                                    if (matchedProvince) {
+                                      form.setFieldsValue({ province: matchedProvince.code });
+                                      setSelectedProvinceId(matchedProvince.code);
+                                    }
+                                  }
+                                }}
+                              >
+                                Hủy
+                              </Button>
+                            )}
+                            <Button
+                              type={editMode ? "primary" : "default"}
+                              icon={editMode ? <SaveOutlined /> : <EditOutlined />}
+                              onClick={() => {
+                                if (editMode) form.submit();
+                                else setEditMode(true);
+                              }}
+                              loading={loading}
+                            >
+                              {editMode ? "Lưu" : "Chỉnh sửa"}
+                            </Button>
+                          </Space>
                         </div>
 
                         <Form

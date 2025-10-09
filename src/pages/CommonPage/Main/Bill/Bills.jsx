@@ -57,7 +57,6 @@ const Bills = () => {
           : res?.bills || res?.items || res || [];
         setRows(list);
       } catch (e) {
-        console.error(e);
         message.error("Không thể tải danh sách hoá đơn");
         setRows([]);
       } finally {
@@ -209,9 +208,6 @@ const Bills = () => {
         title="Chi tiết hoá đơn"
       >
         {detail && (() => {
-          console.log('Detail object:', detail);
-          console.log('Created by (landlord):', detail.createdBy);
-          console.log('Bank Info:', detail.createdBy?.bankInfo);
           return null;
         })()}
         {detail && (

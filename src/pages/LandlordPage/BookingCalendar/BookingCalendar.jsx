@@ -76,7 +76,6 @@ const BookingCalendar = () => {
         message.error("Không thể tải danh sách lịch hẹn");
       }
     } catch (error) {
-      console.error("Error fetching appointments:", error);
       message.error("Có lỗi xảy ra khi tải danh sách lịch hẹn");
     } finally {
       setLoading(false);
@@ -181,7 +180,6 @@ const BookingCalendar = () => {
         message.error(`Không thể ${type === "confirm" ? "xác nhận" : type === "cancel" ? "hủy" : type === "complete" ? "hoàn thành" : "xóa"} lịch hẹn`);
       }
     } catch (error) {
-      console.error(`Error ${type} appointment:`, error);
       message.error(`Có lỗi xảy ra khi ${type === "confirm" ? "xác nhận" : type === "cancel" ? "hủy" : type === "complete" ? "hoàn thành" : "xóa"} lịch hẹn`);
     } finally {
       setButtonLoading(appointmentId, type, false);

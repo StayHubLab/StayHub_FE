@@ -53,7 +53,6 @@ const PaymentApprovalDashboard = () => {
       setPayments(result.data || []);
     } catch (error) {
       message.error('Không thể tải danh sách thanh toán');
-      console.error('Fetch payments error:', error);
     } finally {
       setLoading(false);
     }

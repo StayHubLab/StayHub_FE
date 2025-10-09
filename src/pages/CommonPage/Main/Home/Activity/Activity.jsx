@@ -53,7 +53,6 @@ const Activity = ({ onActivityAction }) => {
           setActivities(transformedActivities);
         }
       } catch (error) {
-        console.error("Error loading activities:", error);
         // Fallback to empty array or mock data if needed
         setActivities([]);
       } finally {
@@ -165,7 +164,6 @@ const Activity = ({ onActivityAction }) => {
         message.info(`Chức năng ${actionType} đang được phát triển`);
       }
     } catch (error) {
-      console.error("Error handling activity action:", error);
       message.error("Có lỗi xảy ra khi xử lý hoạt động");
     }
   };

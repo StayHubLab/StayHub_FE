@@ -167,7 +167,6 @@ export default function ChatPage() {
           }
         }
       } catch (error) {
-        console.error("Error fetching conversations:", error);
         message.error("Không thể tải danh sách cuộc trò chuyện");
       }
     };
@@ -203,7 +202,6 @@ export default function ChatPage() {
         
         setMessages(sortedMessages);
       } catch (error) {
-        console.error("Error fetching messages:", error);
         message.error("Không thể tải tin nhắn");
       }
     };
@@ -269,7 +267,6 @@ export default function ChatPage() {
         setMessages(prev => [...prev, newMsg]);
       }
     } catch (error) {
-      console.error("Error sending message:", error);
       message.error("Không thể gửi tin nhắn");
       
       // Restore message if sending fails

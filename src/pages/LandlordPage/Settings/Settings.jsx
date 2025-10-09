@@ -14,7 +14,6 @@ const Settings = () => {
   const [form] = Form.useForm();
 
   const onFinish = (values) => {
-    console.log("Settings updated:", values);
   };
 
   return (

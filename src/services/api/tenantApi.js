@@ -186,7 +186,6 @@ const tenantApi = {
       const response = await apiClient.get(`/api/tenants?${params}`);
       return response.data;
     } catch (error) {
-      console.error("Error fetching tenants:", error);
       throw error;
     }
   },
@@ -201,7 +200,6 @@ const tenantApi = {
       const response = await apiClient.get(`/api/tenants/${tenantId}`);
       return response.data;
     } catch (error) {
-      console.error("Error fetching tenant:", error);
       throw error;
     }
   },
@@ -216,7 +214,6 @@ const tenantApi = {
       const response = await apiClient.post("/api/tenants", tenantData);
       return response.data;
     } catch (error) {
-      console.error("Error creating tenant:", error);
       throw error;
     }
   },
@@ -235,7 +232,6 @@ const tenantApi = {
       );
       return response.data;
     } catch (error) {
-      console.error("Error updating tenant:", error);
       throw error;
     }
   },
@@ -250,7 +246,6 @@ const tenantApi = {
       const response = await apiClient.delete(`/api/tenants/${tenantId}`);
       return response.data;
     } catch (error) {
-      console.error("Error deleting tenant:", error);
       throw error;
     }
   },
@@ -267,7 +262,6 @@ const tenantApi = {
       );
       return response.data;
     } catch (error) {
-      console.error("Error fetching tenant contracts:", error);
       throw error;
     }
   },
@@ -291,7 +285,6 @@ const tenantApi = {
       );
       return response.data;
     } catch (error) {
-      console.error("Error fetching tenant payments:", error);
       throw error;
     }
   },
@@ -305,7 +298,6 @@ const tenantApi = {
       const response = await apiClient.get("/api/tenants/stats");
       return response.data;
     } catch (error) {
-      console.error("Error fetching tenant stats:", error);
       throw error;
     }
   },
@@ -324,7 +316,6 @@ const tenantApi = {
       );
       return response.data;
     } catch (error) {
-      console.error("Error sending notification:", error);
       throw error;
     }
   },

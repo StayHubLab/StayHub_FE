@@ -58,11 +58,9 @@ const Price = ({
           : roomData?.landlord?.id;
   
       if (!recipientId) {
-        console.error("❌ Không tìm thấy hostId (landlord id)");
         return;
       }
   
-      console.log("RecipientId (landlord):", recipientId);
   
       const res = await chatService.createConversation(recipientId);
       const conversation = res.data.conversation;
@@ -70,10 +68,8 @@ const Price = ({
       if (conversation?._id) {
         navigate(`/chat?conversationId=${conversation._id}`);
       } else {
-        console.error("❌ Không tạo được conversation");
       }
     } catch (err) {
-      console.error("Error creating conversation:", err);
     }
   };
 

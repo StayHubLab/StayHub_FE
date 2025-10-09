@@ -34,7 +34,6 @@ const FormReview = ({ onSubmit, onCancel, targetType = 'room' }) => {
       form.resetFields();
       setCommentLength(0);
     } catch (error) {
-      console.error('Error submitting review:', error);
     } finally {
       setLoading(false);
     }

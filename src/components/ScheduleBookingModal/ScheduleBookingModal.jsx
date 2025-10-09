@@ -33,13 +33,6 @@ const ScheduleBookingModal = ({
   const currentUserData = userData;
   const currentLandlordData = propLandlordData;
 
-  // Debug landlord data
-  console.log("=== MODAL LANDLORD DEBUG ===");
-  console.log("propLandlordData:", propLandlordData);
-  console.log("Final currentLandlordData:", currentLandlordData);
-  console.log("roomData:", roomData);
-  console.log("userData:", userData);
-  console.log("============================");
 
   // Days of week in Vietnamese
   const weekDays = ["CN", "T2", "T3", "T4", "T5", "T6", "T7"];

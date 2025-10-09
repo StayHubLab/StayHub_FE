@@ -125,7 +125,6 @@ export const AuthProvider = ({ children }) => {
           dispatch({ type: AUTH_ACTIONS.SET_LOADING, payload: false });
         }
       } catch (error) {
-        console.error("Error initializing auth:", error);
         dispatch({ type: AUTH_ACTIONS.SET_LOADING, payload: false });
       }
     };
@@ -153,13 +152,21 @@ export const AuthProvider = ({ children }) => {
 
       return { success: true, data: response.data };
     } catch (error) {
-      const errorMessage = error.response?.data?.error || "Login failed";
+      // Get comprehensive error information
+      const errorMessage = error.response?.data?.error || error.response?.data?.message || "Login failed";
+      const statusCode = error.response?.status;
+      
       dispatch({
         type: AUTH_ACTIONS.LOGIN_FAILURE,
         payload: errorMessage,
       });
 
-      return { success: false, error: errorMessage };
+      return { 
+        success: false, 
+        error: errorMessage,
+        statusCode: statusCode,
+        fullError: error.response?.data
+      };
     }
   };
 
@@ -219,7 +226,6 @@ export const AuthProvider = ({ children }) => {
         await authApi.logout();
       }
     } catch (error) {
-      console.error("Logout API call failed:", error);
     } finally {
       // Clear localStorage and state regardless of API call result
       localStorage.removeItem("token");
@@ -233,10 +239,7 @@ export const AuthProvider = ({ children }) => {
   // Update user profile
   const updateProfile = async (profileData) => {
     try {
-      console.log("AuthContext - Updating profile with:", profileData);
       const response = await authApi.updateProfile(profileData);
-      console.log("AuthContext - Full API response:", response);
-      console.log("AuthContext - response.data:", response.data);
 
       // The API response structure is: response.data = { success, message, data: actualUserObject }
       // But authApi.updateProfile returns response.data (which already unwrapped once)
@@ -253,11 +256,9 @@ export const AuthProvider = ({ children }) => {
         // If response.data itself has user properties (_id is a user field)
         updatedUser = response.data;
       } else {
-        console.error("AuthContext - Cannot determine user data structure!");
         return { success: true, data: response.data };
       }
 
-      console.log("AuthContext - Updated user:", updatedUser);
 
       // Update localStorage
       localStorage.setItem("user", JSON.stringify(updatedUser));
@@ -269,8 +270,6 @@ export const AuthProvider = ({ children }) => {
 
       return { success: true, data: response.data };
     } catch (error) {
-      console.error("AuthContext - Update profile error:", error);
-      console.error("AuthContext - Error response:", error.response?.data);
       const errorMessage =
         error.response?.data?.error || "Profile update failed";
       return { success: false, error: errorMessage };

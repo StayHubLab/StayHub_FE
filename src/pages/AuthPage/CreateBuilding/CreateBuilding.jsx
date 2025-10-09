@@ -49,7 +49,6 @@ const CreateBuilding = () => {
         const data = await vietnamProvinceApi.fetchProvinces();
         setProvinces(data);
       } catch (error) {
-        console.error("Error loading provinces:", error);
         message.error("Không thể tải danh sách tỉnh/thành phố");
       } finally {
         setLoadingProvinces(false);
@@ -80,7 +79,6 @@ const CreateBuilding = () => {
       // Clear ward selection when province changes
       form.setFieldsValue({ address_ward: undefined });
     } catch (error) {
-      console.error("Error loading wards:", error);
       message.error("Không thể tải danh sách phường/xã");
     } finally {
       setLoadingWards(false);
@@ -137,7 +135,6 @@ const CreateBuilding = () => {
 
       message.success(`Đã lấy tọa độ cho ${cityName}`);
     } catch (error) {
-      console.error("Error getting coordinates:", error);
       message.error("Lỗi khi lấy tọa độ");
     }
   };
@@ -189,7 +186,6 @@ const CreateBuilding = () => {
         message.error("Tạo tòa nhà thất bại!");
       }
     } catch (error) {
-      console.error("Create building error:", error);
       message.error(
         error?.response?.data?.error ||
           "Không thể tạo tòa nhà. Vui lòng thử lại!"

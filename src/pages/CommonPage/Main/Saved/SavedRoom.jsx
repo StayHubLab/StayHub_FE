@@ -100,7 +100,6 @@ const SavedRoom = () => {
             message.error("Không thể tải danh sách phòng đã lưu");
           }
         } catch (error) {
-          console.error("Error fetching saved rooms:", error);
           message.error("Có lỗi xảy ra khi tải danh sách phòng đã lưu");
           // Fallback to localStorage
           loadFromLocalStorage();
@@ -148,7 +147,6 @@ const SavedRoom = () => {
   const handlePageChange = (page, size) => {
     setCurrentPage(page);
     setPageSize(size);
-    console.log("Page changed:", page, "Size:", size);
   };
 
   const handleHeartClick = async (roomId) => {
@@ -174,7 +172,6 @@ const SavedRoom = () => {
         // Refresh the list by calling API again
         window.location.reload(); // Simple refresh for now
       } catch (error) {
-        console.error("Error updating saved room:", error);
         message.error("Có lỗi xảy ra khi cập nhật");
       }
     } else {

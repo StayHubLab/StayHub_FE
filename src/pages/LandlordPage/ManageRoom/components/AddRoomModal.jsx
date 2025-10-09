@@ -81,7 +81,6 @@ const AddRoomModal = ({ visible, onClose, onSubmit }) => {
       onClose();
     } catch (error) {
       message.error("Có lỗi xảy ra khi thêm phòng!");
-      console.error("Error adding room:", error);
     } finally {
       setLoading(false);
     }

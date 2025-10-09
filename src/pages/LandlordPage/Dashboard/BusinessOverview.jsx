@@ -217,7 +217,6 @@ const BusinessOverview = () => {
         },
       ]);
     } catch (error) {
-      console.error("Error loading dashboard data:", error);
       message.error("Có lỗi xảy ra khi tải dữ liệu dashboard");
     } finally {
       setLoading(false);

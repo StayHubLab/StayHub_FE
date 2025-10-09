@@ -64,7 +64,6 @@ const PaymentsByRoom = () => {
       const billItems = Array.isArray(billResp?.data)
         ? billResp.data
         : billResp?.data?.items || [];
-      console.log("Fetched bills data:", billItems);
       setBills(billItems || []);
 
       // Fetch rooms data to get pricing information and current tenant info
@@ -76,15 +75,13 @@ const PaymentsByRoom = () => {
         const roomItems = Array.isArray(roomResp?.data)
           ? roomResp.data
           : roomResp?.data?.items || [];
-        console.log("Fetched rooms data:", roomItems);
         setRooms(roomItems || []);
       } catch (roomError) {
-        console.error("Error fetching rooms data:", roomError);
         // Continue without rooms data, fallback to bills
         setRooms([]);
       }
     } catch (error) {
-      console.error("Error fetching data:", error);
+      // Error fetching data
     } finally {
       setLoading(false);
     }
@@ -114,10 +111,6 @@ const PaymentsByRoom = () => {
         return roomIdentifier === roomName;
       });
 
-      console.log("Found room for", roomName, ":", room);
-      console.log("Room price data:", room?.price);
-      console.log("Room current tenant:", room?.currentTenant);
-
       if (room && room.price) {
         const price = room.price;
         const nextUnitPrices = {
@@ -127,7 +120,6 @@ const PaymentsByRoom = () => {
           service: Number(price?.service) || 0,
         };
 
-        console.log("Unit prices from room:", nextUnitPrices);
         setUnitPrices(nextUnitPrices);
         form.setFieldsValue({
           rent: nextUnitPrices.rent,
@@ -146,10 +138,6 @@ const PaymentsByRoom = () => {
               "Người thuê",
             hasEmail: !!room.currentTenant.email,
           });
-          console.log(
-            "Set renter email from room currentTenant:",
-            room.currentTenant.email
-          );
         } else {
           setRenterEmailInfo({
             email: null,
@@ -168,16 +156,8 @@ const PaymentsByRoom = () => {
           return billRoomName === roomName;
         });
 
-        console.log("Room bills for", roomName, ":", roomBills);
-
         if (roomBills.length > 0) {
           const latest = roomBills[0];
-          console.log("Latest bill data:", latest);
-          console.log("Room data from bill:", latest?.contractId?.roomId);
-          console.log(
-            "Price data from bill:",
-            latest?.contractId?.roomId?.price
-          );
 
           const price = latest?.contractId?.roomId?.price || {};
           const nextUnitPrices = {
@@ -187,7 +167,6 @@ const PaymentsByRoom = () => {
             service: Number(price?.service) || 0,
           };
 
-          console.log("Unit prices from bill:", nextUnitPrices);
           setUnitPrices(nextUnitPrices);
           form.setFieldsValue({
             rent: nextUnitPrices.rent,
@@ -211,7 +190,6 @@ const PaymentsByRoom = () => {
             hasEmail: !!renterEmail,
           });
         } else {
-          console.log("No room or bill data found for:", roomName);
           // Set default prices
           const defaultPrices = {
             rent: 0,
@@ -354,11 +332,9 @@ const PaymentsByRoom = () => {
             landlordPhone: user?.phone || "",
           };
 
-          console.log("Sending email with bill data:", billData);
           await emailApi.sendBillNotification(billData, renterEmail);
           message.success(`Đã gửi email thông báo hóa đơn đến ${renterEmail}`);
         } catch (emailError) {
-          console.error("Error sending email notification:", emailError);
           message.warning(
             "Hóa đơn đã được tạo nhưng không thể gửi email thông báo"
           );
@@ -370,7 +346,6 @@ const PaymentsByRoom = () => {
       setCreateBillModal(false);
       fetchData(); // Refresh data
     } catch (error) {
-      console.error("Error creating bill:", error);
       message.error("Không thể tạo hóa đơn");
     } finally {
       setLoading(false);

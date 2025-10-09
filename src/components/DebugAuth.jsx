@@ -11,19 +11,16 @@ const DebugAuth = () => {
 
   const handleTestLogin = async () => {
     try {
-      console.log("Attempting test login...");
       const result = await login({
         email: "test@example.com",
         password: "password123",
       });
-      console.log("Login result:", result);
       if (result.success) {
         alert("Login successful! Check console for details.");
       } else {
         alert("Login failed: " + result.error);
       }
     } catch (error) {
-      console.error("Login error:", error);
       alert("Login error: " + error.message);
     }
   };

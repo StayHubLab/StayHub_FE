@@ -11,7 +11,6 @@ const Start = () => {
   const navigate = useNavigate();
 
   const handleRoleSelect = (role) => {
-    console.log("Selected role:", role);
     navigate(`/register?role=${role}`);
   };
 

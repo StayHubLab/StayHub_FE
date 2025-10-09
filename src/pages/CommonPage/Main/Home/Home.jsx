@@ -100,7 +100,6 @@ const Home = () => {
         setSuggestedRooms(roomsData);
       }
     } catch (error) {
-      console.error("Error fetching suggested rooms:", error);
       // Use fallback data if API fails
       setSuggestedRooms([]);
     }

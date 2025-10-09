@@ -72,7 +72,15 @@ const authApi = {
   },
 
   updateProfile: async (profileData) => {
-    const response = await apiClient.put("/auth/profile", profileData);
+    // Handle both FormData (with avatar) and JSON (without avatar)
+    const config = {};
+    if (profileData instanceof FormData) {
+      // Let apiClient interceptor handle FormData headers
+      config.headers = {
+        'Content-Type': 'multipart/form-data',
+      };
+    }
+    const response = await apiClient.put("/auth/profile", profileData, config);
     return response.data;
   },
 

@@ -317,27 +317,20 @@ const ReviewRequestsTab = () => {
                     <Button
                       type="primary"
                       onClick={async () => {
-                        console.log("[SIGN] Clicked approve, detail:", detail);
                         try {
                           if (!window.__tenantSig) {
-                            console.warn("[SIGN] No tenant signature yet");
                             message.warning("Vui lòng ký trước khi đồng ý");
                             return;
                           }
-                          console.log("[SIGN] Sending signature to API", {
-                            id: detail._id,
-                            hasSig: !!window.__tenantSig,
-                          });
+
                           const res = await contactRequestApi.signAsTenant(
                             detail._id,
                             window.__tenantSig
                           );
-                          console.log("[SIGN] API OK:", res);
                           message.success("Đã ký và gửi yêu cầu");
                           setDetail(null);
                           load();
                         } catch (e) {
-                          console.error("[SIGN] API ERROR:", e?.response || e);
                           message.error("Không thể gửi chữ ký");
                         }
                       }}

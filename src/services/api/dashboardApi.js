@@ -10,7 +10,6 @@ const dashboardApi = {
         data: response.data,
       };
     } catch (error) {
-      console.error("Get business overview error:", error);
       return {
         success: false,
         message:
@@ -29,7 +28,6 @@ const dashboardApi = {
         data: response.data,
       };
     } catch (error) {
-      console.error("Get room statistics error:", error);
       return {
         success: false,
         message:
@@ -50,7 +48,6 @@ const dashboardApi = {
         data: response.data,
       };
     } catch (error) {
-      console.error("Get revenue statistics error:", error);
       return {
         success: false,
         message:
@@ -69,7 +66,6 @@ const dashboardApi = {
         data: response.data,
       };
     } catch (error) {
-      console.error("Get tenant statistics error:", error);
       return {
         success: false,
         message:
@@ -90,7 +86,6 @@ const dashboardApi = {
         data: response.data,
       };
     } catch (error) {
-      console.error("Get booking statistics error:", error);
       return {
         success: false,
         message:
@@ -112,7 +107,6 @@ const dashboardApi = {
         data: response.data,
       };
     } catch (error) {
-      console.error("Get recent activities error:", error);
       return {
         success: false,
         message:

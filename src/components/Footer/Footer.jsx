@@ -17,12 +17,10 @@ const { Title, Text } = Typography;
 const Footer = () => {
   const handleSocialClick = (platform) => {
     // TODO: Add actual social media links
-    console.log(`Opening ${platform}`);
   };
 
   const handleLinkClick = (link) => {
     // TODO: Add navigation logic
-    console.log(`Navigating to ${link}`);
   };
 
   return (

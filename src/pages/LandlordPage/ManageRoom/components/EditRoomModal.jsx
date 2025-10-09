@@ -125,16 +125,9 @@ const EditRoomModal = ({
         setAmenities(initialData.amenities || []);
 
         // Handle existing images
-        console.log(
-          "Initializing with initialData.images:",
-          initialData.images
-        );
-
         if (initialData.images && Array.isArray(initialData.images)) {
           const existingFiles = initialData.images
             .map((img, index) => {
-              console.log(`Processing image ${index}:`, img);
-
               // Ensure URL is a string
               let imageUrl = "";
               if (typeof img === "string") {
@@ -155,12 +148,10 @@ const EditRoomModal = ({
                 originalData: img, // Keep original data for reference
               };
 
-              console.log(`Created file object:`, fileObj);
               return fileObj;
             })
             .filter((file) => file.url); // Only keep files with valid URLs
 
-          console.log("Setting existing files:", existingFiles);
           setFileList(existingFiles);
         }
       } else {
@@ -209,7 +200,6 @@ const EditRoomModal = ({
       formData.append("amenities", JSON.stringify(amenities));
 
       // Handle images - fix nested array issue
-      console.log("Debug fileList:", fileList);
 
       // Flatten fileList in case it contains nested arrays
       const flatFileList = Array.isArray(fileList)
@@ -224,8 +214,6 @@ const EditRoomModal = ({
           (file.uid || file.url || file.originFileObj)
       );
 
-      console.log("Valid files:", validFiles);
-
       // Handle new uploaded files
       const newFiles = validFiles.filter(
         (file) =>
@@ -234,21 +222,9 @@ const EditRoomModal = ({
           file.originFileObj instanceof File
       );
 
-      console.log("New files to upload:", newFiles);
-      console.log(
-        "Files details:",
-        newFiles.map((f) => ({
-          name: f.name,
-          type: f.originFileObj?.type,
-          size: f.originFileObj?.size,
-          isFile: f.originFileObj instanceof File,
-        }))
-      );
-
       newFiles.forEach((file) => {
         if (file.originFileObj instanceof File) {
           formData.append("images", file.originFileObj);
-          console.log("Appended file:", file.originFileObj.name);
         }
       });
 
@@ -257,32 +233,11 @@ const EditRoomModal = ({
         (file) => file.isExisting && file.url
       );
 
-      console.log("Existing images to keep:", existingImages);
-
       if (existingImages.length > 0) {
         formData.append(
           "existingImages",
           JSON.stringify(existingImages.map((img) => img.url))
         );
-      }
-
-      console.log("Submitting room data:", {
-        isEdit,
-        roomId: initialData?._id,
-        values,
-        amenities,
-        fileCount: newFiles.length,
-        existingImageCount: existingImages.length,
-      });
-
-      // Debug FormData
-      console.log("FormData entries:");
-      for (let [key, value] of formData.entries()) {
-        if (value instanceof File) {
-          console.log(`${key}: File(${value.name}, ${value.size} bytes)`);
-        } else {
-          console.log(`${key}:`, value);
-        }
       }
 
       await onSubmit(formData, initialData?._id);
@@ -292,7 +247,6 @@ const EditRoomModal = ({
       );
       handleClose();
     } catch (error) {
-      console.error("Error submitting room:", error);
       message.error(
         isEdit ? "Cập nhật phòng thất bại!" : "Tạo phòng thất bại!"
       );
@@ -310,8 +264,6 @@ const EditRoomModal = ({
   };
 
   const handleUploadChange = ({ fileList: newFileList }) => {
-    console.log("Upload change - new fileList:", newFileList);
-
     // Deep flatten and validate fileList to prevent nested arrays
     const flattenFileList = (list) => {
       if (!Array.isArray(list)) return [];
@@ -334,7 +286,6 @@ const EditRoomModal = ({
     };
 
     const validFileList = flattenFileList(newFileList);
-    console.log("Flattened fileList:", validFileList);
     setFileList(validFileList);
   };
 

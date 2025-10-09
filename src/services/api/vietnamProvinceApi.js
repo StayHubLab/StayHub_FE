@@ -13,7 +13,6 @@ const BASE_URL = "https://provinces.open-api.vn/api/v2";
  */
 export const fetchProvinces = async () => {
   try {
-    console.log("Fetching provinces from:", `${BASE_URL}/p/`);
     const response = await fetch(`${BASE_URL}/p/`);
 
     if (!response.ok) {
@@ -21,12 +20,10 @@ export const fetchProvinces = async () => {
     }
 
     const data = await response.json();
-    console.log("Provinces data received:", data.slice(0, 3)); // Log first 3 items for debugging
 
     // This API returns array directly
     return Array.isArray(data) ? data : [];
   } catch (error) {
-    console.error("Error fetching provinces:", error);
     throw new Error("Không thể tải danh sách tỉnh/thành phố");
   }
 };
@@ -39,7 +36,6 @@ export const fetchProvinces = async () => {
  */
 export const fetchWards = async (provinceCode) => {
   try {
-    console.log("Fetching wards for province:", provinceCode);
     const response = await fetch(`${BASE_URL}/p/${provinceCode}?depth=2`);
 
     if (!response.ok) {
@@ -47,46 +43,28 @@ export const fetchWards = async (provinceCode) => {
     }
 
     const data = await response.json();
-    console.log("Province data received:", data);
-    console.log("Data structure check - districts:", data.districts);
 
     // Extract all wards from all districts in the province
     const allWards = [];
     if (data.districts && Array.isArray(data.districts)) {
       data.districts.forEach((district) => {
-        console.log(
-          "Processing district:",
-          district.name,
-          "wards:",
-          district.wards?.length || 0
-        );
         if (district.wards && Array.isArray(district.wards)) {
           allWards.push(...district.wards);
         }
       });
     }
 
-    console.log("Total extracted wards:", allWards.length);
-    console.log("First few wards:", allWards.slice(0, 3));
-
     // If no wards found through districts, check if wards are directly in the data
     if (allWards.length === 0) {
-      console.log(
-        "No wards found in districts, checking direct wards in data..."
-      );
       if (data.wards && Array.isArray(data.wards)) {
-        console.log("Found direct wards:", data.wards.length);
         allWards.push(...data.wards);
       } else if (Array.isArray(data)) {
-        console.log("Data is array, checking if it contains wards...");
         allWards.push(...data);
       }
     }
 
-    console.log("Final wards count:", allWards.length);
     return allWards;
   } catch (error) {
-    console.error("Error fetching wards:", error);
     throw new Error("Không thể tải danh sách phường/xã");
   }
 };
@@ -107,7 +85,6 @@ export const getProvinceById = async (provinceCode) => {
     const data = await response.json();
     return data || {};
   } catch (error) {
-    console.error("Error fetching province details:", error);
     throw new Error("Không thể tải thông tin chi tiết tỉnh/thành phố");
   }
 };
@@ -131,7 +108,6 @@ export const searchProvinces = async (searchTerm) => {
         province.codename?.toLowerCase().includes(normalizedSearch)
     );
   } catch (error) {
-    console.error("Error searching provinces:", error);
     throw new Error("Không thể tìm kiếm tỉnh/thành phố");
   }
 };
@@ -156,7 +132,6 @@ export const searchWards = async (provinceCode, searchTerm) => {
         ward.codename?.toLowerCase().includes(normalizedSearch)
     );
   } catch (error) {
-    console.error("Error searching wards:", error);
     throw new Error("Không thể tìm kiếm phường/xã");
   }
 };
@@ -208,7 +183,7 @@ export const getFullAddress = ({ ward, province, detailedAddress }) => {
 };
 
 // Export default object with all functions
-export default {
+const vietnamProvinceApi = {
   fetchProvinces,
   fetchWards,
   getProvinceById,
@@ -218,3 +193,5 @@ export default {
   formatWardName,
   getFullAddress,
 };
+
+export default vietnamProvinceApi;

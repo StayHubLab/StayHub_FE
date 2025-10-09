@@ -51,7 +51,6 @@ const RoomInfo = ({ roomData, onViewAllReviews, onViewOnMap }) => {
           totalReviews: statistics.totalReviews || 0,
         });
       } catch (error) {
-        console.error('Error fetching reviews:', error);
         setReviews([]);
         setReviewStats({ averageRating: 0, totalReviews: 0 });
       } finally {

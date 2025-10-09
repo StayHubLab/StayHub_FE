@@ -12,32 +12,30 @@
 
 /* Welcome Text Section */
 .welcome-text-section {
-  width: 463.89px;
-  height: 64px;
+  max-width: 463.89px;
+  min-height: 64px;
   position: relative;
   background: rgba(0, 0, 0, 0);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .welcome-title-home {
-  width: 464px;
-  height: 37px;
-  position: absolute;
-  left: 0;
-  top: -6px;
+  max-width: 464px;
+  min-height: 37px;
   color: #4739f0;
   font-size: 30px;
   font-family: "Montserrat", sans-serif;
   font-weight: 700;
   line-height: 36px;
   word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .welcome-subtitle-home {
-  width: 436px;
-  height: 24px;
-  position: absolute;
-  left: 0;
-  top: 38.88px;
+  max-width: 436px;
+  min-height: 24px;
   color: #4b5563;
   font-size: 16px;
   font-family: "Montserrat", sans-serif;

@@ -35,7 +35,6 @@ const UploadPaymentEvidenceModal = ({ visible, onClose, billId, onSuccess }) => 
       onClose();
     } catch (error) {
       message.error(error.response?.data?.message || 'Tải lên chứng từ thất bại');
-      console.error('Upload error:', error);
     } finally {
       setUploading(false);
     }

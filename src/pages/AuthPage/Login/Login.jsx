@@ -21,8 +21,6 @@ const Login = () => {
   const handleLogin = async (values) => {
     setLoading(true);
     try {
-      console.log("Login values:", values);
-
       // Use AuthContext login method
       const result = await login({
         email: values.email,
@@ -37,30 +35,78 @@ const Login = () => {
             user?.fullName || user?.email || "bạn"
           } đến với StayHub!`,
           placement: "topRight",
-          duration: 4.5,
+          duration: 2,
         });
 
-        // Navigate based on user role
-        if (user?.role === "landlord") {
-          navigate("/landlord/dashboard");
-        } else {
-          navigate("/main/home");
-        }
+        // Wait 2 seconds before navigating
+        setTimeout(() => {
+          // Navigate based on user role
+          if (user?.role === "landlord") {
+            navigate("/landlord/dashboard");
+          } else {
+            navigate("/main/home");
+          }
+        }, 2000);
       } else {
-        // Handle login failure
+        // Handle login failure with specific error messages
+        let description = "Email hoặc mật khẩu không đúng!";
+        
+        const errorMsg = (result.error || "").toLowerCase();
+        const statusCode = result.statusCode;
+        
+        // Determine specific error based on status code and message
+        if (statusCode === 500 || errorMsg.includes("internal server error")) {
+          // Internal server error - likely wrong credentials but server didn't return specific error
+          description = "Email hoặc mật khẩu không đúng!";
+        } else if (statusCode === 401) {
+          // Unauthorized - typically wrong password
+          description = "Mật khẩu không chính xác!";
+        } else if (statusCode === 404) {
+          // Not found - user doesn't exist
+          description = "Tài khoản không tồn tại!";
+        } else if (errorMsg.includes("password") || errorMsg.includes("mật khẩu") || errorMsg.includes("incorrect")) {
+          description = "Mật khẩu không chính xác!";
+        } else if (errorMsg.includes("not found") || errorMsg.includes("không tồn tại") || errorMsg.includes("does not exist") || errorMsg.includes("user")) {
+          description = "Tài khoản không tồn tại!";
+        } else if (errorMsg.includes("invalid credentials") || errorMsg.includes("sai thông tin")) {
+          description = "Email hoặc mật khẩu không đúng!";
+        } else if (errorMsg && errorMsg !== "login failed" && errorMsg !== "internal server error") {
+          // If there's a specific error message, use it (but not generic ones)
+          description = result.error;
+        }
+        
         api.error({
           message: "Đăng nhập thất bại!",
-          description:
-            result.error || "Vui lòng kiểm tra lại thông tin đăng nhập.",
+          description: description,
           placement: "topRight",
           duration: 4.5,
         });
       }
     } catch (error) {
-      console.error("Login error:", error);
+      // This catch block handles unexpected errors
+      let description = "Email hoặc mật khẩu không đúng!";
+      
+      // Try to get more specific error from response
+      const errorMsg = (error?.response?.data?.error || error?.response?.data?.message || error?.message || "").toLowerCase();
+      const statusCode = error?.response?.status;
+      
+      if (statusCode === 401) {
+        // Unauthorized - wrong credentials
+        description = "Email hoặc mật khẩu không đúng!";
+      } else if (statusCode === 404) {
+        // Not found - user doesn't exist
+        description = "Tài khoản không tồn tại!";
+      } else if (errorMsg.includes("password") || errorMsg.includes("mật khẩu") || errorMsg.includes("incorrect")) {
+        description = "Mật khẩu không chính xác!";
+      } else if (errorMsg.includes("not found") || errorMsg.includes("không tồn tại") || errorMsg.includes("does not exist")) {
+        description = "Tài khoản không tồn tại!";
+      } else if (errorMsg && errorMsg !== "login failed") {
+        description = error?.response?.data?.error || error?.response?.data?.message || error?.message;
+      }
+      
       api.error({
-        message: "Lỗi không mong muốn!",
-        description: "Đã có lỗi xảy ra. Vui lòng thử lại sau.",
+        message: "Lỗi đăng nhập!",
+        description: description,
         placement: "topRight",
         duration: 4.5,
       });
@@ -77,7 +123,6 @@ const Login = () => {
   const handleGoogleSuccess = async (googleData) => {
     setLoading(true);
     try {
-      console.log("Google login data:", googleData);
 
       const result = await googleLogin(googleData);
 
@@ -89,15 +134,18 @@ const Login = () => {
             user?.fullName || user?.name || user?.email || "bạn"
           } đến với StayHub!`,
           placement: "topRight",
-          duration: 4.5,
+          duration: 2,
         });
 
-        // Navigate based on user role
-        if (user?.role === "landlord") {
-          navigate("/landlord/dashboard");
-        } else {
-          navigate("/main/home");
-        }
+        // Wait 2 seconds before navigating
+        setTimeout(() => {
+          // Navigate based on user role
+          if (user?.role === "landlord") {
+            navigate("/landlord/dashboard");
+          } else {
+            navigate("/main/home");
+          }
+        }, 2000);
       } else {
         api.error({
           message: "Đăng nhập Google thất bại!",
@@ -107,7 +155,6 @@ const Login = () => {
         });
       }
     } catch (error) {
-      console.error("Google login error:", error);
       api.error({
         message: "Lỗi không mong muốn!",
         description:
@@ -121,7 +168,6 @@ const Login = () => {
   };
 
   const handleGoogleError = (error) => {
-    console.error("Google auth error:", error);
     api.error({
       message: "Lỗi xác thực Google!",
       description: "Không thể đăng nhập bằng Google. Vui lòng thử lại.",

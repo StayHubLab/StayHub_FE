@@ -61,7 +61,6 @@ const Saved = ({ savedRooms: propSavedRooms = [], onRoomLike }) => {
           setFavorites(new Set(savedRoomIds));
         }
       } catch (error) {
-        console.error("Error loading saved rooms:", error);
         // Fallback to localStorage
         await loadSavedRoomsFromStorage();
       }
@@ -89,7 +88,6 @@ const Saved = ({ savedRooms: propSavedRooms = [], onRoomLike }) => {
         }
       }
     } catch (error) {
-      console.error("Error loading saved rooms from storage:", error);
     }
   };
 
@@ -207,7 +205,6 @@ const Saved = ({ savedRooms: propSavedRooms = [], onRoomLike }) => {
         onRoomLike(roomId, !isFavorited);
       }
     } catch (error) {
-      console.error("Error saving room:", error);
 
       // If authentication error, fallback to localStorage
       if (

@@ -68,13 +68,6 @@ const Verify = () => {
 
     setLoading(true);
     try {
-      // TODO: Implement verification API call
-      console.log("Submitting verification:", {
-        frontId: frontIdFile,
-        backId: backIdFile,
-        selfie: selfieFile,
-      });
-
       // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 2000));
 

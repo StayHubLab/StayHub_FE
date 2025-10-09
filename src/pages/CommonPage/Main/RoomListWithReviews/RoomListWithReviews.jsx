@@ -48,7 +48,6 @@ const RoomListWithReviews = () => {
         const response = await reviewApi.getRenterReviews(user._id);
         setUserReviews(response.data?.reviews || []);
       } catch (error) {
-        console.error('Error fetching user reviews:', error);
       }
     };
 
@@ -152,7 +151,6 @@ const RoomListWithReviews = () => {
         
         setRooms(rentedRooms);
       } catch (error) {
-        console.error('Error fetching rented data:', error);
         api.error({
           message: 'Lỗi',
           description: 'Không thể tải danh sách. Vui lòng thử lại.',
@@ -238,7 +236,6 @@ const RoomListWithReviews = () => {
 
       handleCloseReviewModal();
     } catch (error) {
-      console.error('Error submitting review:', error);
       api.error({
         message: 'Lỗi',
         description: error.response?.data?.message || 'Không thể gửi đánh giá. Vui lòng thử lại.',

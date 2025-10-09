@@ -11,17 +11,14 @@ const Welcome = ({ user }) => {
   const userName = user?.name || "Người dùng";
   const handleFindNewRoom = () => {
     // Navigate to search page or trigger search functionality
-    console.log("Navigate to find new room");
   };
 
   const handleViewSavedRooms = () => {
     // Navigate to saved rooms page
-    console.log("Navigate to saved rooms");
   };
 
   const handleReportIssue = () => {
     // Open report issue modal or page
-    console.log("Open report issue");
   };
 
   return (

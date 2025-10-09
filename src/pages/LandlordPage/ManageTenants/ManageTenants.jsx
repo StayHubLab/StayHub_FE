@@ -85,7 +85,6 @@ const ManageTenants = () => {
         setFilteredTenants([]);
       }
     } catch (error) {
-      console.error("Error loading tenants:", error);
       message.error("Có lỗi xảy ra khi tải danh sách người thuê");
       setTenants([]);
       setFilteredTenants([]);

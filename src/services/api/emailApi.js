@@ -17,7 +17,6 @@ const emailApi = {
       });
       return response.data;
     } catch (error) {
-      console.error("Error sending templated email:", error);
       throw error;
     }
   },
@@ -52,7 +51,6 @@ const emailApi = {
         landlordPhone: billData.landlordPhone || "",
       };
 
-      console.log("EmailApi - Template data being sent:", templateData);
 
       return await emailApi.sendTemplatedEmail(
         renterEmail,
@@ -60,7 +58,6 @@ const emailApi = {
         templateData
       );
     } catch (error) {
-      console.error("Error sending bill notification:", error);
       throw error;
     }
   },
@@ -75,7 +72,6 @@ const emailApi = {
       const response = await apiClient.post("/email/test", { email });
       return response.data;
     } catch (error) {
-      console.error("Error sending test email:", error);
       throw error;
     }
   },

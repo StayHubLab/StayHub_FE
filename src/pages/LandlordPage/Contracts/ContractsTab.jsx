@@ -133,7 +133,6 @@ const CreateRequestModal = ({ open, onClose, onCreated }) => {
       onClose();
     } catch (e) {
       if (e?.errorFields) return; // lỗi validate
-      console.error(e);
       message.error("Không thể tạo yêu cầu hợp đồng");
     } finally {
       setSubmitting(false);
@@ -262,7 +261,6 @@ const RequestsTab = ({ onNeedCreate }) => {
       const list = Array.isArray(res?.data) ? res.data : res?.data?.items || [];
       setRows(list);
     } catch (e) {
-      console.error(e);
       message.error("Không thể tải yêu cầu hợp đồng");
     } finally {
       setLoading(false);
@@ -341,7 +339,6 @@ const RequestsTab = ({ onNeedCreate }) => {
                   await contactRequestApi.resend?.(r._id || r.id);
                   message.success("Đã gửi lại lời mời");
                 } catch (e) {
-                  console.error(e);
                   message.error("Không thể gửi lại lời mời");
                 } finally {
                   setLoading(false);
@@ -407,7 +404,6 @@ const MainContractsTab = () => {
         : res?.contracts || res?.items || [];
       setRows(list);
     } catch (e) {
-      console.error(e);
       message.error("Không thể tải danh sách hợp đồng");
     } finally {
       setLoading(false);
@@ -532,7 +528,6 @@ const MainContractsTab = () => {
                       });
                       message.success("Đã tạo hóa đơn đặt cọc");
                     } catch (e) {
-                      console.error(e);
                       message.error("Không thể tạo hóa đơn đặt cọc");
                     } finally {
                       setLoading(false);
@@ -589,7 +584,6 @@ const MainContractsTab = () => {
                   onClick={async () => {
                     try {
                       setLoading(true);
-                      console.log("[LL-SIGN] detail:", detail);
                       const existingSig = detail?.signatures?.landlord;
                       const cachedSig = window.__landlordSig;
                       const landlordSignature = cachedSig || existingSig;
@@ -600,20 +594,11 @@ const MainContractsTab = () => {
                         setLoading(false);
                         return;
                       }
-                      console.log(
-                        "[LL-SIGN] have signature? ",
-                        !!landlordSignature
-                      );
                       // 1) Landlord signs the contract with saved/existing base64 image
-                      console.log(
-                        "[LL-SIGN] calling updateSignatures...",
-                        detail._id || detail.id
-                      );
                       const signRes = await contractApi.updateSignatures(
                         detail._id || detail.id,
                         { landlord: landlordSignature }
                       );
-                      console.log("[LL-SIGN] updateSignatures OK:", signRes);
 
                       // 2) Create a deposit bill for the contract
                       const deposit =
@@ -632,11 +617,6 @@ const MainContractsTab = () => {
                         service: 0,
                       };
                       const totalAmount = deposit;
-                      console.log("[LL-SIGN] creating bill...", {
-                        deposit,
-                        renterId,
-                        totalAmount,
-                      });
                       const billRes = await billApi
                         .create({
                           contractId: detail._id || detail.id,
@@ -658,7 +638,6 @@ const MainContractsTab = () => {
                           }
                           throw err;
                         });
-                      console.log("[LL-SIGN] bill created:", billRes);
                       message.success("Đã ký và tạo hoá đơn đặt cọc");
                       try {
                         delete window.__landlordSig;
@@ -666,7 +645,6 @@ const MainContractsTab = () => {
                       setDetail(null);
                       load();
                     } catch (e) {
-                      console.error("[LL-SIGN] ERROR:", e?.response?.data || e);
                       message.error(
                         e?.response?.data?.message ||
                           "Không thể ký/tạo hoá đơn cọc"

@@ -160,9 +160,6 @@ const FindRoom = () => {
         let roomsData = [];
         let totalCount = 0;
 
-        console.log("API Response:", response);
-        console.log("Has search keyword:", hasSearchKeyword);
-
         if (response?.success) {
           // Handle different response structures
           if (hasSearchKeyword) {
@@ -179,8 +176,6 @@ const FindRoom = () => {
               response.total ||
               roomsData.length ||
               0;
-            console.log("Search rooms data:", roomsData);
-            console.log("Search total count:", totalCount);
           } else {
             // GetAllRooms returns {rooms: [...], pagination: {...}}
             roomsData = Array.isArray(response.data?.rooms)
@@ -239,14 +234,13 @@ const FindRoom = () => {
               }
             }
           } catch (fallbackError) {
-            console.error("Fallback queries failed:", fallbackError);
+            // Fallback queries failed
           }
         }
 
         setRooms(roomsData);
         setTotalRooms(totalCount);
       } catch (error) {
-        console.error("Error fetching rooms:", error);
         setError("Đã xảy ra lỗi khi tải dữ liệu");
         message.error("Đã xảy ra lỗi khi tải dữ liệu");
         setRooms([]);
@@ -294,7 +288,6 @@ const FindRoom = () => {
   };
 
   const handleSearch = () => {
-    console.log("Search params:", searchParams);
     // Create search filters from searchParams
     const searchFilters = {};
 
@@ -324,7 +317,6 @@ const FindRoom = () => {
   const handlePageChange = (page, size) => {
     setCurrentPage(page);
     setPageSize(size);
-    console.log("Page changed:", page, "Size:", size);
     // Note: fetchRooms will be called automatically by useEffect when currentPage/pageSize changes
   };
 

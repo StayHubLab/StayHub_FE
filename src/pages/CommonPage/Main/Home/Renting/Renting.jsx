@@ -201,7 +201,6 @@ const Renting = ({ bookings = [], loading: loadingProp = false }) => {
       }
     } catch (err) {
       message.error("Có lỗi xảy ra khi tạo cuộc trò chuyện");
-      console.error("Error creating conversation:", err);
     }
   };
 

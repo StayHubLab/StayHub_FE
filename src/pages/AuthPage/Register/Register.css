@@ -139,8 +139,7 @@
   margin-bottom: 0 !important;
 }
 
-.send-code-btn {
-  height: 50px !important;
+.regissend-code-btn {
   background: #fac227 !important;
   border: none !important;
   border-radius: 8px !important;
@@ -149,7 +148,7 @@
   color: white !important;
 }
 
-.send-code-btn:hover {
+.regissend-code-btn:hover {
   background: #e6af22 !important;
   color: white !important;
 }
@@ -293,7 +292,7 @@
     height: 45px !important;
   }
 
-  .send-code-btn {
+  .regissend-code-btn {
     height: 45px !important;
     font-size: 16px !important;
   }

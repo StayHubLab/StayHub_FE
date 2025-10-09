@@ -38,7 +38,6 @@ apiClient.interceptors.response.use(
     return response.data;
   },
   (error) => {
-    console.error("API Error:", error.response?.data || error.message);
     return Promise.reject(error.response?.data || error);
   }
 );
@@ -52,7 +51,6 @@ class ViewingApi {
       const response = await apiClient.get("/viewings", { params });
       return response;
     } catch (error) {
-      console.error("Error getting viewing appointments:", error);
       throw error;
     }
   }
@@ -62,7 +60,6 @@ class ViewingApi {
       const response = await apiClient.post("/viewings", viewingData);
       return response;
     } catch (error) {
-      console.error("Error creating viewing appointment:", error);
       throw error;
     }
   }
@@ -72,7 +69,6 @@ class ViewingApi {
       const response = await apiClient.get("/viewings/me", { params });
       return response;
     } catch (error) {
-      console.error("Error getting my viewing appointments:", error);
       throw error;
     }
   }
@@ -82,7 +78,6 @@ class ViewingApi {
       const response = await apiClient.get(`/viewings/${viewingId}`);
       return response;
     } catch (error) {
-      console.error("Error getting viewing appointment:", error);
       throw error;
     }
   }
@@ -94,7 +89,6 @@ class ViewingApi {
       });
       return response;
     } catch (error) {
-      console.error("Error getting user viewing appointments:", error);
       throw error;
     }
   }
@@ -106,7 +100,6 @@ class ViewingApi {
       });
       return response;
     } catch (error) {
-      console.error("Error getting landlord viewing appointments:", error);
       throw error;
     }
   }
@@ -119,7 +112,6 @@ class ViewingApi {
       });
       return response;
     } catch (error) {
-      console.error("Error updating viewing appointment status:", error);
       throw error;
     }
   }
@@ -131,7 +123,6 @@ class ViewingApi {
       });
       return response;
     } catch (error) {
-      console.error("Error confirming viewing appointment:", error);
       throw error;
     }
   }
@@ -143,7 +134,6 @@ class ViewingApi {
       });
       return response;
     } catch (error) {
-      console.error("Error cancelling viewing appointment:", error);
       throw error;
     }
   }
@@ -153,7 +143,6 @@ class ViewingApi {
       const response = await apiClient.post(`/viewings/${viewingId}/complete`);
       return response;
     } catch (error) {
-      console.error("Error completing viewing appointment:", error);
       throw error;
     }
   }
@@ -163,7 +152,6 @@ class ViewingApi {
       const response = await apiClient.delete(`/viewings/${viewingId}`);
       return response;
     } catch (error) {
-      console.error("Error deleting viewing appointment:", error);
       throw error;
     }
   }
@@ -210,7 +198,6 @@ class ViewingApi {
         booked: bookedSlots,
       };
     } catch (error) {
-      console.error("Error getting available time slots:", error);
       throw error;
     }
   }

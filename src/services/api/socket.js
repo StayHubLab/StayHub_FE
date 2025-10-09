@@ -17,31 +17,21 @@ class SocketService {
     const authToken = token || localStorage.getItem("token") || localStorage.getItem("authToken");
     
     if (!authToken) {
-      console.error('❌ No authentication token found');
       return null;
     }
 
-    // Debug token information
-    console.log('🔑 Connecting with token:', authToken.substring(0, 20) + '...');
-    
     // Try to decode token to check expiration (basic check)
     try {
       const tokenPayload = JSON.parse(atob(authToken.split('.')[1]));
       const currentTime = Math.floor(Date.now() / 1000);
       
       if (tokenPayload.exp && tokenPayload.exp < currentTime) {
-        console.error('❌ Token is expired:', new Date(tokenPayload.exp * 1000));
         return null;
       }
-      
-      console.log('✅ Token appears valid, user ID:', tokenPayload.id || tokenPayload.userId || tokenPayload.sub);
     } catch (error) {
-      console.warn('⚠️ Could not decode token:', error.message);
+      // Could not decode token
     }
 
-    // Try different token formats based on backend requirements
-    console.log('🔗 Attempting to connect to:', SOCKET_URL);
-    
     this.socket = io(SOCKET_URL, {
       auth: {
         token: authToken // Try without Bearer first, as per your backend integration guide
@@ -55,23 +45,20 @@ class SocketService {
 
     // Connection event handlers
     this.socket.on('connect', () => {
-      console.log('✅ Connected to chat server');
       this.isConnected = true;
     });
 
     this.socket.on('connect_error', (error) => {
-      console.error('❌ Socket connection failed:', error.message);
       this.isConnected = false;
     });
 
     this.socket.on('disconnect', (reason) => {
-      console.log('🔌 Disconnected from server:', reason);
       this.isConnected = false;
     });
 
     // Error handler
     this.socket.on('error', (error) => {
-      console.error('🚨 Socket error:', error.message);
+      // Socket error occurred
     });
 
     return this.socket;
@@ -88,7 +75,6 @@ class SocketService {
   // Join conversation room
   joinConversation(conversationId) {
     if (this.socket?.connected) {
-      console.log('🚪 Joining conversation:', conversationId);
       this.socket.emit('joinConversation', conversationId);
     }
   }
@@ -96,7 +82,6 @@ class SocketService {
   // Leave conversation room
   leaveConversation(conversationId) {
     if (this.socket?.connected) {
-      console.log('🚪 Leaving conversation:', conversationId);
       this.socket.emit('leaveConversation', conversationId);
     }
   }
@@ -104,7 +89,6 @@ class SocketService {
   // Send message via socket
   sendMessage(conversationId, content) {
     if (this.socket?.connected) {
-      console.log('📤 Sending message via socket:', { conversationId, content });
       this.socket.emit('sendMessage', {
         conversationId,
         content
@@ -187,21 +171,14 @@ class SocketService {
     const token = customToken || localStorage.getItem("token") || localStorage.getItem("authToken");
     
     if (!token) {
-      console.error('❌ No token available for testing');
       return;
     }
 
-    console.log('🧪 Testing socket connection...');
-    console.log('🔑 Token (first 30 chars):', token.substring(0, 30) + '...');
-    
     // Decode and log token payload
     try {
-      const payload = JSON.parse(atob(token.split('.')[1]));
-      console.log('📋 Token payload:', payload);
-      console.log('👤 User ID:', payload.id || payload.userId || payload.sub);
-      console.log('⏰ Expires:', payload.exp ? new Date(payload.exp * 1000) : 'No expiration');
+      JSON.parse(atob(token.split('.')[1]));
     } catch (error) {
-      console.error('❌ Failed to decode token:', error);
+      // Failed to decode token
     }
 
     // Test different auth formats
@@ -213,8 +190,6 @@ class SocketService {
 
     testFormats.forEach((format, index) => {
       setTimeout(() => {
-        console.log(`🧪 Testing format ${index + 1}: ${format.name}`);
-        
         const testSocket = io(SOCKET_URL, {
           auth: format.auth,
           transports: ["websocket"],
@@ -222,12 +197,10 @@ class SocketService {
         });
 
         testSocket.on('connect', () => {
-          console.log(`✅ Format ${index + 1} SUCCESS: ${format.name}`);
           testSocket.disconnect();
         });
 
         testSocket.on('connect_error', (error) => {
-          console.log(`❌ Format ${index + 1} FAILED: ${format.name} - ${error.message}`);
           testSocket.disconnect();
         });
       }, index * 2000); // Stagger tests by 2 seconds

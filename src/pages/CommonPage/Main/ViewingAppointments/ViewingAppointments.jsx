@@ -48,7 +48,6 @@ const ViewingAppointments = () => {
         message.error("Không thể tải danh sách lịch hẹn");
       }
     } catch (error) {
-      console.error("Error fetching appointments:", error);
       message.error("Có lỗi xảy ra khi tải danh sách lịch hẹn");
     } finally {
       setLoading(false);
@@ -92,7 +91,6 @@ const ViewingAppointments = () => {
             message.error("Không thể hủy lịch hẹn");
           }
         } catch (error) {
-          console.error("Error cancelling appointment:", error);
           message.error("Có lỗi xảy ra khi hủy lịch hẹn");
         }
       },

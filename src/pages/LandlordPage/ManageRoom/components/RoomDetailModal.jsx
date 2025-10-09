@@ -61,7 +61,6 @@ const RoomDetailModal = ({
         setContractInfo(response.data);
       }
     } catch (error) {
-      console.error("Error fetching contract info:", error);
     } finally {
       setLoadingContract(false);
     }
@@ -77,16 +76,6 @@ const RoomDetailModal = ({
     }).format(amount);
   };
 
-  // Debug: Check price object structure
-  console.log("🔍 Room price debug:", {
-    fullRoom: room,
-    priceObject: room?.price,
-    electricity: room?.price?.electricity,
-    water: room?.price?.water,
-    service: room?.price?.service,
-    deposit: room?.price?.deposit,
-    typeofPrice: typeof room?.price,
-  });
 
   const getStatusTag = (status) => {
     const statusConfig = {

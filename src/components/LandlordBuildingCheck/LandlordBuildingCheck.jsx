@@ -34,7 +34,6 @@ const LandlordBuildingCheck = ({ children }) => {
           setHasBuildings(true);
         }
       } catch (error) {
-        console.error("Error checking buildings:", error);
         setHasBuildings(false);
       } finally {
         setLoading(false);

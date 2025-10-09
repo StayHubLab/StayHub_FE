@@ -17,7 +17,6 @@ const savedRoomApi = {
       const response = await apiClient.get("/saved-rooms");
       return response.data; // Return the backend response directly
     } catch (error) {
-      console.error("API Error:", error.response?.data || error);
       throw error.response?.data || error;
     }
   },
@@ -32,7 +31,6 @@ const savedRoomApi = {
       const response = await apiClient.post("/saved-rooms", { roomId });
       return response.data;
     } catch (error) {
-      console.error("API Error:", error.response?.data || error);
       throw error.response?.data || error;
     }
   },
@@ -47,7 +45,6 @@ const savedRoomApi = {
       const response = await apiClient.delete(`/saved-rooms/${roomId}`);
       return response.data;
     } catch (error) {
-      console.error("API Error:", error.response?.data || error);
       throw error.response?.data || error;
     }
   },
@@ -62,7 +59,6 @@ const savedRoomApi = {
       const response = await apiClient.get(`/saved-rooms/${roomId}/status`);
       return response.data;
     } catch (error) {
-      console.error("API Error:", error.response?.data || error);
       throw error.response?.data || error;
     }
   },

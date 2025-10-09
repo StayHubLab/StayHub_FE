@@ -7,13 +7,11 @@ const GoogleAuthTest = () => {
   const [error, setError] = useState(null);
 
   const handleGoogleSuccess = (userData) => {
-    console.log("Google Auth Success:", userData);
     setResult(userData);
     setError(null);
   };
 
   const handleGoogleError = (error) => {
-    console.error("Google Auth Error:", error);
     setError(error);
     setResult(null);
   };

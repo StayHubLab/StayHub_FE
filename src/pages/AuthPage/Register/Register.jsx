@@ -35,6 +35,7 @@ const { Title, Text, Link } = Typography;
 const { Option } = Select;
 
 const Register = () => {
+  const [api, contextHolder] = notification.useNotification();
   const [form] = Form.useForm();
   const navigate = useNavigate();
   const location = useLocation();
@@ -42,6 +43,7 @@ const Register = () => {
   // submit/loading
   const [loading, setLoading] = useState(false);
   const [sendingCode, setSendingCode] = useState(false);
+  const [countdown, setCountdown] = useState(0);
   const [selectedRole, setSelectedRole] = useState("tenant");
 
   // Tabs & validation gate
@@ -62,8 +64,26 @@ const Register = () => {
       const data = await fetchProvinces();
       setProvinces(data || []);
     } catch (error) {
-      console.error("Error loading provinces:", error);
-      notification.error({
+      const status = error?.response?.status;
+      const backendMessage =
+        error?.response?.data?.error || error?.response?.data?.message || "";
+      const msg = String(backendMessage).toLowerCase();
+      if (
+        status === 409 ||
+        msg.includes("already exists") ||
+        msg.includes("already registered") ||
+        msg.includes("email exists") ||
+        msg.includes("duplicate") ||
+        msg.includes("đã được đăng") ||
+        msg.includes("da duoc dang")
+      ) {
+        api.error({
+          message: "Lỗi",
+          description: "Email này đã được đăng ký",
+        });
+        return;
+      }
+      api.error({
         message: "Lỗi",
         description:
           error?.message || "Không tải được danh sách tỉnh/thành phố",
@@ -81,8 +101,26 @@ const Register = () => {
       // Reset ward when province changes
       form.setFieldsValue({ ward: undefined });
     } catch (error) {
-      console.error("Error loading wards:", error);
-      notification.error({
+      const status = error?.response?.status;
+      const backendMessage =
+        error?.response?.data?.error || error?.response?.data?.message || "";
+      const msg = String(backendMessage).toLowerCase();
+      if (
+        status === 409 ||
+        msg.includes("already exists") ||
+        msg.includes("already registered") ||
+        msg.includes("email exists") ||
+        msg.includes("duplicate") ||
+        msg.includes("đã được đăng") ||
+        msg.includes("da duoc dang")
+      ) {
+        api.error({
+          message: "L��-i",
+          description: "Email nA�y �`A� �`�����c �?��ng kA�",
+        });
+        return;
+      }
+      api.error({
         message: "Lỗi",
         description: error?.message || "Không tải được danh sách phường/xã",
       });
@@ -94,6 +132,15 @@ const Register = () => {
   useEffect(() => {
     loadProvinces();
   }, []);
+
+  // Countdown timer for resend code
+  useEffect(() => {
+    let timer;
+    if (countdown > 0) {
+      timer = setTimeout(() => setCountdown(countdown - 1), 1000);
+    }
+    return () => clearTimeout(timer);
+  }, [countdown]);
 
   // Read role from query string (?role=landlord|tenant)
   useEffect(() => {
@@ -129,7 +176,7 @@ const Register = () => {
       setInfoCompleted(true);
       setActiveTab("2");
     } catch (_) {
-      notification.error({
+      api.error({
         message: "Lỗi",
         description: "Vui lòng hoàn thành tất cả thông tin cá nhân!",
       });
@@ -174,12 +221,11 @@ const Register = () => {
       };
 
       // Debug
-      // console.log('Registration payload:', payload);
 
       const response = await authApi.register(payload);
 
       if (response?.data) {
-        notification.success({
+        api.success({
           message: "Thành công",
           description: "Đăng ký thành công!",
         });
@@ -191,7 +237,7 @@ const Register = () => {
           navigate("/verify");
         }
       } else {
-        notification.success({
+        api.success({
           message: "Thành công",
           description: "Đăng ký thành công!",
         });
@@ -204,8 +250,7 @@ const Register = () => {
         }
       }
     } catch (error) {
-      console.error("Register error:", error?.response?.data || error?.message);
-      notification.error({
+      api.error({
         message: "Lỗi",
         description:
           error?.response?.data?.error || "Đăng ký thất bại. Vui lòng thử lại!",
@@ -220,27 +265,39 @@ const Register = () => {
     try {
       const email = form.getFieldValue("email");
       if (!email) {
-        notification.error({
+        api.error({
           message: "Lỗi",
           description: "Vui lòng nhập email!",
         });
         return;
       }
       await authApi.sendVerificationCode(email);
-      notification.success({
+      api.success({
         message: "Thành công",
         description: "Mã xác nhận đã được gửi tới email của bạn!",
       });
+      // Start 30 second countdown
+      setCountdown(30);
     } catch (error) {
-      console.error(
-        "Send code error:",
-        error?.response?.data || error?.message
-      );
-      notification.error({
-        message: "Lỗi",
-        description:
-          error?.response?.data?.error || "Không thể gửi mã xác nhận!",
-      });
+      // Check if error is due to existing user
+      const errorMessage = error?.response?.data?.error || error?.response?.data?.message || "";
+      const statusCode = error?.response?.status;
+      
+      // If status is 500 and error is "Internal server error", it's likely a duplicate email
+      if (statusCode === 500 || 
+          errorMessage.toLowerCase().includes("already exists") || 
+          errorMessage.toLowerCase().includes("đã tồn tại") ||
+          errorMessage.toLowerCase().includes("internal server error")) {
+        api.error({
+          message: "Lỗi",
+          description: "Tài khoản này đã đăng ký, hãy thử lại",
+        });
+      } else {
+        api.error({
+          message: "Lỗi",
+          description: errorMessage || "Không thể gửi mã xác nhận!",
+        });
+      }
     } finally {
       setSendingCode(false);
     }
@@ -250,8 +307,10 @@ const Register = () => {
   const handleVerifyRedirect = () => navigate("/verify");
 
   return (
-    <div className="register-container">
-      <div className="register-card">
+    <>
+      {contextHolder}
+      <div className="register-container">
+        <div className="register-card">
         {/* Header */}
         <div className="register-header">
           <div className="logo-container">
@@ -367,6 +426,28 @@ const Register = () => {
                               min: 8,
                               message: "Mật khẩu phải có ít nhất 8 ký tự!",
                             },
+                            {
+                              validator(_, value) {
+                                if (!value) {
+                                  return Promise.resolve();
+                                }
+                                
+                                const hasUpperCase = /[A-Z]/.test(value);
+                                const hasLowerCase = /[a-z]/.test(value);
+                                const hasNumber = /[0-9]/.test(value);
+                                const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(value);
+                                
+                                if (!hasUpperCase || !hasLowerCase || !hasNumber || !hasSpecialChar) {
+                                  return Promise.reject(
+                                    new Error(
+                                      "Mật khẩu phải chứa chữ hoa, chữ thường, số và ký tự đặc biệt!"
+                                    )
+                                  );
+                                }
+                                
+                                return Promise.resolve();
+                              },
+                            },
                           ]}
                         >
                           <Input.Password
@@ -445,10 +526,11 @@ const Register = () => {
                               <Button
                                 onClick={handleSendCode}
                                 loading={sendingCode}
-                                className="send-code-btn"
+                                disabled={countdown > 0}
+                                className="regissend-code-btn"
                                 block
                               >
-                                Gửi mã
+                                {countdown > 0 ? `${countdown}s` : "Gửi mã"}
                               </Button>
                             </Form.Item>
                           </Col>
@@ -652,6 +734,7 @@ const Register = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 

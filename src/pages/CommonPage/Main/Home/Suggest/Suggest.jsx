@@ -79,7 +79,6 @@ const Suggest = ({
         setFavorites(new Set(savedRoomIds));
       }
     } catch (error) {
-      console.error("Error loading saved rooms:", error);
 
       // If it's a 401 error, user is not authenticated, just use localStorage
       if (
@@ -150,7 +149,6 @@ const Suggest = ({
 
       setSuggestedRooms(roomsArray);
     } catch (error) {
-      console.error("Error fetching suggested rooms:", error);
       setError("Không thể tải danh sách phòng gợi ý");
       setSuggestedRooms([]);
     } finally {
@@ -259,7 +257,6 @@ const Suggest = ({
 
   const handleViewDetails = (roomId) => {
     navigate(`/main/room-detail/${roomId}`);
-    console.log("View details clicked for room:", roomId);
   };
 
   const handlePrevious = () => {
@@ -285,7 +282,6 @@ const Suggest = ({
       // Check if user is properly authenticated before using API
       const token = localStorage.getItem("token");
       if (isAuthenticated && user && (user._id || user.id) && token) {
-        console.log("Using backend API for room:", roomId);
         // For authenticated users with valid token, use backend API
         if (isFavorited) {
           // Remove from saved rooms
@@ -331,7 +327,6 @@ const Suggest = ({
         onRoomLike(roomId, !isFavorited);
       }
     } catch (error) {
-      console.error("Error saving room:", error);
 
       // If authentication error (401) or authentication required message
       if (

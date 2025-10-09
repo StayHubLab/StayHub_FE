@@ -87,13 +87,7 @@ const ManageRoom = () => {
         sortBy: sortBy,
         landlordId: user._id, // Filter by current landlord
       };
-      console.log("Frontend sending params:", params);
       const response = await roomApi.getRooms(params);
-      console.log("Backend response:", {
-        success: response.success,
-        roomsCount: response.data?.rooms?.length || 0,
-        pagination: response.data?.pagination,
-      });
 
       if (response.success && response.data) {
         // Process the rooms data
@@ -102,21 +96,11 @@ const ManageRoom = () => {
         // Try different possible data structures
         if (response.data.rooms && Array.isArray(response.data.rooms)) {
           roomsArray = response.data.rooms;
-          console.log("Found rooms in response.data.rooms:", roomsArray.length);
         } else if (Array.isArray(response.data)) {
           roomsArray = response.data;
-          console.log(
-            "Found rooms directly in response.data:",
-            roomsArray.length
-          );
         } else if (response.data.data && Array.isArray(response.data.data)) {
           roomsArray = response.data.data;
-          console.log("Found rooms in response.data.data:", roomsArray.length);
         } else {
-          console.log(
-            "No rooms array found, available keys:",
-            Object.keys(response.data)
-          );
           roomsArray = [];
         }
 
@@ -269,7 +253,6 @@ const ManageRoom = () => {
         });
       }
     } catch (error) {
-      console.error('Error deleting room:', error);
       api.open({
         type: 'error',
         message: 'Lỗi hệ thống',
@@ -284,8 +267,6 @@ const ManageRoom = () => {
 
   const handleAddRoom = async (roomData) => {
     try {
-      console.log("Creating room with data:", roomData);
-
       // Add landlordId to FormData
       roomData.append("landlordId", user._id);
 
@@ -307,14 +288,12 @@ const ManageRoom = () => {
         message.error(response.message || "Không thể thêm phòng");
       }
     } catch (error) {
-      console.error("Error creating room:", error);
       message.error("Có lỗi xảy ra khi thêm phòng");
     }
   };
 
   const handleUpdateRoom = async (roomData, roomId) => {
     try {
-      console.log("Updating room:", roomId, roomData);
       const response = await roomApi.updateRoom(roomId, roomData);
       if (response.success) {
         message.success("Cập nhật phòng thành công!");
@@ -325,7 +304,6 @@ const ManageRoom = () => {
         message.error(response.message || "Không thể cập nhật phòng");
       }
     } catch (error) {
-      console.error("Error updating room:", error);
       message.error("Có lỗi xảy ra khi cập nhật phòng");
     }
   };

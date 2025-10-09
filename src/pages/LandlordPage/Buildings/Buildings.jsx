@@ -41,7 +41,6 @@ const Buildings = () => {
         res?.data?.buildings || res?.buildings || res?.data || [];
       setData(buildings);
     } catch (e) {
-      console.error(e);
       message.error("Không tải được danh sách tòa nhà");
     } finally {
       setLoading(false);
@@ -165,7 +164,6 @@ const Buildings = () => {
       await load();
     } catch (e) {
       if (e?.errorFields) return; // form errors
-      console.error(e);
       message.error("Lưu tòa nhà thất bại");
     }
   };

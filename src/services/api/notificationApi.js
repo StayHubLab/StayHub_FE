@@ -27,7 +27,6 @@ const notificationApi = {
       const response = await apiClient.get(`/api/notifications?${params}`);
       return response.data;
     } catch (error) {
-      console.error("Error fetching notifications:", error);
       throw error;
     }
   },
@@ -44,7 +43,6 @@ const notificationApi = {
       );
       return response.data;
     } catch (error) {
-      console.error("Error marking notification as read:", error);
       throw error;
     }
   },
@@ -58,7 +56,6 @@ const notificationApi = {
       const response = await apiClient.put("/api/notifications/mark-all-read");
       return response.data;
     } catch (error) {
-      console.error("Error marking all notifications as read:", error);
       throw error;
     }
   },
@@ -74,7 +71,6 @@ const notificationApi = {
       const response = await apiClient.get(`/api/notifications/count${params}`);
       return response.data;
     } catch (error) {
-      console.error("Error fetching notification count:", error);
       throw error;
     }
   },
@@ -91,7 +87,6 @@ const notificationApi = {
       );
       return response.data;
     } catch (error) {
-      console.error("Error deleting notification:", error);
       throw error;
     }
   },

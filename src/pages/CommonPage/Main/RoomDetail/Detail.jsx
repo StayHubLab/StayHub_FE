@@ -45,17 +45,6 @@ const Detail = () => {
         if (response.success && response.data) {
           const room = response.data;
 
-          // Debug thông tin chủ trọ
-          console.log("=== LANDLORD DEBUG ===");
-          console.log("Room data from API:", room);
-          console.log("Building ID:", room.buildingId);
-          console.log("Host ID data:", room.buildingId?.hostId);
-          console.log("Host name:", room.buildingId?.hostId?.name);
-          console.log("Host phone:", room.buildingId?.hostId?.phone);
-          console.log("Host email:", room.buildingId?.hostId?.email);
-          console.log("Direct landlord:", room.landlord);
-          console.log("=====================");
-
           // Transform API data to match component structure
           const transformedData = {
             _id: room._id || room.id || roomId, // Add room ID
@@ -175,15 +164,6 @@ const Detail = () => {
           setIsUserRenting(currentUserRenting);
           setIsRoomOccupied(roomOccupied);
           
-          console.log("Room occupancy check:", {
-            userId: user?._id || user?.id,
-            tenantId: transformedData.tenant.id,
-            isUserRenting: currentUserRenting,
-            isRoomOccupied: roomOccupied,
-            roomStatus: room.status,
-            isAvailable: room.isAvailable
-          });
-
           setRoomData(transformedData);
 
           // Set images
@@ -211,7 +191,6 @@ const Detail = () => {
           setError("Không thể tải thông tin phòng");
         }
       } catch (error) {
-        console.error("Error fetching room data:", error);
         setError("Đã xảy ra lỗi khi tải dữ liệu");
         message.error("Không thể tải thông tin phòng");
       } finally {
@@ -278,22 +257,18 @@ const Detail = () => {
 
   // Event handlers
   const handleViewAllImages = () => {
-    console.log("View all images clicked");
     // Add image gallery modal logic here
   };
 
   const handleImageClick = (index) => {
-    console.log("Image clicked:", index);
     // Add image viewer logic here
   };
 
   const handleViewAllReviews = () => {
-    console.log("View all reviews clicked");
     // Add reviews modal logic here
   };
 
   const handleViewOnMap = () => {
-    console.log("View on map clicked");
     setIsMapModalVisible(true);
   };
 
@@ -306,22 +281,14 @@ const Detail = () => {
       return;
     }
 
-    console.log("=== BEFORE OPENING MODAL ===");
-    console.log("roomData:", roomData);
-    console.log("roomData.landlord:", roomData?.landlord);
-    console.log("user from auth:", user);
-    console.log("isBookingModalVisible:", isBookingModalVisible);
-    console.log("============================");
     setIsBookingModalVisible(true);
   };
 
   const handleContactLandlord = () => {
-    console.log("Contact landlord clicked");
     // Add contact landlord logic here
   };
 
   const handleViewContract = () => {
-    console.log("View contract clicked");
     setIsContractModalVisible(true);
   };
 
@@ -342,8 +309,6 @@ const Detail = () => {
 
   const handleConfirmBooking = async (bookingData) => {
     try {
-      console.log("Booking confirmed:", bookingData);
-
       // Prepare viewing data for API
       const viewingData = {
         roomId: roomId,
@@ -366,12 +331,10 @@ const Detail = () => {
         message.success(
           "Đã đặt lịch xem phòng thành công! Chủ trọ sẽ liên hệ với bạn sớm."
         );
-        console.log("Viewing appointment created:", response.data);
       } else {
         message.error("Có lỗi xảy ra khi đặt lịch. Vui lòng thử lại.");
       }
     } catch (error) {
-      console.error("Error creating viewing appointment:", error);
       message.error("Không thể đặt lịch xem phòng. Vui lòng thử lại sau.");
     } finally {
       setIsBookingModalVisible(false);
