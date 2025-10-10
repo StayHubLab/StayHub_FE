@@ -22,7 +22,7 @@ import "./CreateBuilding.css";
 const { Title, Text } = Typography;
 
 const CreateBuilding = () => {
-  const { message } = App.useApp();
+  const { message, notification } = App.useApp();
   const { user } = useAuth();
   const navigate = useNavigate();
   const [form] = Form.useForm();
@@ -180,16 +180,32 @@ const CreateBuilding = () => {
       const response = await buildingApi.createBuilding(payload);
 
       if (response?.success || response?.data) {
-        message.success("Tạo tòa nhà thành công!");
-        navigate("/landlord");
+        notification.success({
+          message: "Tạo tòa nhà thành công!",
+          description: "Tòa nhà của bạn đã được tạo. Đang chuyển đến trang quản lý...",
+          duration: 2,
+        });
+        
+        // Wait 2 seconds before navigating
+        setTimeout(() => {
+          navigate("/landlord");
+        }, 2000);
       } else {
-        message.error("Tạo tòa nhà thất bại!");
+        notification.error({
+          message: "Tạo tòa nhà thất bại!",
+          description: "Đã có lỗi xảy ra. Vui lòng thử lại!",
+          duration: 4.5,
+        });
       }
     } catch (error) {
-      message.error(
-        error?.response?.data?.error ||
-          "Không thể tạo tòa nhà. Vui lòng thử lại!"
-      );
+      notification.error({
+        message: "Tạo tòa nhà thất bại!",
+        description:
+          error?.response?.data?.error ||
+          error?.response?.data?.message ||
+          "Không thể tạo tòa nhà. Vui lòng thử lại!",
+        duration: 4.5,
+      });
     } finally {
       setLoading(false);
     }
@@ -287,7 +303,13 @@ const CreateBuilding = () => {
                   name="avgPrice"
                   rules={[{ required: true, message: "Nhập giá trung bình" }]}
                 >
-                  <InputNumber style={{ width: "100%" }} min={0} />
+                  <InputNumber 
+                    style={{ width: "100%" }} 
+                    min={0}
+                    formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                    parser={(value) => value.replace(/,/g, '')}
+                    addonAfter="VNĐ"
+                  />
                 </Form.Item>
               </Col>
             </Row>
@@ -321,7 +343,7 @@ const CreateBuilding = () => {
             <Row gutter={16}>
               <Col span={12}>
                 <Form.Item
-                  label="Đường"
+                  label="Tên đường, số nhà"
                   name="address_street"
                   rules={[{ required: true, message: "Nhập đường" }]}
                 >

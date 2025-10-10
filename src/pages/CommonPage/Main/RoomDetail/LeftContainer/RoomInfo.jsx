@@ -42,13 +42,29 @@ const RoomInfo = ({ roomData, onViewAllReviews, onViewOnMap }) => {
         });
         
         // API returns: { success, data: { reviews, pagination, statistics } }
-        const fetchedReviews = response.data?.reviews || [];
-        const statistics = response.data?.statistics || {};
+        // Try multiple possible structures
+        const fetchedReviews = response.data?.reviews || response.reviews || [];
+        const statistics = response.data?.statistics || response.statistics || response.data || {};
+        
+        // Get rating from multiple possible sources
+        const avgRating = statistics.averageRating || 
+                         statistics.average || 
+                         statistics.rating || 
+                         response.data?.averageRating ||
+                         0;
+        
+        const totalRevs = statistics.totalReviews || 
+                         statistics.total || 
+                         statistics.count ||
+                         response.data?.totalReviews ||
+                         fetchedReviews.length ||
+                         0;
         
         setReviews(fetchedReviews);
         setReviewStats({
-          averageRating: statistics.averageRating || 0,
-          totalReviews: statistics.totalReviews || 0,
+          // Only show rating if there are actual reviews
+          averageRating: avgRating > 0 ? avgRating : 0,
+          totalReviews: totalRevs,
         });
       } catch (error) {
         setReviews([]);
@@ -136,15 +152,18 @@ const RoomInfo = ({ roomData, onViewAllReviews, onViewOnMap }) => {
             <span className="price-period">/tháng</span>
           </div>
 
-          <div className="rating-section">
-            <div className="stars-rating">
-              {renderStars(reviewStats.averageRating || roomData.rating || 0)}
-              <span className="rating-number">{(reviewStats.averageRating || roomData.rating || 0).toFixed(1)}</span>
+          {/* Only show rating section if there are reviews */}
+          {reviewStats.totalReviews > 0 && (
+            <div className="rating-section">
+              <div className="stars-rating">
+                {renderStars(reviewStats.averageRating)}
+                <span className="rating-number">{reviewStats.averageRating.toFixed(1)}</span>
+              </div>
+              <span className="review-users-count">
+                ({reviewStats.totalReviews} đánh giá)
+              </span>
             </div>
-            <span className="review-users-count">
-              ({reviewStats.totalReviews || roomData.reviewCount || 0} đánh giá)
-            </span>
-          </div>
+          )}
         </div>
 
         {/* <button className="view-all-reviews-btn" onClick={handleViewAllReviews}>
@@ -310,17 +329,19 @@ const RoomInfo = ({ roomData, onViewAllReviews, onViewOnMap }) => {
         </div>
 
         {/* Rating Summary */}
-        <div className="rating-summary">
-          <div className="overall-rating">
-            <div className="stars-rating">
-              {renderStars(reviewStats.averageRating || roomData.rating || 0)}
-              <span className="rating-number">{(reviewStats.averageRating || roomData.rating || 0).toFixed(1)}</span>
+        {reviewStats.totalReviews > 0 && (
+          <div className="rating-summary">
+            <div className="overall-rating">
+              <div className="stars-rating">
+                {renderStars(reviewStats.averageRating)}
+                <span className="rating-number">{reviewStats.averageRating.toFixed(1)}</span>
+              </div>
+              <span className="review-users-count">
+                ({reviewStats.totalReviews} đánh giá)
+              </span>
             </div>
-            <span className="review-users-count">
-              ({reviewStats.totalReviews || roomData.reviewCount || 0} đánh giá)
-            </span>
           </div>
-        </div>
+        )}
 
         {/* Rating Breakdown */}
         {/* <div className="rating-breakdown">

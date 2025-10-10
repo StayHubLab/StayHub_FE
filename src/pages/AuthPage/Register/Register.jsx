@@ -226,34 +226,34 @@ const Register = () => {
 
       if (response?.data) {
         api.success({
-          message: "Thành công",
-          description: "Đăng ký thành công!",
+          message: "Đăng ký thành công!",
+          description: "Tài khoản của bạn đã được tạo. Đang chuyển đến trang đăng nhập...",
+          duration: 2,
         });
 
-        // Redirect based on role
-        if (selectedRole === "landlord") {
-          navigate("/create-building");
-        } else {
-          navigate("/verify");
-        }
+        // Wait 2 seconds before redirecting to login
+        setTimeout(() => {
+          navigate("/login");
+        }, 2000);
       } else {
         api.success({
-          message: "Thành công",
-          description: "Đăng ký thành công!",
+          message: "Đăng ký thành công!",
+          description: "Tài khoản của bạn đã được tạo. Đang chuyển đến trang đăng nhập...",
+          duration: 2,
         });
 
-        // Redirect based on role
-        if (selectedRole === "landlord") {
-          navigate("/create-building");
-        } else {
-          navigate("/verify");
-        }
+        // Wait 2 seconds before redirecting to login
+        setTimeout(() => {
+          navigate("/login");
+        }, 2000);
       }
     } catch (error) {
+      const errorMessage = error?.response?.data?.error || error?.response?.data?.message || "";
+      
       api.error({
-        message: "Lỗi",
-        description:
-          error?.response?.data?.error || "Đăng ký thất bại. Vui lòng thử lại!",
+        message: "Đăng ký thất bại!",
+        description: errorMessage || "Đã có lỗi xảy ra. Vui lòng thử lại!",
+        duration: 4.5,
       });
     } finally {
       setLoading(false);
