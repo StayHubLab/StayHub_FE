@@ -401,7 +401,7 @@ const RoomDetailModal = ({
 
             {/* Statistics */}
             <Divider className="landlord-divider" />
-            <Row gutter={24}>
+            {/* <Row gutter={24}>
               <Col span={8}>
                 <div className="landlord-stat-card">
                   <StarOutlined className="landlord-stat-icon" />
@@ -435,7 +435,7 @@ const RoomDetailModal = ({
                   </div>
                 </div>
               </Col>
-            </Row>
+            </Row> */}
 
             {/* Images */}
             {room.images && room.images.length > 0 && (

@@ -130,7 +130,7 @@ const Header = () => {
               >
                 <Avatar
                   size={40}
-                  src={user?.avatar || "https://placehold.co/36x36"}
+                  src={user?.avatar?.url || user?.avatar || "https://placehold.co/36x36"}
                   className="user-avatar"
                   style={{ cursor: "pointer" }}
                 />

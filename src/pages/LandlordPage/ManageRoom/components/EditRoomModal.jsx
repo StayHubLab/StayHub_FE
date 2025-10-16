@@ -8,7 +8,7 @@ import {
   InputNumber,
   Upload,
   Button,
-  message,
+  notification,
   Row,
   Col,
   Tag,
@@ -41,6 +41,7 @@ const EditRoomModal = ({
   initialData,
   isEdit = false,
 }) => {
+  const [api, contextHolder] = notification.useNotification();
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const [fileList, setFileList] = useState([]);
@@ -87,6 +88,15 @@ const EditRoomModal = ({
   useEffect(() => {
     if (visible) {
       if (initialData && isEdit) {
+        // Check if room is rented and show warning
+        if (initialData.status === 'rented') {
+          api.warning({
+            message: "Phòng đang được thuê",
+            description: "Phòng này đang được thuê, không thể chỉnh sửa thông tin. Vui lòng chấm dứt hợp đồng trước khi chỉnh sửa.",
+            duration: 3,
+          });
+        }
+        
         // Populate form with existing data for edit mode
         const formData = {
           name: initialData.name,
@@ -122,7 +132,37 @@ const EditRoomModal = ({
         };
 
         form.setFieldsValue(formData);
-        setAmenities(initialData.amenities || []);
+        
+        // Handle amenities - merge from multiple sources
+        let roomAmenities = [];
+        
+        // Add amenities from 'amenities' field (common amenities)
+        if (initialData.amenities && Array.isArray(initialData.amenities) && initialData.amenities.length > 0) {
+          roomAmenities = [...initialData.amenities];
+        }
+        
+        // Add utilities from 'utilities' field (room-specific utilities)
+        if (initialData.utilities && Array.isArray(initialData.utilities) && initialData.utilities.length > 0) {
+          const utilityNames = initialData.utilities.map(u => {
+            // Handle both string and object formats
+            if (typeof u === 'string') return u;
+            if (u && u.name) return u.name;
+            return null;
+          }).filter(Boolean);
+          
+          // Merge without duplicates
+          utilityNames.forEach(name => {
+            if (!roomAmenities.includes(name)) {
+              roomAmenities.push(name);
+            }
+          });
+        }
+        
+        console.log('🔍 Loading amenities for edit:', roomAmenities);
+        console.log('📦 amenities field:', initialData.amenities);
+        console.log('🏷️ utilities field:', initialData.utilities);
+        
+        setAmenities(roomAmenities);
 
         // Handle existing images
         if (initialData.images && Array.isArray(initialData.images)) {
@@ -161,11 +201,44 @@ const EditRoomModal = ({
         setFileList([]);
       }
     }
-  }, [visible, initialData, isEdit, form]);
+  }, [visible, initialData, isEdit, form, api]);
 
   const handleSubmit = async (values) => {
     try {
       setLoading(true);
+
+      // Check if room is rented (cannot edit)
+      if (isEdit && initialData?.status === 'rented') {
+        api.warning({
+          message: "Không thể chỉnh sửa",
+          description: "Phòng đang được thuê, không thể chỉnh sửa thông tin!",
+          duration: 2,
+        });
+        setLoading(false);
+        return;
+      }
+
+      // Validate amenities
+      if (amenities.length === 0) {
+        api.error({
+          message: "Thiếu tiện ích",
+          description: "Vui lòng thêm ít nhất 1 tiện ích!",
+          duration: 2,
+        });
+        setLoading(false);
+        return;
+      }
+
+      // Validate images
+      if (fileList.length === 0) {
+        api.error({
+          message: "Thiếu hình ảnh",
+          description: "Vui lòng tải lên ít nhất 1 ảnh phòng!",
+          duration: 2,
+        });
+        setLoading(false);
+        return;
+      }
 
       // Prepare form data
       const formData = new FormData();
@@ -242,14 +315,24 @@ const EditRoomModal = ({
 
       await onSubmit(formData, initialData?._id);
 
-      message.success(
-        isEdit ? "Cập nhật phòng thành công!" : "Tạo phòng thành công!"
-      );
-      handleClose();
+      api.success({
+        message: isEdit ? "Cập nhật thành công" : "Tạo phòng thành công",
+        description: isEdit 
+          ? "Thông tin phòng đã được cập nhật!" 
+          : "Phòng mới đã được thêm vào danh sách!",
+        duration: 2,
+      });
+      
+      // Delay closing modal to show notification
+      setTimeout(() => {
+        handleClose();
+      }, 2000);
     } catch (error) {
-      message.error(
-        isEdit ? "Cập nhật phòng thất bại!" : "Tạo phòng thất bại!"
-      );
+      api.error({
+        message: isEdit ? "Cập nhật thất bại" : "Tạo phòng thất bại",
+        description: error?.message || "Đã xảy ra lỗi, vui lòng thử lại!",
+        duration: 2,
+      });
     } finally {
       setLoading(false);
     }
@@ -313,10 +396,13 @@ const EditRoomModal = ({
     </div>
   );
 
+  // Check if room is rented (disable editing)
+  const isRoomRented = isEdit && initialData?.status === 'rented';
+
   return (
     <Modal
       title={
-        isEdit ? `Chỉnh sửa phòng: ${initialData?.name}` : "Thêm phòng mới"
+        isEdit ? `Chỉnh sửa phòng: ${initialData?.name}${isRoomRented ? ' (Đang được thuê)' : ''}` : "Thêm phòng mới"
       }
       open={visible}
       onCancel={handleClose}
@@ -325,10 +411,24 @@ const EditRoomModal = ({
       className="landlord-edit-room-modal"
       destroyOnHidden
     >
+      {contextHolder}
+      {isRoomRented && (
+        <div style={{ 
+          padding: '12px 16px', 
+          marginBottom: '16px', 
+          background: '#fff7e6', 
+          border: '1px solid #ffd591',
+          borderRadius: '4px',
+          color: '#d46b08'
+        }}>
+          ⚠️ Phòng này đang được thuê, không thể chỉnh sửa thông tin!
+        </div>
+      )}
       <Form
         form={form}
         layout="vertical"
         onFinish={handleSubmit}
+        disabled={isRoomRented}
         className="landlord-room-form"
       >
         {/* Basic Information */}
@@ -377,7 +477,7 @@ const EditRoomModal = ({
           <Col span={8}>
             <Form.Item
               name="capacity"
-              label="Sức chứa (người)"
+              label="Sức chứa tối đa (người)"
               rules={[{ required: true, message: "Vui lòng nhập sức chứa!" }]}
             >
               <InputNumber
@@ -426,7 +526,11 @@ const EditRoomModal = ({
             </Form.Item>
           </Col>
           <Col span={12}>
-            <Form.Item name="deposit" label="Tiền cọc (VND)">
+            <Form.Item 
+              name="deposit" 
+              label="Tiền cọc (VND)"
+              rules={[{ required: true, message: "Vui lòng nhập tiền cọc!" }]}
+            >
               <InputNumber
                 min={0}
                 style={{ width: "100%" }}
@@ -442,28 +546,52 @@ const EditRoomModal = ({
 
         <Row gutter={16}>
           <Col span={8}>
-            <Form.Item name="electricity" label="Giá điện (VND/kWh)">
+            <Form.Item 
+              name="electricity" 
+              label="Giá điện (VND/kWh)"
+              rules={[{ required: true, message: "Vui lòng nhập giá điện!" }]}
+            >
               <InputNumber
                 min={0}
                 style={{ width: "100%" }}
+                formatter={(value) =>
+                  `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                }
+                parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
                 placeholder="VD: 3500"
               />
             </Form.Item>
           </Col>
           <Col span={8}>
-            <Form.Item name="water" label="Giá nước (VND/m³)">
+            <Form.Item 
+              name="water" 
+              label="Giá nước (VND/m³)"
+              rules={[{ required: true, message: "Vui lòng nhập giá nước!" }]}
+            >
               <InputNumber
                 min={0}
                 style={{ width: "100%" }}
+                formatter={(value) =>
+                  `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                }
+                parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
                 placeholder="VD: 25000"
               />
             </Form.Item>
           </Col>
           <Col span={8}>
-            <Form.Item name="service" label="Phí dịch vụ (VND/tháng)">
+            <Form.Item 
+              name="service" 
+              label="Phí dịch vụ (VND/tháng)"
+              rules={[{ required: true, message: "Vui lòng nhập phí dịch vụ!" }]}
+            >
               <InputNumber
                 min={0}
                 style={{ width: "100%" }}
+                formatter={(value) =>
+                  `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                }
+                parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
                 placeholder="VD: 150000"
               />
             </Form.Item>
@@ -498,7 +626,9 @@ const EditRoomModal = ({
         </Row>
 
         {/* Amenities */}
-        <Divider orientation="left">Tiện ích</Divider>
+        <Divider orientation="left">
+          <span style={{ color: '#ff4d4f' }}>* </span>Tiện ích
+        </Divider>
         <Row gutter={16}>
           <Col span={12}>
             <Text strong>Thêm tiện ích:</Text>
@@ -542,25 +672,42 @@ const EditRoomModal = ({
             </div>
           </Col>
           <Col span={12}>
-            <Text strong>Tiện ích đã chọn:</Text>
+            <Text strong>
+              Tiện ích đã chọn: 
+              <span style={{ color: amenities.length === 0 ? '#ff4d4f' : '#52c41a', marginLeft: 4 }}>
+                ({amenities.length})
+              </span>
+            </Text>
+            {amenities.length === 0 && (
+              <div style={{ color: '#ff4d4f', fontSize: '12px', marginTop: 4 }}>
+                * Vui lòng chọn ít nhất 1 tiện ích
+              </div>
+            )}
             <div
               style={{
                 marginTop: 8,
                 display: "flex",
                 flexWrap: "wrap",
                 gap: 8,
+                minHeight: 40,
               }}
             >
-              {amenities.map((amenity) => (
-                <Tag
-                  key={amenity}
-                  closable
-                  onClose={() => removeAmenity(amenity)}
-                  color="#4739F0"
-                >
-                  {amenity}
-                </Tag>
-              ))}
+              {amenities.length > 0 ? (
+                amenities.map((amenity) => (
+                  <Tag
+                    key={amenity}
+                    closable
+                    onClose={() => removeAmenity(amenity)}
+                    color="#4739F0"
+                  >
+                    {amenity}
+                  </Tag>
+                ))
+              ) : (
+                <Text type="secondary" style={{ fontSize: '12px' }}>
+                  Chưa có tiện ích nào được chọn
+                </Text>
+              )}
             </div>
           </Col>
         </Row>
@@ -571,7 +718,20 @@ const EditRoomModal = ({
         </Form.Item>
 
         {/* Images */}
-        <Form.Item label="Hình ảnh phòng">
+        <Form.Item 
+          label="Hình ảnh phòng"
+          required
+          rules={[
+            {
+              validator: () => {
+                if (fileList.length === 0) {
+                  return Promise.reject(new Error('Vui lòng tải lên ít nhất 1 ảnh phòng!'));
+                }
+                return Promise.resolve();
+              }
+            }
+          ]}
+        >
           <div>
             <Upload
               listType="picture-card"
@@ -583,7 +743,7 @@ const EditRoomModal = ({
             >
               {fileList.length >= 8 ? null : uploadButton}
             </Upload>
-            <Text type="secondary">Tối đa 8 ảnh, định dạng: JPG, PNG</Text>
+            <Text type="secondary">Tối đa 8 ảnh, định dạng: JPG, PNG (Bắt buộc ít nhất 1 ảnh)</Text>
           </div>
         </Form.Item>
 
@@ -591,7 +751,12 @@ const EditRoomModal = ({
         <Form.Item style={{ marginBottom: 0, textAlign: "right" }}>
           <Space>
             <Button onClick={handleClose}>Hủy</Button>
-            <Button type="primary" htmlType="submit" loading={loading}>
+            <Button 
+              type="primary" 
+              htmlType="submit" 
+              loading={loading}
+              disabled={isRoomRented}
+            >
               {isEdit ? "Cập nhật" : "Tạo phòng"}
             </Button>
           </Space>
