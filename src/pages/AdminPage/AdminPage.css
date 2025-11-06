@@ -1,0 +1,10 @@
+/**
+ * @fileoverview Admin Page Styles
+ * @created 2025-11-06
+ * @file AdminPage.css
+ */
+
+.admin-page {
+  min-height: 100vh;
+  background: #f5f7fa;
+}
