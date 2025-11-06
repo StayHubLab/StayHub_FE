@@ -1,6 +1,12 @@
 import React, { createContext, useContext, useEffect, useReducer } from "react";
 import PropTypes from "prop-types";
 import { authApi } from "../services/api";
+import {
+  trackLogin,
+  trackSignup,
+  setUserId,
+  setUserProperties,
+} from "../utils/analytics";
 
 // Initial state
 const initialState = {
@@ -150,22 +156,33 @@ export const AuthProvider = ({ children }) => {
         payload: { token, refreshToken, user },
       });
 
+      // Track login event in GA4
+      trackLogin("email", user._id || user.id);
+      setUserId(user._id || user.id);
+      setUserProperties({
+        user_role: user.role,
+        user_verified: user.isVerified,
+      });
+
       return { success: true, data: response.data };
     } catch (error) {
       // Get comprehensive error information
-      const errorMessage = error.response?.data?.error || error.response?.data?.message || "Login failed";
+      const errorMessage =
+        error.response?.data?.error ||
+        error.response?.data?.message ||
+        "Login failed";
       const statusCode = error.response?.status;
-      
+
       dispatch({
         type: AUTH_ACTIONS.LOGIN_FAILURE,
         payload: errorMessage,
       });
 
-      return { 
-        success: false, 
+      return {
+        success: false,
         error: errorMessage,
         statusCode: statusCode,
-        fullError: error.response?.data
+        fullError: error.response?.data,
       };
     }
   };
@@ -176,6 +193,10 @@ export const AuthProvider = ({ children }) => {
 
     try {
       const response = await authApi.register(userData);
+
+      // Track signup event in GA4
+      trackSignup("email", userData.role);
+
       return { success: true, data: response.data };
     } catch (error) {
       const errorMessage = error.response?.data?.error || "Registration failed";
@@ -204,6 +225,14 @@ export const AuthProvider = ({ children }) => {
       dispatch({
         type: AUTH_ACTIONS.LOGIN_SUCCESS,
         payload: { token, refreshToken, user },
+      });
+
+      // Track Google login event in GA4
+      trackLogin("google", user._id || user.id);
+      setUserId(user._id || user.id);
+      setUserProperties({
+        user_role: user.role,
+        user_verified: user.isVerified,
       });
 
       return { success: true, data: response.data };
@@ -258,7 +287,6 @@ export const AuthProvider = ({ children }) => {
       } else {
         return { success: true, data: response.data };
       }
-
 
       // Update localStorage
       localStorage.setItem("user", JSON.stringify(updatedUser));

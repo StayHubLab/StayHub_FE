@@ -5,6 +5,7 @@ import { AuthProvider } from "./contexts/AuthContext";
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
 import AppRoutes from "./routes/AppRoutes";
+import usePageTracking from "./hooks/useAnalytics";
 import "./App.css";
 
 // Ant Design theme configuration
@@ -19,6 +20,9 @@ const theme = {
 // Component to handle conditional layout based on route
 const AppLayout = () => {
   const location = useLocation();
+
+  // Track page views with Google Analytics
+  usePageTracking();
 
   // Define auth routes that should hide Header and Footer
   const authRoutes = ["/start", "/login", "/register", "/forgot", "/verify"];

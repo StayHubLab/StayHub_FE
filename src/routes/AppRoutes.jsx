@@ -6,9 +6,11 @@ import Buildings from "pages/LandlordPage/Buildings/Buildings";
 import ContractsTab from "pages/LandlordPage/Contracts/ContractsTab";
 import PaymentsByRoom from "pages/LandlordPage/PaymentsByRoom/PaymentsByRoom";
 import { Route, Routes } from "react-router-dom";
+import AdminProtectedRoute from "../components/AdminProtectedRoute/AdminProtectedRoute";
 import LandlordProtectedRoute from "../components/LandlordProtectedRoute/LandlordProtectedRoute";
 import ProtectedRedirect from "../components/ProtectedRedirect/ProtectedRedirect";
 import RenterProtectedRoute from "../components/RenterProtectedRoute/RenterProtectedRoute";
+import AdminPage from "../pages/AdminPage/AdminPage";
 import CreateBuilding from "../pages/AuthPage/CreateBuilding/CreateBuilding";
 import Forgot from "../pages/AuthPage/Forgot/Forgot";
 import Login from "../pages/AuthPage/Login/Login";
@@ -99,6 +101,16 @@ const AppRoutes = () => {
         <Route path="buildings" element={<Buildings />} />
         <Route path="chat" element={<ChatPage />} />
       </Route>
+
+      {/* Admin Routes */}
+      <Route
+        path="/admin/*"
+        element={
+          <AdminProtectedRoute>
+            <AdminPage />
+          </AdminProtectedRoute>
+        }
+      />
     </Routes>
   );
 };
